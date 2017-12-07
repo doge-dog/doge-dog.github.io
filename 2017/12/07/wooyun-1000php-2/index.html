@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        categories · \xeb\xfe&#39;s Blog
+        Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞 · \xeb\xfe&#39;s Blog
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -105,11 +105,22 @@ white-space: pre;
     
 </head>
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >\xeb\xfe&#39;s Blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>\xeb\xfe's Blog.</a>
 </header>
@@ -117,21 +128,43 @@ white-space: pre;
         <div class="site-intro">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
+            Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞
+            <!-- 404 -->
+            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/07</span>
+            </div>
         
     </div>
 </div>
@@ -201,11 +234,34 @@ white-space: pre;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>Discuz！7.2/X1 第三方插件SQL注入及持久型XSS漏洞。<br>SQL注入比较鸡肋，要求GPC为off，XSS因为是持久型的，只要管理员打开此应用即会触发。</p>
+<p>第三方的心情墙插件，因变量未初始化及过滤不严导致SQL注入及跨站脚本漏洞。</p>
+<h3 id="SQL漏洞代码图片-moodwall-inc-php"><a href="#SQL漏洞代码图片-moodwall-inc-php" class="headerlink" title="SQL漏洞代码图片(moodwall.inc.php)"></a>SQL漏洞代码图片(moodwall.inc.php)</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">elseif</span>($action == <span class="string">'edit_mood'</span> &amp;&amp; moodid) &#123;</span><br><span class="line"></span><br><span class="line">          <span class="comment">//moodid未初始化，直接代入sql查询</span></span><br><span class="line"></span><br><span class="line">	  $check = $db-&gt;result_first(<span class="string">"SELECT * FROM &#123;$tablepre&#125;moodwall WHERE id='$moodid' AND uid='$discuz_uid'"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	  <span class="keyword">if</span>(!$check || !$moodid) &#123;</span><br><span class="line"></span><br><span class="line">		  showmessage(<span class="string">'moodwall:moodwall_inc_php_2'</span>, <span class="string">'plugin.php?id=moodwall&amp;action=user_mood'</span>);</span><br><span class="line"></span><br><span class="line">	  &#125;</span><br><span class="line"></span><br><span class="line">	  $sql = <span class="string">"SELECT * FROM &#123;$tablepre&#125;moodwall WHERE id='$moodid'"</span>;</span><br><span class="line"></span><br><span class="line">	  $query = $db-&gt;query($sql);</span><br><span class="line"></span><br><span class="line">	  $moodlist_edit = <span class="keyword">array</span>();</span><br><span class="line"></span><br><span class="line">	  <span class="keyword">while</span>($mood_edit = $db-&gt;fetch_array($query)) &#123;</span><br><span class="line"></span><br><span class="line">		  $moodlist_edit[] = $mood_edit;</span><br><span class="line"></span><br><span class="line">	  &#125;</span><br></pre></td></tr></table></figure>
+<p>moodid未经过初始化，直接代入sql查询，可以直接输入1’,使SQL报错，判断该参数存在SQL注入，然后开始构造payload。<br>example：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/plugin.php?id=moodwall<span class="variable">&amp;action</span>=edit_mood<span class="variable">&amp;moodid</span>=<span class="number">1</span>'</span><br></pre></td></tr></table></figure></p>
+<h3 id="代码修复方法"><a href="#代码修复方法" class="headerlink" title="代码修复方法"></a>代码修复方法</h3><p>对用户输入的数据进行过滤，或者使用PDO连接并做参数绑定</p>
+<h3 id="XSS漏洞代码图片-moodwall-inc-php"><a href="#XSS漏洞代码图片-moodwall-inc-php" class="headerlink" title="XSS漏洞代码图片(moodwall.inc.php)"></a>XSS漏洞代码图片(moodwall.inc.php)</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$uid=$_POST[uid];</span><br><span class="line">	 $username=$_POST[username];</span><br><span class="line">	 $bgpic=$_POST[bgpic];</span><br><span class="line">	 $mood=$_POST[mood];</span><br><span class="line">	 $message=$_POST[message];</span><br><span class="line">	 $dateline=time();</span><br><span class="line">	 $db-&gt;query((INSERT INTO &#123;$tablepre&#125;moodwall (uid,username, bgpic, mood, message, dateline) VALUES (<span class="string">'$uid'</span>, <span class="string">'$username'</span>, <span class="string">'$bgpic'</span>, <span class="string">'$mood'</span>, <span class="string">'$message'</span>, <span class="string">'$dateline'</span>)));</span><br></pre></td></tr></table></figure>
+<p>POST的代码直接传入数据库，前端出库代码也没做过滤，因此存在存储型XSS<br>example：<br>在发表心情处，直接传入<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">"&gt;<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="regexp">/xss/</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="代码修复方法-1"><a href="#代码修复方法-1" class="headerlink" title="代码修复方法"></a>代码修复方法</h3><p>使用addslashes、htmlspecialchars对用户post过来的数据进行过滤或者过滤数据中的特殊字符，输出时也对数据库出库数据进行过滤</p>
+<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-0146.html" target="_blank" rel="noopener">Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</a></p>
+
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
+            <li class="next">
+                <a href= "/2017/12/07/wooyun-1000php-3/" title= ecshop SQL注射漏洞-2010.8.21 >
+                    <span>往前一页</span>
+                    <span>ecshop SQL注射漏洞-2010.8.21</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/07/wooyun-1000php-1/" title= BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞 >
+                    <span>往后一页</span>
+                    <span>BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</span>
+                </a>
+            </li>
         
     </ul>
     <!-- 评论插件 -->
@@ -261,6 +317,13 @@ white-space: pre;
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL漏洞代码图片-moodwall-inc-php"><span class="toc-number">2.</span> <span class="toc-text">SQL漏洞代码图片(moodwall.inc.php)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码修复方法"><span class="toc-number">3.</span> <span class="toc-text">代码修复方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS漏洞代码图片-moodwall-inc-php"><span class="toc-number">4.</span> <span class="toc-text">XSS漏洞代码图片(moodwall.inc.php)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码修复方法-1"><span class="toc-number">5.</span> <span class="toc-text">代码修复方法</span></a></li></ol>
+    </div>
     
     <div class="back-top">&#xe639;</div>
     <div class="sidebar">

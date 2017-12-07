@@ -5,12 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        wooyun-1000php · \xeb\xfe&#39;s Blog
+        ecshop SQL注射漏洞-2010.8.21 · \xeb\xfe&#39;s Blog
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
     <!-- TODO: 在font-face加载完毕后改变字体  -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+$('pre code').each(function(i, block) {
+  //hljs.highlightBlock(block);
+  var lines = $(this).text().split('\n').length - 1;
+  var $numbering = $('<ul/>').addClass('pre-numbering');
+  $(this)
+    .addClass('has-numbering')
+    .parent()
+    .append($numbering);
+  for(i=1;i<=lines;i++){
+    $numbering.append($('<li/>').text(i));
+  }
+});
+</script>
+<style>
+code.has-numbering {
+  margin-left: 10px;
+  word-wrap: normal;
+  word-break: keep-all;
+  white-space: pre;
+}
+
+.pre-numbering {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  padding: .5em 0.2em .5em 0;
+  border-right: 1px solid #C3CCD0;
+  border-radius: 3px 0 0 3px;
+  background-color: #EEE;
+  text-align: right;
+  font-size: 1.0em;
+  color: #AAA;
+  list-style: none;
+}
+@media (max-width: 767px) {
+  .pre-numbering {
+    display: none;
+  }
+  .has-numbering {
+    margin-left: -10px !important;
+    word-wrap: break-world !important;
+    white-space: pre-wrap !important;
+  }
+}
+overflow-x: auto;
+overflow-y: auto;
+word-break: keep-all;
+white-space: pre;
+</style>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
     <!-- 提前加载place holder  -->
     <style type="text/css">
         @font-face {
@@ -63,7 +118,7 @@
                 <a href="/" >\xeb\xfe&#39;s Blog.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">wooyun-1000php</a>
+                <a href="#" class="post-name">ecshop SQL注射漏洞-2010.8.21</a>
             </div>
     </div>
     
@@ -84,7 +139,7 @@
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            wooyun-1000php
+            ecshop SQL注射漏洞-2010.8.21
             <!-- 404 -->
             
         </h1>
@@ -99,6 +154,12 @@
         <!-- 文章页meta -->
         
             <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
             
             <div class="post-intro-meta">
                 <span class="post-intro-calander iconfont-archer">&#xe676;</span>
@@ -173,16 +234,17 @@
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>在Ecshop中缺乏对参数的有效过滤，导致一个SQL注射漏洞，成功利用该漏洞的攻击者可以获得数据库及站点的完全权限。</p>
+<h3 id="漏洞代码截图-include-libcommon-php"><a href="#漏洞代码截图-include-libcommon-php" class="headerlink" title="漏洞代码截图(include_libcommon.php)"></a>漏洞代码截图(include_libcommon.php)</h3>
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
         
             <li class="previous">
-                <a href= "/2017/11/26/hxctf2017-writeup/" title= hxctf2017-writeup >
+                <a href= "/2017/12/07/wooyun-1000php-2/" title= Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞 >
                     <span>往后一页</span>
-                    <span>hxctf2017-writeup</span>
+                    <span>Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</span>
                 </a>
             </li>
         
@@ -235,6 +297,8 @@
         </span>
     </div>
     
+
+
 </footer>
     </div>
     <!-- toc -->
@@ -243,7 +307,7 @@
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞代码截图-include-libcommon-php"><span class="toc-number">2.</span> <span class="toc-text">漏洞代码截图(include_libcommon.php)</span></a></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>
@@ -253,6 +317,7 @@
 
             <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>archive</span>
             <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>tags</span>
+
         </div>
     </div>
     <div class="sidebar-content sidebar-content-show-archive">
@@ -285,7 +350,29 @@
     
     
     
-    <div class="total-archive" >目前才写: 3 篇博文，好好努力吧，骚年。 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 5 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
     
@@ -297,7 +384,17 @@
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php/" >wooyun-1000php</a>
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-3/" >ecshop SQL注射漏洞-2010.8.21</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-2/" >Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-1/" >BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</a>
         </li>
     
     
@@ -316,6 +413,8 @@
     <div class="sidebar-tags-name">
     
         <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -341,7 +440,7 @@ jsonContent:
     link: false
     permalink: false
     excerpt: false
-    categories: false
+    categories: true
     tags: true</pre>
     </div> 
     <div class="sidebar-tag-list"></div>

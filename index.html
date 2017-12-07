@@ -11,6 +11,61 @@
     <link rel="icon" href= /assests/favicon.ico>
     <!-- TODO: 在font-face加载完毕后改变字体  -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+$('pre code').each(function(i, block) {
+  //hljs.highlightBlock(block);
+  var lines = $(this).text().split('\n').length - 1;
+  var $numbering = $('<ul/>').addClass('pre-numbering');
+  $(this)
+    .addClass('has-numbering')
+    .parent()
+    .append($numbering);
+  for(i=1;i<=lines;i++){
+    $numbering.append($('<li/>').text(i));
+  }
+});
+</script>
+<style>
+code.has-numbering {
+  margin-left: 10px;
+  word-wrap: normal;
+  word-break: keep-all;
+  white-space: pre;
+}
+
+.pre-numbering {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  padding: .5em 0.2em .5em 0;
+  border-right: 1px solid #C3CCD0;
+  border-radius: 3px 0 0 3px;
+  background-color: #EEE;
+  text-align: right;
+  font-size: 1.0em;
+  color: #AAA;
+  list-style: none;
+}
+@media (max-width: 767px) {
+  .pre-numbering {
+    display: none;
+  }
+  .has-numbering {
+    margin-left: -10px !important;
+    word-wrap: break-world !important;
+    white-space: pre-wrap !important;
+  }
+}
+overflow-x: auto;
+overflow-y: auto;
+word-break: keep-all;
+white-space: pre;
+</style>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
     <!-- 提前加载place holder  -->
     <style type="text/css">
         @font-face {
@@ -162,17 +217,82 @@
     
     
         <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/07/wooyun-1000php/" >
+            <a class="content-show-full" href = "/2017/12/07/wooyun-1000php-3/" >
                     <h2 class="abstract-title">
                         
-                        <span>wooyun-1000php</span>
+                        <span>ecshop SQL注射漏洞-2010.8.21</span>
                     </h2>
                 <div class="abstract-content">
-                    
+                    简要描述在Ecshop中缺乏对参数的有效过滤，导致一个SQL注射漏洞，成功利用该漏洞的攻击者可以获得数据库及站点的完全权限。
+漏洞代码截图(include_libcommon.php)
                 </div>
             </a>
             <div class="abstract-post-meta">
                 <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/07</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2017/12/07/wooyun-1000php-2/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</span>
+                    </h2>
+                <div class="abstract-content">
+                    简要描述Discuz！7.2/X1 第三方插件SQL注入及持久型XSS漏洞。SQL注入比较鸡肋，要求GPC为off，XSS因为是持久型的，只要管理员打开此应用即会触发。
+第三方的心情墙插件，因变量未初始化及过滤不严导致SQL注入及跨站脚本漏洞。
+SQL漏洞代码图片(moodwall.inc.php)12345678910111213141516171819202122232425elseif($action == 'edit_mood' &amp;&amp; moodid) &#123;          //moodid未初始化，直接代入sql查询	  $check = $db-&gt...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/07</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2017/12/07/wooyun-1000php-1/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</span>
+                    </h2>
+                <div class="abstract-content">
+                    漏洞代码(ad_js.php)12345678910111213141516171819202122232425262728293031323334&lt;?phpdefine('IN_BLUE', true);require_once dirname(__FILE__) . '/include/common.inc.php';$ad_id = !empty($_GET['ad_id']) ? trim($_GET['ad_id']) : '';if(empty($ad_id))&#123;	echo 'Error!';	exit();&#125;$ad = $db-&gt;getone...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
                 
                 <!-- date  -->
                 <div class="abstract-date">
@@ -316,6 +436,8 @@
         </span>
     </div>
     
+
+
 </footer>
     </div>
     <!-- toc -->
@@ -327,6 +449,7 @@
 
             <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>archive</span>
             <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>tags</span>
+
         </div>
     </div>
     <div class="sidebar-content sidebar-content-show-archive">
@@ -359,7 +482,29 @@
     
     
     
-    <div class="total-archive" >目前才写: 3 篇博文，好好努力吧，骚年。 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 5 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
     
@@ -371,7 +516,17 @@
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php/" >wooyun-1000php</a>
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-3/" >ecshop SQL注射漏洞-2010.8.21</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-2/" >Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-1/" >BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</a>
         </li>
     
     
@@ -390,6 +545,8 @@
     <div class="sidebar-tags-name">
     
         <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -415,7 +572,7 @@ jsonContent:
     link: false
     permalink: false
     excerpt: false
-    categories: false
+    categories: true
     tags: true</pre>
     </div> 
     <div class="sidebar-tag-list"></div>
