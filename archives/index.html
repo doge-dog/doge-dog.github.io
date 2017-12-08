@@ -204,6 +204,127 @@ white-space: pre;
     
     
         <article class="index-post">
+            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-7/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>phpwind远程代码执行漏洞-2010.09</span>
+                    </h2>
+                <div class="abstract-content">
+                    简要描述phpwind较高版本论坛中存在一个严重的漏洞，成功利用该漏洞可以远程执行任意php代码，影响phpwind 7和phpwind 8
+详细说明漏洞代码(pw_ajax.php)12345678910111213&#125; elseif ($action == 'pcdelimg') &#123;	InitGP(array('fieldname','pctype'));	InitGP(array('tid','id'),2);	if (!$tid || !$id || !$fieldname || !$pctype) &#123;			echo 'fail';	&#125;	$i...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-6/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>phpcms 2008 sp4 爆路径及任意文件删除漏洞</span>
+                    </h2>
+                <div class="abstract-content">
+                    简要描述某页面下，未作容错处理导致爆路径，同时过滤不严导致恶意攻击者可以删除网站任意文件
+任意文件删除漏洞详细说明在corpandresize/config.inc.php中定义：12$tmp = $_COOKIE['tmp'];define("TMP_PATH", $tmp);
+在corpandresize/process.php中用到TMP_PATH，满足前面的一系列条件后（这个很好满足，都是用户可控的）：1@unlink(TMP_PATH.'/'.$thumbfile);
+没有检查$_COOKIE[‘tmp’]就直接放入unlink()了，只要修改cookie的tmp值就可以删除网...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-5/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>PHPCMS通杀XSS-2010.08</span>
+                    </h2>
+                <div class="abstract-content">
+                    简要描述在我要报错功能页下，过滤不严格，造成反射型XSS
+1http://**.**.**.**/error_report/error_report.php?title=1&amp;contentid=1"&gt;&lt;script&gt;alert(/xss/)&lt;/script&gt;
+修复方案：输入输出前通过htmlspecialchars过滤，并过滤其他特殊字符
+原文链接：PHPCMS通杀XSS-2010.08
+
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-4/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>Discuz!漫游插件API本地包含漏洞</span>
+                    </h2>
+                <div class="abstract-content">
+                    简要描述Discuz!漫游插件API本地包含漏洞,该插件默认不安装,并且服务默认不开启.
+漏洞代码(manyou/api/class/MyBase.php)12345678function parseRequest() &#123;	$request = $_POST;	$module = $request['module'];	$method = $request['method'];	return $this-&gt;callback($module, $method, $params);	&#125;	function callback($module, $method, $par...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
             <a class="content-show-full" href = "/2017/12/07/wooyun-1000php-3/" >
                     <h2 class="abstract-title">
                         
@@ -211,7 +332,7 @@ white-space: pre;
                     </h2>
                 <div class="abstract-content">
                     简要描述在Ecshop中缺乏对参数的有效过滤，导致一个SQL注射漏洞，成功利用该漏洞的攻击者可以获得数据库及站点的完全权限。
-漏洞代码截图(include_libcommon.php)
+漏洞代码函数(include_libcommon.php)1234567891011121314151617181920212223242526272829303132333435function get_package_info($id)&#123;    global $ecs, $db,$_CFG;    $now = gmtime();    $sql = "SELECT act_id AS id,  act_name AS package_name, g...
                 </div>
             </a>
             <div class="abstract-post-meta">
@@ -445,7 +566,79 @@ SQL漏洞代码图片(moodwall.inc.php)12345678910111213141516171819202122232425
     
     
     
-    <div class="total-archive" >目前才写: 5 篇博文，好好努力吧，骚年。 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 9 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
     
@@ -454,6 +647,26 @@ SQL漏洞代码图片(moodwall.inc.php)12345678910111213141516171819202122232425
     
     <div class="archive-year"> 2017 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
     
     
         <li class="archive-post-item">

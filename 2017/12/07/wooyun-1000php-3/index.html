@@ -235,10 +235,25 @@ white-space: pre;
             <main class="main post-page">
     <article class="article-entry">
         <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>在Ecshop中缺乏对参数的有效过滤，导致一个SQL注射漏洞，成功利用该漏洞的攻击者可以获得数据库及站点的完全权限。</p>
-<h3 id="漏洞代码截图-include-libcommon-php"><a href="#漏洞代码截图-include-libcommon-php" class="headerlink" title="漏洞代码截图(include_libcommon.php)"></a>漏洞代码截图(include_libcommon.php)</h3>
+<h3 id="漏洞代码函数-include-libcommon-php"><a href="#漏洞代码函数-include-libcommon-php" class="headerlink" title="漏洞代码函数(include_libcommon.php)"></a>漏洞代码函数(include_libcommon.php)</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_package_info</span><span class="params">($id)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">global</span> $ecs, $db,$_CFG;</span><br><span class="line">    $now = gmtime();</span><br><span class="line">    $sql = <span class="string">"SELECT act_id AS id,  act_name AS package_name, goods_id , goods_name, start_time, end_time, act_desc, ext_info"</span>.</span><br><span class="line">           <span class="string">" FROM "</span> . $GLOBALS[<span class="string">'ecs'</span>]-&gt;table(<span class="string">'goods_activity'</span>) .<span class="string">" WHERE act_id='$id' AND act_type = "</span> . GAT_PACKAGE;</span><br><span class="line">    $package = $db-&gt;GetRow($sql);</span><br><span class="line">    <span class="comment">/* 将时间转成可阅读格式 */</span></span><br><span class="line">    <span class="keyword">if</span> ($package[<span class="string">'start_time'</span>] &lt;= $now &amp;&amp; $package[<span class="string">'end_time'</span>] &gt;= $now)</span><br><span class="line">    &#123;</span><br><span class="line">        $package[<span class="string">'is_on_sale'</span>] = <span class="string">"1"</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        $package[<span class="string">'is_on_sale'</span>] = <span class="string">"0"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	$package[<span class="string">'start_time'</span>] = local_date(<span class="string">'Y-m-d H:i'</span>, $package[<span class="string">'start_time'</span>]);</span><br><span class="line">    $package[<span class="string">'end_time'</span>]   = local_date(<span class="string">'Y-m-d H:i'</span>, $package[<span class="string">'end_time'</span>]);</span><br><span class="line">    $row = unserialize($package[<span class="string">'ext_info'</span>]);</span><br><span class="line">    <span class="keyword">unset</span>($package[<span class="string">'ext_info'</span>]);</span><br><span class="line">    <span class="keyword">if</span> ($row)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">foreach</span> ($row <span class="keyword">as</span> $key=&gt;$val)</span><br><span class="line">        &#123;</span><br><span class="line">            $package[$key] = $val;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    $sql = <span class="string">"SELECT pg.package_id, pg.goods_id, pg.goods_number, pg.admin_id, "</span>.</span><br><span class="line">           <span class="string">" g.goods_sn, g.goods_name, g.market_price, g.goods_thumb, g.is_real, "</span>.</span><br><span class="line">           <span class="string">" IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS rank_price "</span> .</span><br><span class="line">           <span class="string">" FROM "</span> . $GLOBALS[<span class="string">'ecs'</span>]-&gt;table(<span class="string">'package_goods'</span>) . <span class="string">" AS pg "</span>.</span><br><span class="line">           <span class="string">"   LEFT JOIN "</span>. $GLOBALS[<span class="string">'ecs'</span>]-&gt;table(<span class="string">'goods'</span>) . <span class="string">" AS g "</span>.<span class="string">"   ON g.goods_id = pg.goods_id "</span>.</span><br><span class="line">           <span class="string">" LEFT JOIN "</span> . $GLOBALS[<span class="string">'ecs'</span>]-&gt;table(<span class="string">'member_price'</span>) . <span class="string">" AS mp "</span>.<span class="string">"ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' "</span>.<span class="string">" WHERE pg.package_id = "</span> . $id. <span class="string">" "</span>.<span class="string">" ORDER BY pg.package_id, pg.goods_id"</span>;</span><br><span class="line"></span><br><span class="line">    $goods_res = $GLOBALS[<span class="string">'db'</span>]-&gt;getAll($sql);</span><br><span class="line">    $market_price = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>第六行代码中，$id没有经过严格过滤就直接进入了SQL查询，导致一个SQL注射漏洞。</p>
+<h3 id="漏洞函数调用处-lib-order-php"><a href="#漏洞函数调用处-lib-order-php" class="headerlink" title="漏洞函数调用处(lib_order.php)"></a>漏洞函数调用处(lib_order.php)</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add_package_to_cart</span><span class="params">($package_id, $num = <span class="number">1</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $GLOBALS[<span class="string">'err'</span>]-&gt;clean();</span><br><span class="line">    <span class="comment">/* 取得礼包信息 */</span></span><br><span class="line">    $package = get_package_info($package_id);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>($package))</span><br><span class="line">    &#123;</span><br><span class="line">        $GLOBALS[<span class="string">'err'</span>]-&gt;add($GLOBALS[<span class="string">'_LANG'</span>][<span class="string">'goods_not_exists'</span>], ERR_NOT_EXISTS);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>在系统的lib_order.php中存在一个该函数的调用(第五行)</p>
+<h3 id="漏洞代码函数参数可控点-flow-php"><a href="#漏洞代码函数参数可控点-flow-php" class="headerlink" title="漏洞代码函数参数可控点(flow.php)"></a>漏洞代码函数参数可控点(flow.php)</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$package = $json-&gt;decode($_POST[<span class="string">'package_info'</span>]);</span><br><span class="line">    <span class="comment">/* 如果是一步购物，先清空购物车 */</span></span><br><span class="line">    <span class="keyword">if</span> ($_CFG[<span class="string">'one_step_buy'</span>] == <span class="string">'1'</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        clear_cart();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* 商品数量是否合法 */</span></span><br><span class="line">    <span class="keyword">if</span> (!is_numeric($package-&gt;number) || intval($package-&gt;number) &lt;= <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        $result[<span class="string">'error'</span>]   = <span class="number">1</span>;</span><br><span class="line">        $result[<span class="string">'message'</span>] = $_LANG[<span class="string">'invalid_number'</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/* 添加到购物车 */</span></span><br><span class="line">        <span class="keyword">if</span> (add_package_to_cart($package-&gt;package_id, $package-&gt;number))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> ($_CFG[<span class="string">'cart_confirm'</span>] &gt; <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>$package-&gt;package_id来源于输入,接收用户post过来的package_info(json数据)，然后进行json decode,保存到变量$package中。</p>
+<h3 id="漏洞修复方案："><a href="#漏洞修复方案：" class="headerlink" title="漏洞修复方案："></a>漏洞修复方案：</h3><p>对用户post过来的数据进行过滤，这里可以直接对package_id进行整数化。</p>
+<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-0248.html" target="_blank" rel="noopener">ecshop SQL注射漏洞-2010.8.21</a></p>
+
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
+        
+            <li class="next">
+                <a href= "/2017/12/08/wooyun-1000php-4/" title= Discuz!漫游插件API本地包含漏洞 >
+                    <span>往前一页</span>
+                    <span>Discuz!漫游插件API本地包含漏洞</span>
+                </a>
+            </li>
         
         
             <li class="previous">
@@ -307,7 +322,7 @@ white-space: pre;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞代码截图-include-libcommon-php"><span class="toc-number">2.</span> <span class="toc-text">漏洞代码截图(include_libcommon.php)</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞代码函数-include-libcommon-php"><span class="toc-number">2.</span> <span class="toc-text">漏洞代码函数(include_libcommon.php)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞函数调用处-lib-order-php"><span class="toc-number">3.</span> <span class="toc-text">漏洞函数调用处(lib_order.php)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞代码函数参数可控点-flow-php"><span class="toc-number">4.</span> <span class="toc-text">漏洞代码函数参数可控点(flow.php)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞修复方案："><span class="toc-number">5.</span> <span class="toc-text">漏洞修复方案：</span></a></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>
@@ -372,7 +387,79 @@ white-space: pre;
     
     
     
-    <div class="total-archive" >目前才写: 5 篇博文，好好努力吧，骚年。 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 9 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
     
@@ -381,6 +468,26 @@ white-space: pre;
     
     <div class="archive-year"> 2017 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
     
     
         <li class="archive-post-item">

