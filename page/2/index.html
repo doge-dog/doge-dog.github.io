@@ -26,10 +26,6 @@ $('pre code').each(function(i, block) {
   }
 });
 </script>
-<!-- UY BEGIN -->
-<div id="uyan_frame"></div>
-<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2151445"></script>
-<!-- UY END -->
 <style>
 code.has-numbering {
   margin-left: 10px;
@@ -217,6 +213,67 @@ white-space: pre;
         </script>
         <div class="container container-unloaded">
             <main class="main index-page">
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-5/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>PHPCMS通杀XSS-2010.08</span>
+                    </h2>
+                <div class="abstract-content">
+                    简要描述在我要报错功能页下，过滤不严格，造成反射型XSS
+1http://**.**.**.**/error_report/error_report.php?title=1&amp;contentid=1"&gt;&lt;script&gt;alert(/xss/)&lt;/script&gt;
+修复方案：输入输出前通过htmlspecialchars过滤，并过滤其他特殊字符
+原文链接：PHPCMS通杀XSS-2010.08
+
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-4/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>Discuz!漫游插件API本地包含漏洞</span>
+                    </h2>
+                <div class="abstract-content">
+                    简要描述Discuz!漫游插件API本地包含漏洞,该插件默认不安装,并且服务默认不开启.
+漏洞代码(manyou/api/class/MyBase.php)12345678function parseRequest() &#123;	$request = $_POST;	$module = $request['module'];	$method = $request['method'];	return $this-&gt;callback($module, $method, $params);	&#125;	function callback($module, $method, $par...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
+                </div>
+            </div>
+        </article>
     
     
     
@@ -660,7 +717,45 @@ SQL漏洞代码图片(moodwall.inc.php)12345678910111213141516171819202122232425
     
     
     
-    <div class="total-archive" >目前才写: 15 篇博文，好好努力吧，骚年。 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 17 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
     
@@ -672,27 +767,12 @@ SQL漏洞代码图片(moodwall.inc.php)12345678910111213141516171819202122232425
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
+            <span class="archive-post-date">12/09</span><a class="archive-post-title" href= "/2017/12/09/wooyun-1000php-14/" >wooyun-1000php-14</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+            <span class="archive-post-date">12/09</span><a class="archive-post-title" href= "/2017/12/09/wooyun-1000php-15/" >wooyun-1000php-15</a>
         </li>
     
     
@@ -702,7 +782,32 @@ SQL漏洞代码图片(moodwall.inc.php)12345678910111213141516171819202122232425
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
         </li>
     
     
@@ -712,12 +817,12 @@ SQL漏洞代码图片(moodwall.inc.php)12345678910111213141516171819202122232425
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
         </li>
     
     
@@ -750,9 +855,9 @@ SQL漏洞代码图片(moodwall.inc.php)12345678910111213141516171819202122232425
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
