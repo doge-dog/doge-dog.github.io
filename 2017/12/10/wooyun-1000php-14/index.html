@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        wooyun-1000php-15 · \xeb\xfe&#39;s Blog
+        PHPCMS V9 通行证注册缺陷 · \xeb\xfe&#39;s Blog
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -118,7 +118,7 @@ white-space: pre;
                 <a href="/" >\xeb\xfe&#39;s Blog.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">wooyun-1000php-15</a>
+                <a href="#" class="post-name">PHPCMS V9 通行证注册缺陷</a>
             </div>
     </div>
     
@@ -139,7 +139,7 @@ white-space: pre;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            wooyun-1000php-15
+            PHPCMS V9 通行证注册缺陷
             <!-- 404 -->
             
         </h1>
@@ -155,9 +155,15 @@ white-space: pre;
         
             <!-- 文章页标签  -->
             
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+            
             <div class="post-intro-meta">
                 <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                <span class="post-intro-time">2017/12/09</span>
+                <span class="post-intro-time">2017/12/10</span>
             </div>
         
     </div>
@@ -228,16 +234,28 @@ white-space: pre;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>通过通行证注册用户，可以直接注册VIP注册会员。</p>
+<h3 id="详细说明"><a href="#详细说明" class="headerlink" title="详细说明"></a>详细说明</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 添加用户</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">if</span> ($action == <span class="string">'member_add'</span>) &#123;</span><br><span class="line">	$userinfo = <span class="keyword">array</span>();</span><br><span class="line">	$userinfo[<span class="string">'phpssouid'</span>] = <span class="keyword">isset</span>($arr[<span class="string">'uid'</span>]) ? $arr[<span class="string">'uid'</span>] : <span class="keyword">exit</span>(<span class="string">'0'</span>);</span><br><span class="line">	$userinfo[<span class="string">'encrypt'</span>] = <span class="keyword">isset</span>($arr[<span class="string">'random'</span>]) ? $arr[<span class="string">'random'</span>] : <span class="keyword">exit</span>(<span class="string">'0'</span>);</span><br><span class="line">	$userinfo[<span class="string">'username'</span>] = <span class="keyword">isset</span>($arr[<span class="string">'username'</span>]) ? $arr[<span class="string">'username'</span>] : <span class="keyword">exit</span>(<span class="string">'0'</span>);</span><br><span class="line">	$userinfo[<span class="string">'password'</span>] = <span class="keyword">isset</span>($arr[<span class="string">'password'</span>]) ? $arr[<span class="string">'password'</span>] : <span class="keyword">exit</span>(<span class="string">'0'</span>);</span><br><span class="line">	$userinfo[<span class="string">'email'</span>] = <span class="keyword">isset</span>($arr[<span class="string">'email'</span>]) ? $arr[<span class="string">'email'</span>] : <span class="string">''</span>;</span><br><span class="line">	$userinfo[<span class="string">'regip'</span>] = <span class="keyword">isset</span>($arr[<span class="string">'regip'</span>]) ? $arr[<span class="string">'regip'</span>] : <span class="string">''</span>;</span><br><span class="line">	$userinfo[<span class="string">'regdate'</span>] = $userinfo[<span class="string">'lastdate'</span>] = SYS_TIME;</span><br><span class="line">	$userinfo[<span class="string">'modelid'</span>] = <span class="number">10</span>;</span><br><span class="line">	$userinfo[<span class="string">'groupid'</span>] = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">	$userid = $db-&gt;insert($userinfo, <span class="number">1</span>);</span><br><span class="line">	<span class="keyword">if</span>($userid) &#123;</span><br><span class="line">		<span class="keyword">exit</span>(<span class="string">'1'</span>);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">exit</span>(<span class="string">'0'</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>$userinfo数组没有初始化，第16行直接执行了insert操作，我们可以直接post userinfo[vip]=1这样的表单直接覆盖数组。<br>为什么post表单的值是vip，因为数据库中member表有vip字段，默认值为0(普通会员),1为VIP会员。<br><img src="/2017/12/10/wooyun-1000php-14/3.jpg" alt=""></p>
+<h3 id="漏洞证明"><a href="#漏洞证明" class="headerlink" title="漏洞证明"></a>漏洞证明</h3><p><img src="/2017/12/10/wooyun-1000php-14/4.png" alt=""></p>
+<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-01379.html" target="_blank" rel="noopener">PHPCMS V9 通行证注册缺陷</a></p>
+
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
+            <li class="next">
+                <a href= "/2017/12/10/wooyun-1000php-15/" title= fckeditor >= 2.6.4 任意文件上传漏洞 >
+                    <span>往前一页</span>
+                    <span>fckeditor >= 2.6.4 任意文件上传漏洞</span>
+                </a>
+            </li>
+        
         
             <li class="previous">
-                <a href= "/2017/12/09/wooyun-1000php-14/" title= wooyun-1000php-14 >
+                <a href= "/2017/12/08/wooyun-1000php-13/" title= dedecms v5.3-v5.6 Get Shell >
                     <span>往后一页</span>
-                    <span>wooyun-1000php-14</span>
+                    <span>dedecms v5.3-v5.6 Get Shell</span>
                 </a>
             </li>
         
@@ -245,17 +263,27 @@ white-space: pre;
     <!-- 评论插件 -->
     <!-- 来必力City版安装代码 -->
 
+    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMjI3OC84ODQy>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
 <!-- City版安装代码已完成 -->
     
     
     <!--PC版-->
 
     <!--PC版-->
-
-	<!-- UY BEGIN -->
-	<div id="uyan_frame"></div>
-	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2151445"></script>
-	<!-- UY END -->
 
 
     
@@ -305,7 +333,7 @@ white-space: pre;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#详细说明"><span class="toc-number">2.</span> <span class="toc-text">详细说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞证明"><span class="toc-number">3.</span> <span class="toc-text">漏洞证明</span></a></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>
@@ -539,24 +567,7 @@ white-space: pre;
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <div class="total-archive" >目前才写: 17 篇博文，好好努力吧，骚年。 </div>
+    <div class="total-archive" >目前才写: 18 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
     
@@ -568,32 +579,22 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/09</span><a class="archive-post-title" href= "/2017/12/09/wooyun-1000php-14/" >wooyun-1000php-14</a>
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-16/" >mvmmall网店商城系统注入漏洞-2011.07</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/09</span><a class="archive-post-title" href= "/2017/12/09/wooyun-1000php-15/" >wooyun-1000php-15</a>
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-15/" >fckeditor >= 2.6.4 任意文件上传漏洞</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-14/" >PHPCMS V9 通行证注册缺陷</a>
         </li>
     
     
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
         </li>
     
     
@@ -608,7 +609,17 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
         </li>
     
     
@@ -624,6 +635,11 @@ white-space: pre;
     
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
         </li>
     
     
@@ -656,9 +672,9 @@ white-space: pre;
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">

