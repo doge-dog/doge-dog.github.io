@@ -105,10 +105,8 @@ white-space: pre;
     
 </head>
     
-        <body class="home-body">
     
-    
-<header class="header index-header">
+<header class="header">
 
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
@@ -119,29 +117,18 @@ white-space: pre;
         <div class="site-intro">
     
     <!-- 主页  -->
-    
-    
-    <!-- 文章页  -->
             
-    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/intro-desktop.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            \xeb\xfe's Blog.
-            <!-- 文章页  -->
-            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
-            
-            
-                做人如果没有梦想，那跟咸鱼有什么区别.
-            
-            <!-- 文章页  -->
             
         </p>
         <!-- 文章页meta -->
@@ -217,14 +204,14 @@ white-space: pre;
     
     
         <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-7/" >
+            <a class="content-show-full" href = "/2017/12/11/file-upload/" >
                     <h2 class="abstract-title">
                         
-                        <span>phpwind远程代码执行漏洞-2010.09</span>
+                        <span>WEB文件上传漏洞总结</span>
                     </h2>
                 <div class="abstract-content">
-                    简要描述phpwind较高版本论坛中存在一个严重的漏洞，成功利用该漏洞可以远程执行任意php代码，影响phpwind 7和phpwind 8
-详细说明漏洞代码(pw_ajax.php)12345678910111213&#125; elseif ($action == 'pcdelimg') &#123;	InitGP(array('fieldname','pctype'));	InitGP(array('tid','id'),2);	if (!$tid || !$id || !$fieldname || !$pctype) &#123;			echo 'fail';	&#125;	$i...
+                    1. 概述文件上传漏洞可以说是日常渗透测试中用得最多的一个漏洞，用它获得服务器权限最快最直接。在Web程序中，经常需要用到文件上传的功能。如用户或者管理员上传图片，或者其它文件。如果没有限制上传类型或者限制不严格被绕过，就有可能造成文件上传漏洞。如果上传了可执行文件或者网页脚本，就会导致网站被控制甚至服务器沦陷。，复杂一点的情况是配合 Web Server的解析漏洞来获取控制权或结合文件包含漏洞。此篇文章主要分三部分：总结一些常见的上传文件校验方式，以及绕过校验的各种姿势，最后对此漏洞提几点防护建议。
+2. 上传检测流程通常一个文件以HTTP协议进行上传时，将以POST请求发送至Web服...
                 </div>
             </a>
             <div class="abstract-post-meta">
@@ -232,301 +219,21 @@ white-space: pre;
                 
                 <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+        <a class="post-tag" href="javascript:void(0);" data-href = web渗透-文件上传>web渗透-文件上传</a>
     
 </div>
                 
                 <!-- date  -->
                 <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-6/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>phpcms 2008 sp4 爆路径及任意文件删除漏洞</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述某页面下，未作容错处理导致爆路径，同时过滤不严导致恶意攻击者可以删除网站任意文件
-任意文件删除漏洞详细说明在corpandresize/config.inc.php中定义：12$tmp = $_COOKIE['tmp'];define("TMP_PATH", $tmp);
-在corpandresize/process.php中用到TMP_PATH，满足前面的一系列条件后（这个很好满足，都是用户可控的）：1@unlink(TMP_PATH.'/'.$thumbfile);
-没有检查$_COOKIE[‘tmp’]就直接放入unlink()了，只要修改cookie的tmp值就可以删除网...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-5/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>PHPCMS通杀XSS-2010.08</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述在我要报错功能页下，过滤不严格，造成反射型XSS
-1http://**.**.**.**/error_report/error_report.php?title=1&amp;contentid=1"&gt;&lt;script&gt;alert(/xss/)&lt;/script&gt;
-修复方案：输入输出前通过htmlspecialchars过滤，并过滤其他特殊字符
-原文链接：PHPCMS通杀XSS-2010.08
-
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-4/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>Discuz!漫游插件API本地包含漏洞</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述Discuz!漫游插件API本地包含漏洞,该插件默认不安装,并且服务默认不开启.
-漏洞代码(manyou/api/class/MyBase.php)12345678function parseRequest() &#123;	$request = $_POST;	$module = $request['module'];	$method = $request['method'];	return $this-&gt;callback($module, $method, $params);	&#125;	function callback($module, $method, $par...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/07/wooyun-1000php-3/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>ecshop SQL注射漏洞-2010.8.21</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述在Ecshop中缺乏对参数的有效过滤，导致一个SQL注射漏洞，成功利用该漏洞的攻击者可以获得数据库及站点的完全权限。
-漏洞代码函数(include_libcommon.php)1234567891011121314151617181920212223242526272829303132333435function get_package_info($id)&#123;    global $ecs, $db,$_CFG;    $now = gmtime();    $sql = "SELECT act_id AS id,  act_name AS package_name, g...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/07</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/07/wooyun-1000php-2/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述Discuz！7.2/X1 第三方插件SQL注入及持久型XSS漏洞。SQL注入比较鸡肋，要求GPC为off，XSS因为是持久型的，只要管理员打开此应用即会触发。
-第三方的心情墙插件，因变量未初始化及过滤不严导致SQL注入及跨站脚本漏洞。
-SQL漏洞代码图片(moodwall.inc.php)12345678910111213141516171819202122232425elseif($action == 'edit_mood' &amp;&amp; moodid) &#123;          //moodid未初始化，直接代入sql查询	  $check = $db-&gt...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/07</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/07/wooyun-1000php-1/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</span>
-                    </h2>
-                <div class="abstract-content">
-                    漏洞代码(ad_js.php)12345678910111213141516171819202122232425262728293031323334&lt;?phpdefine('IN_BLUE', true);require_once dirname(__FILE__) . '/include/common.inc.php';$ad_id = !empty($_GET['ad_id']) ? trim($_GET['ad_id']) : '';if(empty($ad_id))&#123;	echo 'Error!';	exit();&#125;$ad = $db-&gt;getone...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/07</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/11/26/hxctf2017-writeup/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>hxctf2017-writeup</span>
-                    </h2>
-                <div class="abstract-content">
-                    2017年 “湖湘杯”网络安全技能大赛部分WriteupMISC热身运动一张gif动图，通过命令convert pink.gif output.png对分割每一帧图片，看到跳跳虎的每个坐标位置，写成文本,图片及转换好的文本如下：5B4G2B4B5B2H3E2B5F8F1E2B7F6F1F4G5F6G1B3G5G6H2E搜索64进制，得到一张图片，跟跳跳虎的8*8类似，把坐标转换成数字25 38 49 33 25 55 44 49 29 5 60 49 13 21 61 38 29 22 57 46 30 23 52Base64也是0-63索引，将数字字符串转成base64，base64表...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/11/26</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/11/24/blog/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>My blog</span>
-                    </h2>
-                <div class="abstract-content">
-                    什么都不会的辣鸡终于把博客搭建好了！
-
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = 小试牛刀>小试牛刀</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/11/24</span>
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/11</span>
                 </div>
             </div>
         </article>
     
     <!-- paginator  -->
     
-    <nav class="page-nav">
-        <a class="extend prev" rel="prev" href="/">#PREV</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-    </nav>
-    
 </main>
             <!-- profile -->
-            
-            <div class="profile">
-    <img class="profile-avatar" src= /avatar/kumamon.jpg >
-    <div class="profile-name">\xeb\xfe</div>
-    
-    <div class="profile-signature">
-        什么都不会的辣鸡在弄博客
-    </div>
-    
-    
-    <div class="profile-social">
-        
-    
-        
-            
-                <a href="mailto:447344932@qq.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/doge-dog" class="iconfont-archer github" target="_blank" title="github"></a>
-            
-        
-    
-
-    </div>
-    
-    
-        <div class="friends">
-            <div>friends</div>
-            
-                <span>
-                    <a href= https://ares-x.com/ target="_black">ares-x</a>
-                </span>
-            
-        </div>
-    
-    
-        <div class="about-me">
-            <div>
-                <a href = "/about" >about me</a>
-            </div>
-        </div>
-    
-</div>
             
         </div>
         <footer class="footer footer-unloaded">

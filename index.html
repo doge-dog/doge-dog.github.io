@@ -217,6 +217,35 @@ white-space: pre;
     
     
         <article class="index-post">
+            <a class="content-show-full" href = "/2017/12/11/file-upload/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>WEB文件上传漏洞总结</span>
+                    </h2>
+                <div class="abstract-content">
+                    1. 概述文件上传漏洞可以说是日常渗透测试中用得最多的一个漏洞，用它获得服务器权限最快最直接。在Web程序中，经常需要用到文件上传的功能。如用户或者管理员上传图片，或者其它文件。如果没有限制上传类型或者限制不严格被绕过，就有可能造成文件上传漏洞。如果上传了可执行文件或者网页脚本，就会导致网站被控制甚至服务器沦陷。，复杂一点的情况是配合 Web Server的解析漏洞来获取控制权或结合文件包含漏洞。此篇文章主要分三部分：总结一些常见的上传文件校验方式，以及绕过校验的各种姿势，最后对此漏洞提几点防护建议。
+2. 上传检测流程通常一个文件以HTTP协议进行上传时，将以POST请求发送至Web服...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = web渗透-文件上传>web渗透-文件上传</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/11</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
             <a class="content-show-full" href = "/2017/12/10/wooyun-1000php-16/" >
                     <h2 class="abstract-title">
                         
@@ -462,35 +491,6 @@ white-space: pre;
                 <div class="abstract-content">
                     简要描述phpcms2008本地文件包括及利用（执行任意SQL脚本）
 漏洞文件(wap/index.php)123456789101112131415161718&lt;?phpinclude '../include/common.inc.php';include './include/global.func.php';$lang = include './include/lang.inc.php';if(preg_match('/(mozilla|m3gate|winwap|openwave)/i', $_SERVER['HTTP_USER_AGENT'])) &#123;header...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-7/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>phpwind远程代码执行漏洞-2010.09</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述phpwind较高版本论坛中存在一个严重的漏洞，成功利用该漏洞可以远程执行任意php代码，影响phpwind 7和phpwind 8
-详细说明漏洞代码(pw_ajax.php)12345678910111213&#125; elseif ($action == 'pcdelimg') &#123;	InitGP(array('fieldname','pctype'));	InitGP(array('tid','id'),2);	if (!$tid || !$id || !$fieldname || !$pctype) &#123;			echo 'fail';	&#125;	$i...
                 </div>
             </a>
             <div class="abstract-post-meta">
@@ -832,7 +832,20 @@ white-space: pre;
     
     
     
-    <div class="total-archive" >目前才写: 18 篇博文，好好努力吧，骚年。 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 19 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
     
@@ -841,6 +854,11 @@ white-space: pre;
     
     <div class="archive-year"> 2017 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/file-upload/" >WEB文件上传漏洞总结</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -859,21 +877,6 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
         </li>
     
@@ -884,7 +887,32 @@ white-space: pre;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
         </li>
     
     
@@ -895,16 +923,6 @@ white-space: pre;
     
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
         </li>
     
     
@@ -938,6 +956,8 @@ white-space: pre;
     <div class="sidebar-tags-name">
     
         <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
     
