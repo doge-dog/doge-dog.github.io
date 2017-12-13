@@ -204,16 +204,18 @@ white-space: pre;
     
     
         <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-6/" >
+            <a class="content-show-full" href = "/2017/12/13/php-audit-brainmap1/" >
                     <h2 class="abstract-title">
                         
-                        <span>phpcms 2008 sp4 爆路径及任意文件删除漏洞</span>
+                        <span>php代码审计脑图</span>
                     </h2>
                 <div class="abstract-content">
-                    简要描述某页面下，未作容错处理导致爆路径，同时过滤不严导致恶意攻击者可以删除网站任意文件
-任意文件删除漏洞详细说明在corpandresize/config.inc.php中定义：12$tmp = $_COOKIE['tmp'];define("TMP_PATH", $tmp);
-在corpandresize/process.php中用到TMP_PATH，满足前面的一系列条件后（这个很好满足，都是用户可控的）：1@unlink(TMP_PATH.'/'.$thumbfile);
-没有检查$_COOKIE[‘tmp’]就直接放入unlink()了，只要修改cookie的tmp值就可以删除网...
+                    PHP代码审计安装问题
+1.自动删除这个安装文件通过生成一个lock文件来判断程序是否安装过
+2.根本无验证安装完成后不会自动删除文件，又不会生成lock判断是否安装过参考链接：PHPSHE B2C 重装
+3.安装file直接用GET提交step绕过，直接进入下一步
+4.变量覆盖导致重装可以GET,POST,COOKIE 任意提交一个变量名$insLockfile,给其赋空值，覆盖掉$insLockfile,从而让file_exists为false就不会退出参考链接：frcms 重装系统
+5.判断lock后，无exit判断是否存在lock文件，如果存在lock文件，就会header到in...
                 </div>
             </a>
             <div class="abstract-post-meta">
@@ -221,170 +223,18 @@ white-space: pre;
                 
                 <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
+        <a class="post-tag" href="javascript:void(0);" data-href = 脑图>脑图</a>
     
 </div>
                 
                 <!-- date  -->
                 <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-5/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>PHPCMS通杀XSS-2010.08</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述在我要报错功能页下，过滤不严格，造成反射型XSS
-1http://**.**.**.**/error_report/error_report.php?title=1&amp;contentid=1"&gt;&lt;script&gt;alert(/xss/)&lt;/script&gt;
-修复方案：输入输出前通过htmlspecialchars过滤，并过滤其他特殊字符
-原文链接：PHPCMS通杀XSS-2010.08
-
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-4/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>Discuz!漫游插件API本地包含漏洞</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述Discuz!漫游插件API本地包含漏洞,该插件默认不安装,并且服务默认不开启.
-漏洞代码(manyou/api/class/MyBase.php)12345678function parseRequest() &#123;	$request = $_POST;	$module = $request['module'];	$method = $request['method'];	return $this-&gt;callback($module, $method, $params);	&#125;	function callback($module, $method, $par...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/07/wooyun-1000php-3/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>ecshop SQL注射漏洞-2010.8.21</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述在Ecshop中缺乏对参数的有效过滤，导致一个SQL注射漏洞，成功利用该漏洞的攻击者可以获得数据库及站点的完全权限。
-漏洞代码函数(include_libcommon.php)1234567891011121314151617181920212223242526272829303132333435function get_package_info($id)&#123;    global $ecs, $db,$_CFG;    $now = gmtime();    $sql = "SELECT act_id AS id,  act_name AS package_name, g...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/07</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/07/wooyun-1000php-2/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述Discuz！7.2/X1 第三方插件SQL注入及持久型XSS漏洞。SQL注入比较鸡肋，要求GPC为off，XSS因为是持久型的，只要管理员打开此应用即会触发。
-第三方的心情墙插件，因变量未初始化及过滤不严导致SQL注入及跨站脚本漏洞。
-SQL漏洞代码图片(moodwall.inc.php)12345678910111213141516171819202122232425elseif($action == 'edit_mood' &amp;&amp; moodid) &#123;          //moodid未初始化，直接代入sql查询	  $check = $db-&gt...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/07</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/07/wooyun-1000php-1/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</span>
-                    </h2>
-                <div class="abstract-content">
-                    漏洞代码(ad_js.php)12345678910111213141516171819202122232425262728293031323334&lt;?phpdefine('IN_BLUE', true);require_once dirname(__FILE__) . '/include/common.inc.php';$ad_id = !empty($_GET['ad_id']) ? trim($_GET['ad_id']) : '';if(empty($ad_id))&#123;	echo 'Error!';	exit();&#125;$ad = $db-&gt;getone...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/07</span>
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/13</span>
                 </div>
             </div>
         </article>
     
     <!-- paginator  -->
-    
-    <nav class="page-nav">
-        <a class="extend prev" rel="prev" href="/tags/wooyun-1000php/">#PREV</a><a class="page-number" href="/tags/wooyun-1000php/">1</a><span class="page-number current">2</span>
-    </nav>
     
 </main>
             <!-- profile -->

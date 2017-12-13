@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        php代码审计脑图 · \xeb\xfe&#39;s Blog
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+$('pre code').each(function(i, block) {
+  //hljs.highlightBlock(block);
+  var lines = $(this).text().split('\n').length - 1;
+  var $numbering = $('<ul/>').addClass('pre-numbering');
+  $(this)
+    .addClass('has-numbering')
+    .parent()
+    .append($numbering);
+  for(i=1;i<=lines;i++){
+    $numbering.append($('<li/>').text(i));
+  }
+});
+</script>
+<style>
+code.has-numbering {
+  margin-left: 10px;
+  word-wrap: normal;
+  word-break: keep-all;
+  white-space: pre;
+}
+
+.pre-numbering {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  padding: .5em 0.2em .5em 0;
+  border-right: 1px solid #C3CCD0;
+  border-radius: 3px 0 0 3px;
+  background-color: #EEE;
+  text-align: right;
+  font-size: 1.0em;
+  color: #AAA;
+  list-style: none;
+}
+@media (max-width: 767px) {
+  .pre-numbering {
+    display: none;
+  }
+  .has-numbering {
+    margin-left: -10px !important;
+    word-wrap: break-world !important;
+    white-space: pre-wrap !important;
+  }
+}
+overflow-x: auto;
+overflow-y: auto;
+word-break: keep-all;
+white-space: pre;
+</style>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >\xeb\xfe&#39;s Blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">php代码审计脑图</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>\xeb\xfe's Blog.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            php代码审计脑图
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = 脑图>脑图</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/13</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="PHP代码审计"><a href="#PHP代码审计" class="headerlink" title="PHP代码审计"></a>PHP代码审计</h1><h2 id="安装问题"><a href="#安装问题" class="headerlink" title="安装问题"></a>安装问题</h2><ul>
+<li><strong>1.自动删除这个安装文件</strong><br>通过生成一个lock文件来判断程序是否安装过</li>
+<li><strong>2.根本无验证</strong><br>安装完成后不会自动删除文件，又不会生成lock判断是否安装过<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-062047.html" target="_blank" rel="noopener">PHPSHE B2C 重装</a></li>
+<li><strong>3.安装file</strong><br>直接用GET提交step绕过，直接进入下一步</li>
+<li><strong>4.变量覆盖导致重装</strong><br>可以GET,POST,COOKIE 任意提交一个变量名$insLockfile,给其赋空值，覆盖掉$insLockfile,从而让file_exists为false就不会退出<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-073244.html" target="_blank" rel="noopener">frcms 重装系统</a></li>
+<li><strong>5.判断lock后，无exit</strong><br>判断是否存在lock文件，如果存在lock文件，就会header到index.php,但是header后并没有exit，所以 并不会退出，类似的还有javascript弹个框<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2013-045143.html" target="_blank" rel="noopener">开源轻论坛StartBBS前台getshell</a></li>
+<li><strong>6.解析漏洞</strong><br>在安装完成后会将install.php 重命名为index.php.bak,但是由于Apache的解析漏洞：如果无法识别到最后一个后缀的话，就会向上解析，那么就又变成了php了，然后结合安装时的变量覆盖又成重装了。</li>
+<li><strong>7.满足一些条件不会退出的</strong><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-054387.html" target="_blank" rel="noopener">建站之星Sitestar前台Getshell一枚</a></li>
+</ul>
+<h2 id="包含漏洞"><a href="#包含漏洞" class="headerlink" title="包含漏洞"></a>包含漏洞</h2><ul>
+<li><p><strong>1.本地文件包含</strong><br>很多都限制了包含的后缀结尾必须为.php，例如<code>include($a.&#39;.php&#39;)</code>，需要截断后面的<code>.php</code></p>
+<ul>
+<li>00截断<br><code>gpc off &amp;&amp; php &lt; 5.3.4</code></li>
+<li>长文件名截断</li>
+<li>转换字符集造成的截断<br><code>&lt;iconv()截断&gt;</code></li>
+<li><p>伪协议</p>
+<ul>
+<li>截取字符判断是不是.php</li>
+<li>用zip(或者phar)协议绕过<br>首先新建一个1.php，里面phpinfo，然后压缩成.zip，然后把zip的名字改成yu.jpg，然后把这个.jpg上传上去，然后包含<br>Example：<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost/php/include.php?include_file=zip://C:\wamp\www.php\1.jpg%231.php`</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>包含日志，环境变量</p>
+</li>
+</ul>
+</li>
+<li><strong>2.见 <code>&lt;PHP技巧之截断&gt;</code></strong></li>
+<li><strong>3.远程文件包含</strong><ul>
+<li>包含远程文件，或者伪协议php://input data等</li>
+<li>条件：allow_url_include on ，默认是off</li>
+<li>allow_url_include off 条件下RFI<ul>
+<li>allow_url_include为on ,allow_url_fopen为off<br>伪协议：<img src="/2017/12/13/php-audit-brainmap1/1.jpg" alt="伪协议"></li>
+<li>allow_url_include &amp;&amp; allow_url_fopen为off<br>包含共享文件：<img src="/2017/12/13/php-audit-brainmap1/2.jpg" alt="包含共享文件"><br>互联网上445端口基本上被过滤</li>
+</ul>
+</li>
+<li>allow_url_fopen 默认是on</li>
+</ul>
+</li>
+</ul>
+<h2 id="找回密码"><a href="#找回密码" class="headerlink" title="找回密码"></a>找回密码</h2><ul>
+<li><strong>1.验证token</strong><br>在找回密码的时候生成一个token,然后存储到数据库中，然后把找回密码的地址发到邮箱中，url中就含有token，由用户点开后就能修改密码</li>
+<li><strong>2.延伸</strong><br>一些cms的密码加密方式很难破掉，有时候拿到了管理的密码破不开，利用方法：一般找回密码是用的邮箱，首先把管理的邮箱注入出来，然后再去找回密码，再把数据库的token注入出来，构造一下地址，就能重置密码</li>
+<li><p><strong>3.rand函数生成token</strong></p>
+<ul>
+<li><code>$resetpwd=md5((rand());</code><br>  对rand()函数生成出来的数字进行MD5<br>  某些平台下(例如windows)RAND_MAX只有32768，如果需要的范围大于32768，那么指定min和max参数就可以生成大于RAND_MAX的数了，或者考虑用mt_rand()来替代它<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-050304.html" target="_blank" rel="noopener">Thinksaas找回密码处设计错误利用账户可找回密码。</a></li>
+<li><p><code>$encryptstring=md5($this-&gt;time.$verification.$auth);</code></p>
+  <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$timetemp=date(<span class="string">"Y-m-d H:i:s"</span>,<span class="keyword">$this</span>-&gt;time);$auth=util::strcode($timetemp,<span class="string">'ENCODE'</span>);`</span><br></pre></td></tr></table></figure>
+<p>  算法的KEY并没有初始化，如果知道了这个时间，就可以生成加密的字符串<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-067410.html" target="_blank" rel="noopener">Hdwiki设计缺陷知邮箱可改密码（包括管理员）</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="上传漏洞"><a href="#上传漏洞" class="headerlink" title="上传漏洞"></a>上传漏洞</h2><ul>
+<li><strong>1.未验证上传后缀</strong></li>
+<li><strong>2.验证上传后缀被bypass</strong></li>
+<li><strong>3.上传的文件验证了上传后缀，但是文件名不重命名</strong><br>  截断yu.php%00.jpg</li>
+<li><strong>4.上传路径可控</strong></li>
+<li><strong>5.解析漏洞</strong><ul>
+<li>Nginx<br>yu.jpg/1.php</li>
+<li>Apache<br>yu.php.xxx</li>
+</ul>
+</li>
+<li><strong>6.验证方法</strong><ul>
+<li>MIME,客户端的JS验证，白名单，黑名单</li>
+</ul>
+</li>
+<li><strong>7.绕过</strong><ul>
+<li>大小写</li>
+<li>文件名没trim<br>在文件名后面加空格，windows下的x.php%81-%99 decode后仍为x.php,windows下的特性.php::$data</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><p>任意文件删除，任意文件复制，任意文件重命名，任意文件移动，任意文件下载<br>首先尝试拿到配置文件中的数据库连接账号和密码，然后外链<br>拿到配置文件，拿到加密解密函数的key，生成加密字符串，结合具体的代码利用</p>
+<ul>
+<li><strong>1.文件删除</strong><ul>
+<li>由于全局的过滤而不能注入时，可以用任意文件删除删掉这个文件</li>
+<li>删除安装文件生成的lock文件，重装</li>
+<li>参考链接：<a href="https://wy.tuisec.win/wooyun-2010-0412.html" target="_blank" rel="noopener">phpcms 2008 sp4 爆路径及任意文件删除漏洞</a></li>
+</ul>
+</li>
+<li><p><strong>2.文件复制</strong></p>
+<ul>
+<li>要复制的文件  要复制的路径<br>当两个都完全可控，可以直接把自己上传的图片复制成一个.php马</li>
+<li><p>复制的文件可控  要复制的路径不可控</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy(ROOT_PATH.<span class="string">"$webdb[updir]/$value"</span>,ROOT_PATH.<span class="string">"$webdb[updir]/&#123;$value&#125;.jpg"</span>)</span><br></pre></td></tr></table></figure>
+<p>可以把$value控制为保存了qibocms的加密函数的key的配置文件，复制后成一个.jpg直接打开就可以看到key</p>
+</li>
+</ul>
+</li>
+<li><strong>3.文件下载</strong><br>  下载配置文件 拿到key<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-066459.html" target="_blank" rel="noopener">qibocmsV7整站系统任意文件下载导致无限制注入多处</a></li>
+<li><strong>4.文件写入</strong></li>
+<li><strong>5.文件包含</strong></li>
+</ul>
+<h2 id="加密函数"><a href="#加密函数" class="headerlink" title="加密函数"></a>加密函数</h2><p>拿到加密函数的key,加密一些特殊字符然后拿到加密的字符串</p>
+<ul>
+<li><strong>1.加密可逆</strong><br>  弱算法导致了知道明文，知道密文，可逆，拿到加密函数的key，从而自己生成一个想要的加密字符串<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-071655.html" target="_blank" rel="noopener">DedeCMS-V5.7-SP1(2014-07-25)sql注入+新绕过思路</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-066138.html" target="_blank" rel="noopener">phpcms最新版绕过全局防御暴力注入</a></li>
+<li><strong>2.加密可控</strong><br>  要加密的内容是可控的，密文会输出，这个可控的点能引入特殊字符，那么把一些特殊字符带入到这里面，拿到密文，再找到一处decode后会进行特殊操作的点，然后进行各种操作。<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080370.html" target="_blank" rel="noopener">程氏舞曲CMS某泄露，导致sql注入</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2013-024984.html" target="_blank" rel="noopener">PHPCMS最新版(V9)SQL注入一枚</a></li>
+<li><strong>3.key泄露</strong><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-072727.html" target="_blank" rel="noopener">一个PHPWIND可拿shell的高危漏洞</a></li>
+</ul>
+<h2 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h2><ul>
+<li><strong>1.输入输出</strong></li>
+<li><strong>2.foreach()的key值</strong></li>
+<li><strong>3.removeXSS函数</strong></li>
+<li><strong>多个函数处理，插入辣鸡数据绕过第一个函数后，第二个函数过滤了辣鸡数据</strong></li>
+</ul>
+<h2 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h2><ul>
+<li><strong>1.后台敏感操作</strong></li>
+</ul>
+<h2 id="撸库"><a href="#撸库" class="headerlink" title="撸库"></a>撸库</h2><ul>
+<li><strong>1.失败后没有清空session中的验证码</strong></li>
+<li><strong>2.ip第一次出现，验证码为默认值</strong></li>
+<li><strong>3.验证码md5显示在cookie中</strong></li>
+<li><strong>4.session保存到文件</strong></li>
+</ul>
+<h2 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h2><h2 id="登录认证"><a href="#登录认证" class="headerlink" title="登录认证"></a>登录认证</h2><ul>
+<li><strong>1.session</strong></li>
+<li><strong>2.算法</strong></li>
+</ul>
+<h2 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h2><h2 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h2><ul>
+<li><strong>1.通过ID操作</strong></li>
+</ul>
+<h2 id="注入"><a href="#注入" class="headerlink" title="注入"></a>注入</h2><p>把用户可控的一些变量，带入到了数据库的各种操作中，并且没有做好过滤，例如：在注册用户的时候检测用户名是否存在，SQL语句是拼接SQL</p>
+<ul>
+<li><strong>1.select注入</strong><br>  一般使用union select 联合查询</li>
+<li><strong>2.update注入</strong><ul>
+<li>update set的位置<br>看这个表的哪个column会被展示出来，就把查询出来的内容显示到这里</li>
+<li>where 后<br>通过盲注的方式列出数据</li>
+</ul>
+</li>
+<li><strong>3.insert注入</strong><br>  把要输出的数据插入到这个column里面去</li>
+<li><strong>4.delete注入</strong><br>  通过盲注的方式列出数据</li>
+<li><strong>5.数字型注入</strong><br>  变量并没有用单引号括住，不需要用单引号区分数据与SQL命令，这样就会让一般的GPC等机制无用，因为不包括特殊字符<br>  强制类型转换intval</li>
+<li><strong>6.字符型、搜索型</strong><ul>
+<li>有单引号括住，需要闭合单引号</li>
+<li>全局没有做addslashes，在查询的时候再对一些用户可控的变量进行addslashes,遗漏了某些变量没addslashes</li>
+<li>全局做addslashes,在全局文件中对GET POST COOKIE做addslashes<br>首先get magic quotes gpc 判断GPC是否开启，如果没开启就调用addslashes来转义，如果开启就不调用addslashes</li>
+</ul>
+</li>
+<li><strong>7.Magic_quotes_gpc</strong><ul>
+<li>Magic_quotes_gpc在稍微高点的版本默认都是on，5.4已经废除，<code>&#39;,&quot;,\,NULL</code>会在前面添加上一个转义符</li>
+</ul>
+</li>
+<li><strong>8.宽字节注入</strong><ul>
+<li>数据库字符集GBK的宽字节注入<br>数据库的连接方式不同，数据库与PHP的编码不一致，转换过程中可能存在<br>错误方法：set names gbk</li>
+<li>转换字符集造成的宽字节注入<br>从gbk转到utf8<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-063225.html" target="_blank" rel="noopener">74cms 最新版 注入8-9</a><br>从utf8转到gbk，錦从UTF8转成GBK之后成了<code>%e5%5c</code>，对GET POST COOKIE 做了addslashes，<code>&#39;</code>转义后为<code>\&#39;-&gt;%5c %e5%5c5c&#39;</code>两个<code>\</code>，则引号出来<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-055842.html" target="_blank" rel="noopener">qibocms 下载系统SQL注入一枚</a></li>
+</ul>
+</li>
+<li><strong>9.解码导致</strong><ul>
+<li>先提交encode的，那么就能不被转义，decode后再带入查询，造成了注入，无视GPC</li>
+<li>urlencode</li>
+<li>base64_decode</li>
+<li>XML<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-053187.html" target="_blank" rel="noopener">qibocms B2b 注入一枚</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-056822.html" target="_blank" rel="noopener">phpdisk V7 sql注入2</a></li>
+</ul>
+</li>
+<li><p><strong>10.变量覆盖</strong><br>  变量覆盖有extract、parse_str、$$</p>
+<ul>
+<li><p>extract<br>extract($_POST)直接从POST数组中取出变量，覆盖掉之前的一些变量，覆盖的话，一般是覆盖掉表前缀之类的。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">selet * from $pre_admin where xxx</span><br></pre></td></tr></table></figure>
+<p>像这种就覆盖掉$pre,然后直接补全语句注入<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-053189.html" target="_blank" rel="noopener">qibocms分类注入一枚可提升自己为管理</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-051734.html" target="_blank" rel="noopener">phpdisk V7 sql注入2</a></p>
+</li>
+<li>$$<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-055338.html" target="_blank" rel="noopener">MetInfo最新版(5.2.4)一处SQL盲注漏洞</a></li>
+</ul>
+</li>
+<li><p><strong>11.Replace</strong></p>
+<ul>
+<li><p>把<code>&#39;</code>替换成空，但是通过又全局有转义<code>?&lt;</code>单引号<code>&#39;</code>转义为<code>\&#39;</code>,然后替换<code>&#39;</code>为空格，留下<code>\</code>,注释掉<code>&#39;</code>,破坏原本的SQL<br>用户提交一个<code>&#39;</code>全局转义成<code>\&#39;</code>,然后这过滤函数又会把<code>&#39;</code>替换成空，那么就留下<code>\</code>导致可以吃掉一个单引号。<br>需要double query ,两处可控输入</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from c_admin where username=' admin\' and email=' inject#'</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>有时会把<code>&#39;&quot;</code>都替换成空，然后提交之后去掉了<code>&#39;</code>，不把<code>&#39;</code>替换成空，但是<code>&quot;</code>也会被转义，那么提交一个 <code>&quot;</code>就又剩下了一个转义符了。<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-050636.html" target="_blank" rel="noopener">PHPCMS全版本通杀SQL注入漏洞</a></p>
+</li>
+<li><p>一些replace 是用户可控的，就是说用户可以控制替换为空的内容</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$order_sn=str_replace($_GET[<span class="string">'subject'</span>],<span class="string">''</span>,$_GET[<span class="string">'out_trade_no'</span>]);</span><br></pre></td></tr></table></figure>
+<p>这里因为会被转义，如果提交<code>&#39;</code>就变成<code>\&#39;</code>，并且这里替换为空的内容get来的，那就想办法把<code>\</code>替换掉<br>addslashes 会对<code>&#39;,&quot;,\,NULL</code>转义，<code>&#39;</code>变成<code>\&#39;</code>，<code>&quot;</code>变成<code>\&quot;</code>，<code>\</code>变成<code>\\</code>，<code>NULL</code>变成<code>\0</code>, 提交<code>%00&#39;</code>会被转义生成<code>\0\&#39;</code>，这时候再提交把0替换成空，那么就剩下<code>\\&#39;</code>，<code>\\</code>表示<code>\</code>的转义，<code>&#39;</code>单引号也就成功出来了。<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-053198.html" target="_blank" rel="noopener">cmseasy绕过补丁SQL注入一枚</a></p>
+</li>
+</ul>
+</li>
+<li><p><strong>12.server注入</strong><br>  -只对GET POST COOKIE 进行addslashes，没有对SERVER济宁转义，一些server的变量，用户可控并写入数据库</p>
+  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QUERY_STRING , X_FORWARDED_FOR , CLIENT_IP , HTTP_HOST , ACCEPT_LANGUAGE</span><br></pre></td></tr></table></figure>
+<p>  最常见的当然也就是X_FORWARDED_FOR，一般是在IP 函数中用户，没有验证ip 是否合法，直接return。<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-068853.html" target="_blank" rel="noopener">Phpyun注入漏洞二</a></p>
+<ul>
+<li>正则验证错误<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-062957.html" target="_blank" rel="noopener">CmsEasy最新版本无限制SQL注射</a></li>
+</ul>
+</li>
+<li><strong>13.file注入</strong><ul>
+<li>全局只对GET POST COOKIE 转义，遗漏了files，，且不受GPC，files注入一般是因为上传，会把上传的名字带到insert当中入库<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-065837.html" target="_blank" rel="noopener">qibocms 黄页系统SQL注入一枚</a></li>
+<li>在入库的时候对文件的名字进行转义，在获取后缀后再入库时对文件名转义了却没有对后缀转义也导致了注入<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-079041.html" target="_blank" rel="noopener">Supesite 前台注入 #2 (Insert)</a></li>
+</ul>
+</li>
+<li><strong>14.未初始化造成的注入</strong><br>  php &lt; 4.20时，register_globals默认都是on,逐渐register_globals默认都是off<br>  伪全局机制，遗漏了初始化<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080867.html" target="_blank" rel="noopener">qibocms地方门户系统注入一个问题</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080870.html" target="_blank" rel="noopener">qibocms地方门户系统注入</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-079938.html" target="_blank" rel="noopener">齐博地方门户系统SQL注入漏洞</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080259.html" target="_blank" rel="noopener">齐博整站/地方门户SQL注入漏洞</a></li>
+<li><strong>15.数组中的key</strong><br>  判断GPC是否开启，如果off就对数组中的value进行addslashes，没有对数组中的key进行转义，key带入sql，听说低版本的php对二维数组中的key就算GPC ON 也不会转义<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-069746.html" target="_blank" rel="noopener">qibocms V7 整站系统最新版SQL注入一枚 &amp; 另外一处能引入转义符的地方。</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-070072.html" target="_blank" rel="noopener">qibocms多个系统绕过补丁继续注入</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-070366.html" target="_blank" rel="noopener">qibocms全部开源系统 Getshell</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-071516.html" target="_blank" rel="noopener">Discuz 5.x 6.x 7.x 前台SQL注入漏洞一枚</a></li>
+<li><strong>16.offset</strong><br>  <code>$_GET[a]</code>提交的是一个数组，且含有一个key为0，那么<code>$a</code>就是对应的这个key的value，但是这里并没有强制要求为数组。<br>  提交一个字符串就为了<code>\</code>,吃掉一个单引号，然后就在$b处写入inject 可以注入<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080875.html" target="_blank" rel="noopener">qibocms 地方门户系统</a></li>
+<li><strong>17.第三方插件</strong><br>  常见的uc_cencert / alipay / tenpay / chinabank<ul>
+<li>默认UC里面都会striplashes</li>
+<li>uckey默认的</li>
+<li>uckey这个常量没有初始化</li>
+<li>uckey可控<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-060159.html" target="_blank" rel="noopener">phpmps 注入 (可修改其他用户密码,官网成功)–UC</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-061135.html" target="_blank" rel="noopener">PHPEMS (在线考试系统) 设计缺陷 Getshell一枚(官网已shell)–UC</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-058479.html" target="_blank" rel="noopener">最土团购注入一枚可直接提升自己为管理 &amp; 无限刷钱。–CHINABANK</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-055026.html" target="_blank" rel="noopener">Destoon Sql注入漏洞2（有条件）–TENPAY</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-054947.html" target="_blank" rel="noopener">Destoon Sql注入漏洞一枚（有条件）–TENPAY</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-052363.html" target="_blank" rel="noopener">CSDJCMS程式舞曲最新版Sql 一枚–TENPAY</a></li>
+</ul>
+</li>
+<li><p><strong>18.数字型注入</strong></p>
+<ul>
+<li>一般数字型的都不会加单引号，$id没被单引号且没有被强制类型转换<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080873.html" target="_blank" rel="noopener">qibocms 地方门户系统 注入#3</a></li>
+<li><p>不是一些数字型，忘记加单引号</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$query=$_SGLOBAL[<span class="string">'db'</span>]-&gt;query(<span class="string">'select * from '</span>.tname(<span class="string">'spacetags'</span>).<span class="string">' where itemid=\''</span>.$itemid.<span class="string">'\' and status = \''</span>.status.<span class="string">'\''</span>);</span><br></pre></td></tr></table></figure>
+<p>$itemid首先带入查询中，被单引号，如果查询有接过才会带入到delete中，如果无接过就不执行delete。在数据库中itemid中存储的是int类型，所以这里本意是只能提交数字型才能查询出结果，如果不是提交数字的话，那么就查询不出来结果，就不去执行下面的delete语句了。但是由于mysql的类型转换，因为这里存储的是int类型，所以4xxxx跟4 是一样的。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$_SGLOBAL[<span class="string">'db'</span>]-&gt;query(<span class="string">'delete from '</span>.tname(<span class="string">'spacetags'</span>).<span class="string">' where itemid='</span>.$itemid.<span class="string">' and tagid in ('</span>.simplode($deletetagidarr).<span class="string">') and status=\''</span>.$status.<span class="string">'\''</span>);</span><br></pre></td></tr></table></figure>
+<p>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-079045.html" target="_blank" rel="noopener">Supesite 前台注入 #3 (Delete)</a></p>
+</li>
+<li>PHP弱类型语言<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-088872.html" target="_blank" rel="noopener">phpyun v3.2 (20141226) 两处注入。</a></li>
+</ul>
+</li>
+<li><strong>19.二次注入</strong><ul>
+<li>涉及到的是入库和出库<br>在入库时经过全局转义，<code>insert into table(username) values (a\&#39;&#39;);</code><br>入库后转义符就会消失，那么就是<code>a&#39;</code>,把这个查询出来，那么出库的就是<code>a&#39;</code>,如果再带入到了查询，那么就成功的引入了单引号导致了注入，很多时候数据库中存储的长度是有限制的。<br><img src="/2017/12/13/php-audit-brainmap1/3.jpg" alt=""><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-088872.html" target="_blank" rel="noopener">phpyun v3.2 (20141226) 两处注入。</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080877.html" target="_blank" rel="noopener">qibocms 地方门户系统 二次注入#5</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-068362.html" target="_blank" rel="noopener">74cms (20140709) 二枚二次注入</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-067424.html" target="_blank" rel="noopener">Hdwiki最新版二次注入一枚</a></li>
+</ul>
+</li>
+<li><strong>20.查询当中key可控</strong><br>  把$_POST带入到了查询函数，然后foreach key ，foreach 出来的key做了查询中的column。<br>  防止方法一般是把数据库中的column查询出来，然后in_array判断一下$_POST出来的key是否在数据库中的column中。<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-060166.html" target="_blank" rel="noopener">云人才系统SQL注入，绕过WAF</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-066221.html" target="_blank" rel="noopener">Cmseasy SQL注射漏洞之三</a></li>
+<li><p><strong>21.striplashes</strong><br>  在全局addslashes后，在后面的文件中又stripslashes去掉了转义符，然后可以闭合单引号</p>
+  <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$_SESSION[<span class="string">'flow_consignee'</span>] = stripslashes_deep($consignee);</span><br></pre></td></tr></table></figure>
+<p>  参考链接：<a href="https://www.2cto.com/article/201301/182509.html" target="_blank" rel="noopener">ecshop全版本注入分析</a></p>
+</li>
+<li><strong>22.截取字符</strong><ul>
+<li>会限制用户输入的长度，只截取一部分</li>
+<li><code>cutstr($asd,32);</code>，只允许输入32个字符，没有在截取字符的后面加其他字符<br>提交一个<code>11111111111&#39;</code>，被转义后成<code>11111111111\&#39;</code>，绕后截取32个字符就是<code>11111111111\</code><br>double query的话，吃掉一个单引号，然后下一个连着的可控变量可以注入<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-088004.html" target="_blank" rel="noopener">Hdwiki (20141205) 存在7处SQL注入漏洞（含之前处理不当安全的漏洞）</a></li>
+</ul>
+</li>
+<li><strong>23.注册GLOBALS变量</strong><br>  把GET POST COOKIE 循环出来，然后注册一个变量，这里不允许创建GLOBALS变量，如果设置了REQUEST的GLOBALS，就直接退出<br>  低版本request order 是GPC ,在php5.3以后request order 默认成了GP ,也就是request成了get 和post ，不包含cookie，所以$_REQUEST里面就不包含COOKIE提交来的，而这里也把COOKIE循环出来，注册变量，所以这里在COOKIE里面提交GLOBALS就不会被检测出来，而且也成功注册了GLOBALS变量，所以再结合后面的一些些代码就造成了代码执行。<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080723.html" target="_blank" rel="noopener">Discuz!某两个版本前台产品命令执行</a></li>
+</ul>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/11/file-upload/" title= WEB文件上传漏洞总结 >
+                    <span>往后一页</span>
+                    <span>WEB文件上传漏洞总结</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMjI3OC84ODQy>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:447344932@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/doge-dog" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_uv"></span> visitor.
+        </span>
+    </div>
+    
+
+
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PHP代码审计"><span class="toc-number">1.</span> <span class="toc-text">PHP代码审计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装问题"><span class="toc-number">1.1.</span> <span class="toc-text">安装问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#包含漏洞"><span class="toc-number">1.2.</span> <span class="toc-text">包含漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#找回密码"><span class="toc-number">1.3.</span> <span class="toc-text">找回密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上传漏洞"><span class="toc-number">1.4.</span> <span class="toc-text">上传漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件操作"><span class="toc-number">1.5.</span> <span class="toc-text">文件操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加密函数"><span class="toc-number">1.6.</span> <span class="toc-text">加密函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS"><span class="toc-number">1.7.</span> <span class="toc-text">XSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF"><span class="toc-number">1.8.</span> <span class="toc-text">CSRF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撸库"><span class="toc-number">1.9.</span> <span class="toc-text">撸库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令注入"><span class="toc-number">1.10.</span> <span class="toc-text">命令注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#登录认证"><span class="toc-number">1.11.</span> <span class="toc-text">登录认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XXE"><span class="toc-number">1.12.</span> <span class="toc-text">XXE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#越权"><span class="toc-number">1.13.</span> <span class="toc-text">越权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注入"><span class="toc-number">1.14.</span> <span class="toc-text">注入</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>tags</span>
+
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 20 篇博文，好好努力吧，骚年。 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/13</span><a class="archive-post-title" href= "/2017/12/13/php-audit-brainmap1/" >php代码审计脑图</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/file-upload/" >WEB文件上传漏洞总结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-16/" >mvmmall网店商城系统注入漏洞-2011.07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-15/" >fckeditor2.6.4 任意文件上传漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-14/" >PHPCMS V9 通行证注册缺陷</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-3/" >ecshop SQL注射漏洞-2010.8.21</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-2/" >Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-1/" >BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2017/11/26/hxctf2017-writeup/" >hxctf2017-writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/24</span><a class="archive-post-title" href= "/2017/11/24/blog/" >My blog</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">脑图</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

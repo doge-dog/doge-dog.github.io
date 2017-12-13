@@ -217,6 +217,39 @@ white-space: pre;
     
     
         <article class="index-post">
+            <a class="content-show-full" href = "/2017/12/13/php-audit-brainmap1/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>php代码审计脑图</span>
+                    </h2>
+                <div class="abstract-content">
+                    PHP代码审计安装问题
+1.自动删除这个安装文件通过生成一个lock文件来判断程序是否安装过
+2.根本无验证安装完成后不会自动删除文件，又不会生成lock判断是否安装过参考链接：PHPSHE B2C 重装
+3.安装file直接用GET提交step绕过，直接进入下一步
+4.变量覆盖导致重装可以GET,POST,COOKIE 任意提交一个变量名$insLockfile,给其赋空值，覆盖掉$insLockfile,从而让file_exists为false就不会退出参考链接：frcms 重装系统
+5.判断lock后，无exit判断是否存在lock文件，如果存在lock文件，就会header到in...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = 脑图>脑图</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/13</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
             <a class="content-show-full" href = "/2017/12/11/file-upload/" >
                     <h2 class="abstract-title">
                         
@@ -462,35 +495,6 @@ white-space: pre;
                 <div class="abstract-content">
                     简要描述PHP168 V6.02整站系统远程执行任意代码漏洞
 详细说明漏洞出在inc/function.inc.php里面.get_html_url()这个函数.12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364function get_html_url()&#123; global $rsdb,$aid,$fidDB,$webdb,$fid,$page,$showHtml_Type,$Html_Typ...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/12/08</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/2017/12/08/wooyun-1000php-8/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>phpcms2008本地文件包括及利用（执行任意SQL脚本）</span>
-                    </h2>
-                <div class="abstract-content">
-                    简要描述phpcms2008本地文件包括及利用（执行任意SQL脚本）
-漏洞文件(wap/index.php)123456789101112131415161718&lt;?phpinclude '../include/common.inc.php';include './include/global.func.php';$lang = include './include/lang.inc.php';if(preg_match('/(mozilla|m3gate|winwap|openwave)/i', $_SERVER['HTTP_USER_AGENT'])) &#123;header...
                 </div>
             </a>
             <div class="abstract-post-meta">
@@ -845,7 +849,58 @@ white-space: pre;
     
     
     
-    <div class="total-archive" >目前才写: 19 篇博文，好好努力吧，骚年。 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 20 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
     
@@ -854,6 +909,11 @@ white-space: pre;
     
     <div class="archive-year"> 2017 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/13</span><a class="archive-post-title" href= "/2017/12/13/php-audit-brainmap1/" >php代码审计脑图</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -877,17 +937,12 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
         </li>
     
     
@@ -897,17 +952,17 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
         </li>
     
     
@@ -917,12 +972,17 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
         </li>
     
     
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
         </li>
     
     
@@ -957,9 +1017,11 @@ white-space: pre;
     
         <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
+        <span class="sidebar-tag-name"><a href= "#">脑图</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
