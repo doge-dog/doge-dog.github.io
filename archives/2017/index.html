@@ -210,12 +210,34 @@ white-space: pre;
                         <span>php代码审计脑图</span>
                     </h2>
                 <div class="abstract-content">
-                    PHP代码审计安装问题
-1.自动删除这个安装文件通过生成一个lock文件来判断程序是否安装过
-2.根本无验证安装完成后不会自动删除文件，又不会生成lock判断是否安装过参考链接：PHPSHE B2C 重装
-3.安装file直接用GET提交step绕过，直接进入下一步
-4.变量覆盖导致重装可以GET,POST,COOKIE 任意提交一个变量名$insLockfile,给其赋空值，覆盖掉$insLockfile,从而让file_exists为false就不会退出参考链接：frcms 重装系统
-5.判断lock后，无exit判断是否存在lock文件，如果存在lock文件，就会header到in...
+                    PHP代码审计审计套路
+通读全文法          (麻烦，但是最全面)
+
+敏感函数参数回溯法  (最高效，最常用)
+
+定向功能分析法      (根据程序的业务逻辑来审计)
+
+初始安装
+信息泄露
+文件上传
+文件管理
+登录认证
+数据库备份恢复
+找回密码
+验证码
+越权
+注入
+第三方组件
+CSRF,SSRF,XSS……
+
+
+
+审计方法
+1.获取源码
+
+2.本地搭建调试可先使用扫描器识别常见传统漏洞，验证扫描器结果，手动正则
+
+3.把握大局对网站结构，入口文件(查看包含了哪些文件)，配置文件(看数据库编码)，路由，伪全局变量和全局filter，资源加载顺序，了解数据库处理模式，考察filte...
                 </div>
             </a>
             <div class="abstract-post-meta">
@@ -799,48 +821,6 @@ white-space: pre;
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <div class="total-archive" >目前才写: 20 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
@@ -878,7 +858,12 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
         </li>
     
     
@@ -898,17 +883,7 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
         </li>
     
     
@@ -924,6 +899,11 @@ white-space: pre;
     
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
         </li>
     
     
@@ -958,11 +938,11 @@ white-space: pre;
     
         <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
     
+        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
+    
         <span class="sidebar-tag-name"><a href= "#">脑图</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">

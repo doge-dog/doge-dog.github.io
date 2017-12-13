@@ -234,14 +234,51 @@ white-space: pre;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="PHP代码审计"><a href="#PHP代码审计" class="headerlink" title="PHP代码审计"></a>PHP代码审计</h1><h2 id="安装问题"><a href="#安装问题" class="headerlink" title="安装问题"></a>安装问题</h2><ul>
-<li><strong>1.自动删除这个安装文件</strong><br>通过生成一个lock文件来判断程序是否安装过</li>
-<li><strong>2.根本无验证</strong><br>安装完成后不会自动删除文件，又不会生成lock判断是否安装过<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-062047.html" target="_blank" rel="noopener">PHPSHE B2C 重装</a></li>
-<li><strong>3.安装file</strong><br>直接用GET提交step绕过，直接进入下一步</li>
-<li><strong>4.变量覆盖导致重装</strong><br>可以GET,POST,COOKIE 任意提交一个变量名$insLockfile,给其赋空值，覆盖掉$insLockfile,从而让file_exists为false就不会退出<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-073244.html" target="_blank" rel="noopener">frcms 重装系统</a></li>
-<li><strong>5.判断lock后，无exit</strong><br>判断是否存在lock文件，如果存在lock文件，就会header到index.php,但是header后并没有exit，所以 并不会退出，类似的还有javascript弹个框<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2013-045143.html" target="_blank" rel="noopener">开源轻论坛StartBBS前台getshell</a></li>
-<li><strong>6.解析漏洞</strong><br>在安装完成后会将install.php 重命名为index.php.bak,但是由于Apache的解析漏洞：如果无法识别到最后一个后缀的话，就会向上解析，那么就又变成了php了，然后结合安装时的变量覆盖又成重装了。</li>
-<li><strong>7.满足一些条件不会退出的</strong><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-054387.html" target="_blank" rel="noopener">建站之星Sitestar前台Getshell一枚</a></li>
+        <h1 id="PHP代码审计"><a href="#PHP代码审计" class="headerlink" title="PHP代码审计"></a>PHP代码审计</h1><h2 id="审计套路"><a href="#审计套路" class="headerlink" title="审计套路"></a>审计套路</h2><ul>
+<li><p>通读全文法          (麻烦，但是最全面)</p>
+</li>
+<li><p>敏感函数参数回溯法  (最高效，最常用)</p>
+</li>
+<li><p>定向功能分析法      (根据程序的业务逻辑来审计)</p>
+<ul>
+<li>初始安装</li>
+<li>信息泄露</li>
+<li>文件上传</li>
+<li>文件管理</li>
+<li>登录认证</li>
+<li>数据库备份恢复</li>
+<li>找回密码</li>
+<li>验证码</li>
+<li>越权</li>
+<li>注入</li>
+<li>第三方组件</li>
+<li>CSRF,SSRF,XSS……</li>
+</ul>
+</li>
+</ul>
+<h2 id="审计方法"><a href="#审计方法" class="headerlink" title="审计方法"></a>审计方法</h2><ul>
+<li><p>1.获取源码</p>
+</li>
+<li><p>2.本地搭建调试<br>可先使用扫描器识别常见传统漏洞，验证扫描器结果，手动正则</p>
+</li>
+<li><p>3.把握大局<br>对网站结构，入口文件(查看包含了哪些文件)，配置文件(看数据库编码)，路由，伪全局变量和全局filter，资源加载顺序，了解数据库处理模式，考察filter是否绕过，了解XSS过滤机制，考察filter是否可绕过，错误信息输出控制，对每个模块的功能进行了解，配合文件数据库监控，从安装到后台功能使用和前台功能使用走一波，仔细观察每步的变化，找不到问题再开始认真审计</p>
+</li>
+</ul>
+<h1 id="常见漏洞"><a href="#常见漏洞" class="headerlink" title="常见漏洞"></a>常见漏洞</h1><h2 id="安装问题"><a href="#安装问题" class="headerlink" title="安装问题"></a>安装问题</h2><ul>
+<li><p><strong>1.自动删除这个安装文件</strong><br>通过生成一个lock文件来判断程序是否安装过</p>
+</li>
+<li><p><strong>2.根本无验证</strong><br>安装完成后不会自动删除文件，又不会生成lock判断是否安装过<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-062047.html" target="_blank" rel="noopener">PHPSHE B2C 重装</a></p>
+</li>
+<li><p><strong>3.安装file</strong><br>直接用GET提交step绕过，直接进入下一步</p>
+</li>
+<li><p><strong>4.变量覆盖导致重装</strong><br>可以GET,POST,COOKIE 任意提交一个变量名$insLockfile,给其赋空值，覆盖掉$insLockfile,从而让file_exists为false就不会退出<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-073244.html" target="_blank" rel="noopener">frcms 重装系统</a></p>
+</li>
+<li><p><strong>5.判断lock后，无exit</strong><br>判断是否存在lock文件，如果存在lock文件，就会header到index.php,但是header后并没有exit，所以 并不会退出，类似的还有javascript弹个框<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2013-045143.html" target="_blank" rel="noopener">开源轻论坛StartBBS前台getshell</a></p>
+</li>
+<li><p><strong>6.解析漏洞</strong><br>在安装完成后会将install.php 重命名为index.php.bak,但是由于Apache的解析漏洞：如果无法识别到最后一个后缀的话，就会向上解析，那么就又变成了php了，然后结合安装时的变量覆盖又成重装了。</p>
+</li>
+<li><p><strong>7.满足一些条件不会退出的</strong><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-054387.html" target="_blank" rel="noopener">建站之星Sitestar前台Getshell一枚</a></p>
+</li>
 </ul>
 <h2 id="包含漏洞"><a href="#包含漏洞" class="headerlink" title="包含漏洞"></a>包含漏洞</h2><ul>
 <li><p><strong>1.本地文件包含</strong><br>很多都限制了包含的后缀结尾必须为.php，例如<code>include($a.&#39;.php&#39;)</code>，需要截断后面的<code>.php</code></p>
@@ -260,8 +297,10 @@ white-space: pre;
 </li>
 </ul>
 </li>
-<li><strong>2.见 <code>&lt;PHP技巧之截断&gt;</code></strong></li>
-<li><strong>3.远程文件包含</strong><ul>
+<li><p><strong>2.见 <code>&lt;PHP技巧之截断&gt;</code></strong></p>
+</li>
+<li><p><strong>3.远程文件包含</strong></p>
+<ul>
 <li>包含远程文件，或者伪协议php://input data等</li>
 <li>条件：allow_url_include on ，默认是off</li>
 <li>allow_url_include off 条件下RFI<ul>
@@ -274,8 +313,10 @@ white-space: pre;
 </li>
 </ul>
 <h2 id="找回密码"><a href="#找回密码" class="headerlink" title="找回密码"></a>找回密码</h2><ul>
-<li><strong>1.验证token</strong><br>在找回密码的时候生成一个token,然后存储到数据库中，然后把找回密码的地址发到邮箱中，url中就含有token，由用户点开后就能修改密码</li>
-<li><strong>2.延伸</strong><br>一些cms的密码加密方式很难破掉，有时候拿到了管理的密码破不开，利用方法：一般找回密码是用的邮箱，首先把管理的邮箱注入出来，然后再去找回密码，再把数据库的token注入出来，构造一下地址，就能重置密码</li>
+<li><p><strong>1.验证token</strong><br>在找回密码的时候生成一个token,然后存储到数据库中，然后把找回密码的地址发到邮箱中，url中就含有token，由用户点开后就能修改密码</p>
+</li>
+<li><p><strong>2.延伸</strong><br>一些cms的密码加密方式很难破掉，有时候拿到了管理的密码破不开，利用方法：一般找回密码是用的邮箱，首先把管理的邮箱注入出来，然后再去找回密码，再把数据库的token注入出来，构造一下地址，就能重置密码</p>
+</li>
 <li><p><strong>3.rand函数生成token</strong></p>
 <ul>
 <li><code>$resetpwd=md5((rand());</code><br>  对rand()函数生成出来的数字进行MD5<br>  某些平台下(例如windows)RAND_MAX只有32768，如果需要的范围大于32768，那么指定min和max参数就可以生成大于RAND_MAX的数了，或者考虑用mt_rand()来替代它<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-050304.html" target="_blank" rel="noopener">Thinksaas找回密码处设计错误利用账户可找回密码。</a></li>
@@ -287,20 +328,27 @@ white-space: pre;
 </li>
 </ul>
 <h2 id="上传漏洞"><a href="#上传漏洞" class="headerlink" title="上传漏洞"></a>上传漏洞</h2><ul>
-<li><strong>1.未验证上传后缀</strong></li>
-<li><strong>2.验证上传后缀被bypass</strong></li>
-<li><strong>3.上传的文件验证了上传后缀，但是文件名不重命名</strong><br>  截断yu.php%00.jpg</li>
-<li><strong>4.上传路径可控</strong></li>
-<li><strong>5.解析漏洞</strong><ul>
+<li><p><strong>1.未验证上传后缀</strong></p>
+</li>
+<li><p><strong>2.验证上传后缀被bypass</strong></p>
+</li>
+<li><p><strong>3.上传的文件验证了上传后缀，但是文件名不重命名</strong><br>  截断yu.php%00.jpg</p>
+</li>
+<li><p><strong>4.上传路径可控</strong></p>
+</li>
+<li><p><strong>5.解析漏洞</strong></p>
+<ul>
 <li>Nginx<br>yu.jpg/1.php</li>
 <li>Apache<br>yu.php.xxx</li>
 </ul>
 </li>
-<li><strong>6.验证方法</strong><ul>
+<li><p><strong>6.验证方法</strong></p>
+<ul>
 <li>MIME,客户端的JS验证，白名单，黑名单</li>
 </ul>
 </li>
-<li><strong>7.绕过</strong><ul>
+<li><p><strong>7.绕过</strong></p>
+<ul>
 <li>大小写</li>
 <li>文件名没trim<br>在文件名后面加空格，windows下的x.php%81-%99 decode后仍为x.php,windows下的特性.php::$data</li>
 </ul>
@@ -308,7 +356,8 @@ white-space: pre;
 </ul>
 <h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><p>任意文件删除，任意文件复制，任意文件重命名，任意文件移动，任意文件下载<br>首先尝试拿到配置文件中的数据库连接账号和密码，然后外链<br>拿到配置文件，拿到加密解密函数的key，生成加密字符串，结合具体的代码利用</p>
 <ul>
-<li><strong>1.文件删除</strong><ul>
+<li><p><strong>1.文件删除</strong></p>
+<ul>
 <li>由于全局的过滤而不能注入时，可以用任意文件删除删掉这个文件</li>
 <li>删除安装文件生成的lock文件，重装</li>
 <li>参考链接：<a href="https://wy.tuisec.win/wooyun-2010-0412.html" target="_blank" rel="noopener">phpcms 2008 sp4 爆路径及任意文件删除漏洞</a></li>
@@ -323,69 +372,131 @@ white-space: pre;
 </li>
 </ul>
 </li>
-<li><strong>3.文件下载</strong><br>  下载配置文件 拿到key<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-066459.html" target="_blank" rel="noopener">qibocmsV7整站系统任意文件下载导致无限制注入多处</a></li>
-<li><strong>4.文件写入</strong></li>
-<li><strong>5.文件包含</strong></li>
+<li><p><strong>3.文件下载</strong><br>  下载配置文件 拿到key<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-066459.html" target="_blank" rel="noopener">qibocmsV7整站系统任意文件下载导致无限制注入多处</a></p>
+</li>
+<li><p><strong>4.文件写入</strong></p>
+</li>
+<li><p><strong>5.文件包含</strong></p>
+</li>
 </ul>
 <h2 id="加密函数"><a href="#加密函数" class="headerlink" title="加密函数"></a>加密函数</h2><p>拿到加密函数的key,加密一些特殊字符然后拿到加密的字符串</p>
 <ul>
-<li><strong>1.加密可逆</strong><br>  弱算法导致了知道明文，知道密文，可逆，拿到加密函数的key，从而自己生成一个想要的加密字符串<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-071655.html" target="_blank" rel="noopener">DedeCMS-V5.7-SP1(2014-07-25)sql注入+新绕过思路</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-066138.html" target="_blank" rel="noopener">phpcms最新版绕过全局防御暴力注入</a></li>
-<li><strong>2.加密可控</strong><br>  要加密的内容是可控的，密文会输出，这个可控的点能引入特殊字符，那么把一些特殊字符带入到这里面，拿到密文，再找到一处decode后会进行特殊操作的点，然后进行各种操作。<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080370.html" target="_blank" rel="noopener">程氏舞曲CMS某泄露，导致sql注入</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2013-024984.html" target="_blank" rel="noopener">PHPCMS最新版(V9)SQL注入一枚</a></li>
-<li><strong>3.key泄露</strong><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-072727.html" target="_blank" rel="noopener">一个PHPWIND可拿shell的高危漏洞</a></li>
+<li><p><strong>1.加密可逆</strong><br>  弱算法导致了知道明文，知道密文，可逆，拿到加密函数的key，从而自己生成一个想要的加密字符串<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-071655.html" target="_blank" rel="noopener">DedeCMS-V5.7-SP1(2014-07-25)sql注入+新绕过思路</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-066138.html" target="_blank" rel="noopener">phpcms最新版绕过全局防御暴力注入</a></p>
+</li>
+<li><p><strong>2.加密可控</strong><br>  要加密的内容是可控的，密文会输出，这个可控的点能引入特殊字符，那么把一些特殊字符带入到这里面，拿到密文，再找到一处decode后会进行特殊操作的点，然后进行各种操作。<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080370.html" target="_blank" rel="noopener">程氏舞曲CMS某泄露，导致sql注入</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2013-024984.html" target="_blank" rel="noopener">PHPCMS最新版(V9)SQL注入一枚</a></p>
+</li>
+<li><p><strong>3.key泄露</strong><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-072727.html" target="_blank" rel="noopener">一个PHPWIND可拿shell的高危漏洞</a></p>
+</li>
 </ul>
 <h2 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h2><ul>
-<li><strong>1.输入输出</strong></li>
-<li><strong>2.foreach()的key值</strong></li>
-<li><strong>3.removeXSS函数</strong></li>
-<li><strong>多个函数处理，插入辣鸡数据绕过第一个函数后，第二个函数过滤了辣鸡数据</strong></li>
+<li><p><strong>1.输入输出</strong></p>
+</li>
+<li><p><strong>2.foreach()的key值</strong></p>
+</li>
+<li><p><strong>3.removeXSS函数</strong></p>
+</li>
+<li><p><strong>多个函数处理，插入辣鸡数据绕过第一个函数后，第二个函数过滤了辣鸡数据</strong></p>
+</li>
 </ul>
 <h2 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h2><ul>
 <li><strong>1.后台敏感操作</strong></li>
+<li><strong>2.修改权限、导出数据等高危功能</strong></li>
+<li><strong>3.Login Form CSRF</strong></li>
+</ul>
+<h2 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h2><ul>
+<li><p><strong>1.绕过本地IP过滤(畸形IP,本地网段覆盖不完全)</strong></p>
+</li>
+<li><p><strong>2.协议白名单</strong></p>
+</li>
+<li><p><strong>3.跳转到本地IP</strong></p>
+</li>
+<li><p><strong>4.DNS解析到本地IP</strong></p>
+</li>
+<li><p><strong>5.DNS rebinding</strong></p>
+</li>
+<li><p><strong>6.<code>Content-Disposition:attachment;filename=&quot;evil_file.exe;.txt&quot;</code> 分号截断可绕过跳板机的filter</strong></p>
+</li>
 </ul>
 <h2 id="撸库"><a href="#撸库" class="headerlink" title="撸库"></a>撸库</h2><ul>
-<li><strong>1.失败后没有清空session中的验证码</strong></li>
-<li><strong>2.ip第一次出现，验证码为默认值</strong></li>
-<li><strong>3.验证码md5显示在cookie中</strong></li>
-<li><strong>4.session保存到文件</strong></li>
+<li><p><strong>1.失败后没有清空session中的验证码</strong></p>
+</li>
+<li><p><strong>2.ip第一次出现，验证码为默认值</strong></p>
+</li>
+<li><p><strong>3.验证码md5显示在cookie中</strong></p>
+</li>
+<li><p><strong>4.session保存到文件</strong></p>
+</li>
 </ul>
-<h2 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h2><h2 id="登录认证"><a href="#登录认证" class="headerlink" title="登录认证"></a>登录认证</h2><ul>
-<li><strong>1.session</strong></li>
-<li><strong>2.算法</strong></li>
+<h2 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h2><ul>
+<li><strong>常见命令注入函数</strong><ul>
+<li>sysytem()</li>
+<li>exec()</li>
+<li>passthru()</li>
+<li>shell_exec()</li>
+<li>call_user_func()</li>
+<li>array_map()</li>
+<li>array_filter()</li>
+<li>usort()</li>
+<li>pcntl_exec()</li>
+<li>popen()</li>
+<li>proc_open()</li>
+<li>mail()    —&gt; PHPmail RCE</li>
+<li><code>$_GET[&#39;a&#39;]($_GET[&#39;b&#39;])</code><h2 id="登录认证"><a href="#登录认证" class="headerlink" title="登录认证"></a>登录认证</h2></li>
 </ul>
-<h2 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h2><h2 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h2><ul>
+</li>
+<li><p><strong>1.session</strong></p>
+</li>
+<li><p><strong>2.算法</strong></p>
+</li>
+</ul>
+<h2 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h2><ul>
+<li>simplexml_load_string()<br>默认情况下会解析外部实体,造成安全威胁,导致任意文件读取、命令执行漏洞。</li>
+</ul>
+<h2 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h2><ul>
 <li><strong>1.通过ID操作</strong></li>
+<li><strong>2.通过cookie操作</strong></li>
 </ul>
 <h2 id="注入"><a href="#注入" class="headerlink" title="注入"></a>注入</h2><p>把用户可控的一些变量，带入到了数据库的各种操作中，并且没有做好过滤，例如：在注册用户的时候检测用户名是否存在，SQL语句是拼接SQL</p>
 <ul>
-<li><strong>1.select注入</strong><br>  一般使用union select 联合查询</li>
-<li><strong>2.update注入</strong><ul>
+<li><p><strong>1.select注入</strong><br>  一般使用union select 联合查询</p>
+</li>
+<li><p><strong>2.update注入</strong></p>
+<ul>
 <li>update set的位置<br>看这个表的哪个column会被展示出来，就把查询出来的内容显示到这里</li>
 <li>where 后<br>通过盲注的方式列出数据</li>
 </ul>
 </li>
-<li><strong>3.insert注入</strong><br>  把要输出的数据插入到这个column里面去</li>
-<li><strong>4.delete注入</strong><br>  通过盲注的方式列出数据</li>
-<li><strong>5.数字型注入</strong><br>  变量并没有用单引号括住，不需要用单引号区分数据与SQL命令，这样就会让一般的GPC等机制无用，因为不包括特殊字符<br>  强制类型转换intval</li>
-<li><strong>6.字符型、搜索型</strong><ul>
+<li><p><strong>3.insert注入</strong><br>  把要输出的数据插入到这个column里面去</p>
+</li>
+<li><p><strong>4.delete注入</strong><br>  通过盲注的方式列出数据</p>
+</li>
+<li><p><strong>5.数字型注入</strong><br>  变量并没有用单引号括住，不需要用单引号区分数据与SQL命令，这样就会让一般的GPC等机制无用，因为不包括特殊字符<br>  强制类型转换intval</p>
+</li>
+<li><p><strong>6.字符型、搜索型</strong></p>
+<ul>
 <li>有单引号括住，需要闭合单引号</li>
 <li>全局没有做addslashes，在查询的时候再对一些用户可控的变量进行addslashes,遗漏了某些变量没addslashes</li>
 <li>全局做addslashes,在全局文件中对GET POST COOKIE做addslashes<br>首先get magic quotes gpc 判断GPC是否开启，如果没开启就调用addslashes来转义，如果开启就不调用addslashes</li>
 </ul>
 </li>
-<li><strong>7.Magic_quotes_gpc</strong><ul>
+<li><p><strong>7.Magic_quotes_gpc</strong></p>
+<ul>
 <li>Magic_quotes_gpc在稍微高点的版本默认都是on，5.4已经废除，<code>&#39;,&quot;,\,NULL</code>会在前面添加上一个转义符</li>
 </ul>
 </li>
-<li><strong>8.宽字节注入</strong><ul>
+<li><p><strong>8.宽字节注入</strong></p>
+<ul>
 <li>数据库字符集GBK的宽字节注入<br>数据库的连接方式不同，数据库与PHP的编码不一致，转换过程中可能存在<br>错误方法：set names gbk</li>
 <li>转换字符集造成的宽字节注入<br>从gbk转到utf8<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-063225.html" target="_blank" rel="noopener">74cms 最新版 注入8-9</a><br>从utf8转到gbk，錦从UTF8转成GBK之后成了<code>%e5%5c</code>，对GET POST COOKIE 做了addslashes，<code>&#39;</code>转义后为<code>\&#39;-&gt;%5c %e5%5c5c&#39;</code>两个<code>\</code>，则引号出来<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-055842.html" target="_blank" rel="noopener">qibocms 下载系统SQL注入一枚</a></li>
 </ul>
 </li>
-<li><strong>9.解码导致</strong><ul>
+<li><p><strong>9.解码导致</strong></p>
+<ul>
 <li>先提交encode的，那么就能不被转义，decode后再带入查询，造成了注入，无视GPC</li>
 <li>urlencode</li>
 <li>base64_decode</li>
-<li>XML<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-053187.html" target="_blank" rel="noopener">qibocms B2b 注入一枚</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-056822.html" target="_blank" rel="noopener">phpdisk V7 sql注入2</a></li>
+<li>XML</li>
+<li>Json_decode<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-053187.html" target="_blank" rel="noopener">qibocms B2b 注入一枚</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-056822.html" target="_blank" rel="noopener">phpdisk V7 sql注入2</a></li>
 </ul>
 </li>
 <li><p><strong>10.变量覆盖</strong><br>  变量覆盖有extract、parse_str、$$</p>
@@ -417,15 +528,20 @@ white-space: pre;
 <li>正则验证错误<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-062957.html" target="_blank" rel="noopener">CmsEasy最新版本无限制SQL注射</a></li>
 </ul>
 </li>
-<li><strong>13.file注入</strong><ul>
+<li><p><strong>13.file注入</strong></p>
+<ul>
 <li>全局只对GET POST COOKIE 转义，遗漏了files，，且不受GPC，files注入一般是因为上传，会把上传的名字带到insert当中入库<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-065837.html" target="_blank" rel="noopener">qibocms 黄页系统SQL注入一枚</a></li>
 <li>在入库的时候对文件的名字进行转义，在获取后缀后再入库时对文件名转义了却没有对后缀转义也导致了注入<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-079041.html" target="_blank" rel="noopener">Supesite 前台注入 #2 (Insert)</a></li>
 </ul>
 </li>
-<li><strong>14.未初始化造成的注入</strong><br>  php &lt; 4.20时，register_globals默认都是on,逐渐register_globals默认都是off<br>  伪全局机制，遗漏了初始化<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080867.html" target="_blank" rel="noopener">qibocms地方门户系统注入一个问题</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080870.html" target="_blank" rel="noopener">qibocms地方门户系统注入</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-079938.html" target="_blank" rel="noopener">齐博地方门户系统SQL注入漏洞</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080259.html" target="_blank" rel="noopener">齐博整站/地方门户SQL注入漏洞</a></li>
-<li><strong>15.数组中的key</strong><br>  判断GPC是否开启，如果off就对数组中的value进行addslashes，没有对数组中的key进行转义，key带入sql，听说低版本的php对二维数组中的key就算GPC ON 也不会转义<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-069746.html" target="_blank" rel="noopener">qibocms V7 整站系统最新版SQL注入一枚 &amp; 另外一处能引入转义符的地方。</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-070072.html" target="_blank" rel="noopener">qibocms多个系统绕过补丁继续注入</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-070366.html" target="_blank" rel="noopener">qibocms全部开源系统 Getshell</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-071516.html" target="_blank" rel="noopener">Discuz 5.x 6.x 7.x 前台SQL注入漏洞一枚</a></li>
-<li><strong>16.offset</strong><br>  <code>$_GET[a]</code>提交的是一个数组，且含有一个key为0，那么<code>$a</code>就是对应的这个key的value，但是这里并没有强制要求为数组。<br>  提交一个字符串就为了<code>\</code>,吃掉一个单引号，然后就在$b处写入inject 可以注入<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080875.html" target="_blank" rel="noopener">qibocms 地方门户系统</a></li>
-<li><strong>17.第三方插件</strong><br>  常见的uc_cencert / alipay / tenpay / chinabank<ul>
+<li><p><strong>14.未初始化造成的注入</strong><br>  php &lt; 4.20时，register_globals默认都是on,逐渐register_globals默认都是off<br>  伪全局机制，遗漏了初始化<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080867.html" target="_blank" rel="noopener">qibocms地方门户系统注入一个问题</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080870.html" target="_blank" rel="noopener">qibocms地方门户系统注入</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-079938.html" target="_blank" rel="noopener">齐博地方门户系统SQL注入漏洞</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080259.html" target="_blank" rel="noopener">齐博整站/地方门户SQL注入漏洞</a></p>
+</li>
+<li><p><strong>15.数组中的key</strong><br>  判断GPC是否开启，如果off就对数组中的value进行addslashes，没有对数组中的key进行转义，key带入sql，听说低版本的php对二维数组中的key就算GPC ON 也不会转义<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-069746.html" target="_blank" rel="noopener">qibocms V7 整站系统最新版SQL注入一枚 &amp; 另外一处能引入转义符的地方。</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-070072.html" target="_blank" rel="noopener">qibocms多个系统绕过补丁继续注入</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-070366.html" target="_blank" rel="noopener">qibocms全部开源系统 Getshell</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-071516.html" target="_blank" rel="noopener">Discuz 5.x 6.x 7.x 前台SQL注入漏洞一枚</a></p>
+</li>
+<li><p><strong>16.offset</strong><br>  <code>$_GET[a]</code>提交的是一个数组，且含有一个key为0，那么<code>$a</code>就是对应的这个key的value，但是这里并没有强制要求为数组。<br>  提交一个字符串就为了<code>\</code>,吃掉一个单引号，然后就在$b处写入inject 可以注入<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080875.html" target="_blank" rel="noopener">qibocms 地方门户系统</a></p>
+</li>
+<li><p><strong>17.第三方插件</strong><br>  常见的uc_cencert / alipay / tenpay / chinabank</p>
+<ul>
 <li>默认UC里面都会striplashes</li>
 <li>uckey默认的</li>
 <li>uckey这个常量没有初始化</li>
@@ -444,21 +560,79 @@ white-space: pre;
 <li>PHP弱类型语言<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-088872.html" target="_blank" rel="noopener">phpyun v3.2 (20141226) 两处注入。</a></li>
 </ul>
 </li>
-<li><strong>19.二次注入</strong><ul>
+<li><p><strong>19.二次注入</strong></p>
+<ul>
 <li>涉及到的是入库和出库<br>在入库时经过全局转义，<code>insert into table(username) values (a\&#39;&#39;);</code><br>入库后转义符就会消失，那么就是<code>a&#39;</code>,把这个查询出来，那么出库的就是<code>a&#39;</code>,如果再带入到了查询，那么就成功的引入了单引号导致了注入，很多时候数据库中存储的长度是有限制的。<br><img src="/2017/12/13/php-audit-brainmap1/3.jpg" alt=""><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-088872.html" target="_blank" rel="noopener">phpyun v3.2 (20141226) 两处注入。</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080877.html" target="_blank" rel="noopener">qibocms 地方门户系统 二次注入#5</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-068362.html" target="_blank" rel="noopener">74cms (20140709) 二枚二次注入</a><br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-067424.html" target="_blank" rel="noopener">Hdwiki最新版二次注入一枚</a></li>
 </ul>
 </li>
-<li><strong>20.查询当中key可控</strong><br>  把$_POST带入到了查询函数，然后foreach key ，foreach 出来的key做了查询中的column。<br>  防止方法一般是把数据库中的column查询出来，然后in_array判断一下$_POST出来的key是否在数据库中的column中。<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-060166.html" target="_blank" rel="noopener">云人才系统SQL注入，绕过WAF</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-066221.html" target="_blank" rel="noopener">Cmseasy SQL注射漏洞之三</a></li>
+<li><p><strong>20.查询当中key可控</strong><br>  把$_POST带入到了查询函数，然后foreach key ，foreach 出来的key做了查询中的column。<br>  防止方法一般是把数据库中的column查询出来，然后in_array判断一下$_POST出来的key是否在数据库中的column中。<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-060166.html" target="_blank" rel="noopener">云人才系统SQL注入，绕过WAF</a><br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-066221.html" target="_blank" rel="noopener">Cmseasy SQL注射漏洞之三</a></p>
+</li>
 <li><p><strong>21.striplashes</strong><br>  在全局addslashes后，在后面的文件中又stripslashes去掉了转义符，然后可以闭合单引号</p>
   <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$_SESSION[<span class="string">'flow_consignee'</span>] = stripslashes_deep($consignee);</span><br></pre></td></tr></table></figure>
 <p>  参考链接：<a href="https://www.2cto.com/article/201301/182509.html" target="_blank" rel="noopener">ecshop全版本注入分析</a></p>
 </li>
-<li><strong>22.截取字符</strong><ul>
+<li><p><strong>22.截取字符</strong></p>
+<ul>
 <li>会限制用户输入的长度，只截取一部分</li>
 <li><code>cutstr($asd,32);</code>，只允许输入32个字符，没有在截取字符的后面加其他字符<br>提交一个<code>11111111111&#39;</code>，被转义后成<code>11111111111\&#39;</code>，绕后截取32个字符就是<code>11111111111\</code><br>double query的话，吃掉一个单引号，然后下一个连着的可控变量可以注入<br>参考链接：<a href="https://wy.tuisec.win/wooyun-2014-088004.html" target="_blank" rel="noopener">Hdwiki (20141205) 存在7处SQL注入漏洞（含之前处理不当安全的漏洞）</a></li>
 </ul>
 </li>
-<li><strong>23.注册GLOBALS变量</strong><br>  把GET POST COOKIE 循环出来，然后注册一个变量，这里不允许创建GLOBALS变量，如果设置了REQUEST的GLOBALS，就直接退出<br>  低版本request order 是GPC ,在php5.3以后request order 默认成了GP ,也就是request成了get 和post ，不包含cookie，所以$_REQUEST里面就不包含COOKIE提交来的，而这里也把COOKIE循环出来，注册变量，所以这里在COOKIE里面提交GLOBALS就不会被检测出来，而且也成功注册了GLOBALS变量，所以再结合后面的一些些代码就造成了代码执行。<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080723.html" target="_blank" rel="noopener">Discuz!某两个版本前台产品命令执行</a></li>
+<li><p><strong>23.注册GLOBALS变量</strong><br>  把GET POST COOKIE 循环出来，然后注册一个变量，这里不允许创建GLOBALS变量，如果设置了REQUEST的GLOBALS，就直接退出<br>  低版本request order 是GPC ,在php5.3以后request order 默认成了GP ,也就是request成了get 和post ，不包含cookie，所以$_REQUEST里面就不包含COOKIE提交来的，而这里也把COOKIE循环出来，注册变量，所以这里在COOKIE里面提交GLOBALS就不会被检测出来，而且也成功注册了GLOBALS变量，所以再结合后面的一些些代码就造成了代码执行。<br>  参考链接：<a href="https://wy.tuisec.win/wooyun-2014-080723.html" target="_blank" rel="noopener">Discuz!某两个版本前台产品命令执行</a></p>
+</li>
+<li><p><strong>24.PDO注入</strong></p>
+<ul>
+<li>查看prepare()硬编码的string是否可控</li>
+<li>PDO无法安全处理order by 需求 <code>bool-blind order by if([expr],id,name)</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="敏感逻辑"><a href="#敏感逻辑" class="headerlink" title="敏感逻辑"></a>敏感逻辑</h2><ul>
+<li><p><strong>1.认证与会话</strong></p>
+<ul>
+<li>重置、找回密码</li>
+<li>人机验证绕过</li>
+<li>session固定</li>
+<li>密码存储、加密算法是否合理  ,rand()/mt_rand()   注意种子生成逻辑</li>
+<li>sso / oauth / openid 使用合规</li>
+<li>注意Cookie中包含的可读数据</li>
+</ul>
+</li>
+<li><p><strong>2.交易</strong></p>
+<ul>
+<li>条件竞争  select &lt;&gt; for update</li>
+<li>服务器端数据校验逻辑</li>
+</ul>
+</li>
+<li><p><strong>3.投票、统计</strong></p>
+<ul>
+<li>未使用REMOTE_ADDR获取ip地址</li>
+</ul>
+</li>
+</ul>
+<h2 id="PHP黑魔法"><a href="#PHP黑魔法" class="headerlink" title="PHP黑魔法"></a>PHP黑魔法</h2><ul>
+<li><p>1.弱类型</p>
+<ul>
+<li>string 转 int<br>  0e+纯数字优先转换<br>  字符截断(int)/intval()  wp content injection<br>  json_decode()引入数字类型</li>
+<li>bypass<ul>
+<li>使左右结果为弱类型的0，构造0e科学计数法<br>  <code>&quot;1e3&quot; bypass</code><br>  Magic hash</li>
+<li>传入空类型让函数报错返回null<br>  如果结果来自数据库，让其取不到数据</li>
+<li>传入数组类型让函数报错返回null<br>  string/array/null类型可以从GPC传入</li>
+<li>===使左右结果为true/false/null</li>
+<li>is_numeric 传入hex编码的str返回true</li>
+</ul>
+</li>
+<li>函数结果可控<ul>
+<li>in_array/intval/md5/strcmp&lt;5.3/switch</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>2.正则匹配</p>
+<ul>
+<li>preg_replace<br>  <code>\0  $0</code><br>  <code>php&lt;7 /e,php&lt;5.4用00截断构造/e,(regex) /e %00</code><br>  thinkphp url rce</li>
+<li>preg_match<br>  php&lt;=5.3 传入数组报错</li>
+</ul>
+</li>
 </ul>
 
     </article>
@@ -547,7 +721,7 @@ white-space: pre;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PHP代码审计"><span class="toc-number">1.</span> <span class="toc-text">PHP代码审计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装问题"><span class="toc-number">1.1.</span> <span class="toc-text">安装问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#包含漏洞"><span class="toc-number">1.2.</span> <span class="toc-text">包含漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#找回密码"><span class="toc-number">1.3.</span> <span class="toc-text">找回密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上传漏洞"><span class="toc-number">1.4.</span> <span class="toc-text">上传漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件操作"><span class="toc-number">1.5.</span> <span class="toc-text">文件操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加密函数"><span class="toc-number">1.6.</span> <span class="toc-text">加密函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS"><span class="toc-number">1.7.</span> <span class="toc-text">XSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF"><span class="toc-number">1.8.</span> <span class="toc-text">CSRF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撸库"><span class="toc-number">1.9.</span> <span class="toc-text">撸库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令注入"><span class="toc-number">1.10.</span> <span class="toc-text">命令注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#登录认证"><span class="toc-number">1.11.</span> <span class="toc-text">登录认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XXE"><span class="toc-number">1.12.</span> <span class="toc-text">XXE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#越权"><span class="toc-number">1.13.</span> <span class="toc-text">越权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注入"><span class="toc-number">1.14.</span> <span class="toc-text">注入</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PHP代码审计"><span class="toc-number">1.</span> <span class="toc-text">PHP代码审计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#审计套路"><span class="toc-number">1.1.</span> <span class="toc-text">审计套路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#审计方法"><span class="toc-number">1.2.</span> <span class="toc-text">审计方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#常见漏洞"><span class="toc-number">2.</span> <span class="toc-text">常见漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装问题"><span class="toc-number">2.1.</span> <span class="toc-text">安装问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#包含漏洞"><span class="toc-number">2.2.</span> <span class="toc-text">包含漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#找回密码"><span class="toc-number">2.3.</span> <span class="toc-text">找回密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上传漏洞"><span class="toc-number">2.4.</span> <span class="toc-text">上传漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件操作"><span class="toc-number">2.5.</span> <span class="toc-text">文件操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加密函数"><span class="toc-number">2.6.</span> <span class="toc-text">加密函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS"><span class="toc-number">2.7.</span> <span class="toc-text">XSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF"><span class="toc-number">2.8.</span> <span class="toc-text">CSRF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSRF"><span class="toc-number">2.9.</span> <span class="toc-text">SSRF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撸库"><span class="toc-number">2.10.</span> <span class="toc-text">撸库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令注入"><span class="toc-number">2.11.</span> <span class="toc-text">命令注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#登录认证"><span class="toc-number">2.12.</span> <span class="toc-text">登录认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XXE"><span class="toc-number">2.13.</span> <span class="toc-text">XXE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#越权"><span class="toc-number">2.14.</span> <span class="toc-text">越权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注入"><span class="toc-number">2.15.</span> <span class="toc-text">注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#敏感逻辑"><span class="toc-number">2.16.</span> <span class="toc-text">敏感逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP黑魔法"><span class="toc-number">2.17.</span> <span class="toc-text">PHP黑魔法</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>
@@ -563,48 +737,6 @@ white-space: pre;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-archive">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -880,7 +1012,12 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
         </li>
     
     
@@ -900,17 +1037,7 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
         </li>
     
     
@@ -926,6 +1053,11 @@ white-space: pre;
     
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
         </li>
     
     
@@ -960,11 +1092,11 @@ white-space: pre;
     
         <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
     
+        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
+    
         <span class="sidebar-tag-name"><a href= "#">脑图</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
